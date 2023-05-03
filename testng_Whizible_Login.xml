@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+	</listeners>
+
+	<test thread-count="5" name="Login Test Scripts">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name = "url" value = "https://dev.whizible.com/pointwest_w21/"/>
+		<parameter name="td" value="\\testData\\Whizible.xlsx"/>
+		<classes>
+ 			<class name="test.Whiz.Login.TC001_Login_ValidUsernameAndPassword" />
+ 			<class name="test.Whiz.Login.TC002_Login_InvalidUsernameAndValidPassword" />
+			<class name="test.Whiz.Login.TC003_Login_ValidUsernameAndInvalidPassword" />
+			<class name="test.Whiz.Login.TC004_Login_InvalidUsernameAndPassword" />
+			<class name="test.Whiz.Login.TC005_Login_NullUsernameAndPassword" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

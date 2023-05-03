@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+</listeners>
+
+  <test thread-count="5" name="Login_Valid Username and Password">
+  		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name = "url" value = "http://timetracker.srv.pointwest.com.ph/"/>
+		<parameter name="td" value="\\testData\\timetracker_chris.xlsx"/>
+    	<classes>
+    		<class name="test.TimeTracker.Login.TC001_TimeTracker_Login_ValidCredentials" />
+    		<class name="test.TimeTracker.Login.TC002_TimeTracker_Login_InvalidUsername" />
+    		<class name="test.TimeTracker.Login.TC003_TimeTracker_Login_InvalidPassword" />
+    		<class name="test.TimeTracker.Login.TC004_TimeTracker_Login_InvalidCredentials" />
+ 		</classes>
+	</test>
+</suite>

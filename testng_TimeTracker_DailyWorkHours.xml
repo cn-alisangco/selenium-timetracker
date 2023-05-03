@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+	</listeners>
+
+	<test thread-count="5" name="Daily Work Hours Test Scripts">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+			<class name="test.WorkHours.TC1_Charge_Hours_Button" />
+			<class
+				name="test.WorkHours.TC2_TC3_Click_and_Close_Daily_Work_Hours" />
+			<class
+				name="test.WorkHours.TC4_TC5_Daily_Work_Hours_Date_Displayed" />
+			<class
+				name="test.WorkHours.TC6_TC7_Daily_Work_Hours_View_and_Select_Project" />
+			<class
+				name="test.WorkHours.TC8_TC9_Daily_Work_Hours_View_and_Select_Delivery_Milestone" />
+			<class
+				name="test.WorkHours.TC10_TC11_Daily_Work_Hours_Click_Tasks_With_Logs_and_Click_Task" />
+			<class
+				name="test.WorkHours.TC12_TC13_Daily_Work_Hours_Click_Active_Tasks_and_Click_Task" />
+			<class
+				name="test.WorkHours.TC14_TC15_Daily_Work_Hours_Click_All_Tasks_and_Click_Task" />
+			<class
+				name="test.WorkHours.TC16_TC17_Daily_Work_Hours_Click_General_Tasks_and_Click_Task" />
+			<class
+				name="test.WorkHours.TC18_Daily_Work_Hours_Check_Allocated_Hours" />
+			<class
+				name="test.WorkHours.TC19_to_TC23_Daily_Work_Hours_Save_and_Verify_Details" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

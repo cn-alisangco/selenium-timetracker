@@ -1,0 +1,5 @@
+<parameter name = "categoryXML" value = "Regression"/>
+
+<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+</listeners>

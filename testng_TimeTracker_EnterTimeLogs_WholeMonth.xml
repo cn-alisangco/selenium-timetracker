@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+	</listeners>
+
+	<test thread-count="5"
+		name="Enter and Remove Time Logs and Work Hours">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+
+		<classes>
+			<class name="test.TC6_Remove_Time_Log_Details" />
+
+		</classes>
+
+	</test> <!-- Test -->
+
+
+
+</suite> <!-- Suite -->

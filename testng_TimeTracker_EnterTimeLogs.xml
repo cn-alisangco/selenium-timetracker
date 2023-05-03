@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+	</listeners>
+
+	<test thread-count="5" name="Enter_Time_Logs_TimeIn_Only">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+			<class
+				name="test.TimeLogs.TC1_Enter_Time_Logs_TimeIn_Only" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_TimeOut_Only">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+
+			<class
+				name="test.TimeLogs.TC2_Enter_Time_Logs_TimeOut_Only" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_Equal_TimeIn_and_TimeOut">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+
+			<class
+				name="test.TimeLogs.TC3_Enter_Time_Logs_Equal_TimeIn_and_TimeOut" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_TimeIn_Later_Than_TimeOut">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+
+			<class
+				name="test.TimeLogs.TC4_Enter_Time_Logs_TimeIn_Later_Than_TimeOut" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_TimeIn_and_TimeOut">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+
+			<class
+				name="test.TimeLogs.TC5_Enter_Time_Logs_TimeIn_and_TimeOut" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_Missing_Manual_Override">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+
+			<class
+				name="test.TimeLogs.TC6_Enter_Time_Logs_Missing_Manual_Override" />
+
+		</classes>
+	</test> <!-- Test -->
+	
+		<test thread-count="5" name="Enter_Time_Logs_and_Cancel">
+		<parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url"
+			value="https://john.guballa:Luk@5amanic19@timetracker.pointwest.com.ph" />
+		<parameter name="td" value="\\testData\\timetracker_jp.xlsx" />
+		<classes>
+			<class
+				name="test.TimeLogs.TC7_Enter_Time_Logs_and_Cancel" />
+		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->
