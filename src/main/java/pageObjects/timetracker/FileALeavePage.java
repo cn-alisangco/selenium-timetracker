@@ -2,7 +2,8 @@ package pageObjects.timetracker;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import userHelper.UserHelper;
+
+import pages.Arch.UserHelper;
 
 import java.time.LocalDate;
 

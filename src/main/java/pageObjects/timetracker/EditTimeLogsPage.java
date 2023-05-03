@@ -12,7 +12,7 @@ import org.testng.Reporter;
 
 import com.aventstack.extentreports.Status;
 
-import userHelper.UserHelper;
+import pages.Arch.UserHelper;
 import utilities.TestNGListeners;
 
 public class EditTimeLogsPage extends UserHelper {
