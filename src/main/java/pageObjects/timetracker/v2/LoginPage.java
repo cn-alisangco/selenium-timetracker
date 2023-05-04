@@ -18,6 +18,17 @@ public class LoginPage extends UserHelper {
     @FindBy(id="LoginSubmit")
     WebElement btnLogin;
     
+    @FindBy(xpath="//*[@id=\"Login\"]/p")
+    WebElement msgErrorLogin;
+    
+    @FindBy(xpath="//span[@data-valmsg-for='Username']")
+    WebElement msgErrorNullUsername;
+    
+    @FindBy(xpath="//span[@data-valmsg-for='Password']")
+    WebElement msgErrorNullPassword;
+    
+    private static String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+    
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -26,7 +37,7 @@ public class LoginPage extends UserHelper {
         waitForElement(txtUsername);
         moveAndHighlightElement(txtUsername);
         txtUsername.sendKeys(value);
-        reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Entered the username");
+        reportPass(methodName, "Entered the username");
     }	
     
     public void enterPassword(String value) {
@@ -48,4 +59,20 @@ public class LoginPage extends UserHelper {
     	enterPassword(password);
     	clickLogin();
     }
+    
+    // Added verifications for error messages during failed login attempts
+    
+    public void verifyLoginErrorMessage(){
+    	waitForElement(msgErrorLogin);
+		moveAndHighlightElement(msgErrorLogin);
+        reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Incorrect username or password error message is displayed.");
+	}
+
+	public void verifyNullFields(){
+		waitForElement(msgErrorNullUsername);
+		waitForElement(msgErrorNullPassword);
+		moveAndHighlightElement(msgErrorNullUsername);
+		moveAndHighlightElement(msgErrorNullPassword);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Empty username and password field validators are displayed.");
+	}
 }
