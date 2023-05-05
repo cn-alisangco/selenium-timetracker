@@ -31,5 +31,6 @@ public class TC003_TimeTracker_Login_InvalidPassword extends BaseClass {
 	    	String password = creds.testData(id, "password");
 	    	
 	    	loginPage.login(username, password);
+	    	loginPage.verifyLoginErrorMessage();
 	    }
 }
