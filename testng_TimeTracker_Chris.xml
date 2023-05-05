@@ -12,9 +12,10 @@
 		<parameter name="td" value="\\testData\\timetracker_chris.xlsx"/>
     	<classes>
     		<class name="test.TimeTracker.Login.TC001_TimeTracker_Login_ValidCredentials"/>
-			<class name="test.TimeTracker.Login.TC002_TimeTracker_Login_InvalidUsername" />
-    		<class name="test.TimeTracker.Login.TC003_TimeTracker_Login_InvalidPassword" />
-    		<class name="test.TimeTracker.Login.TC004_TimeTracker_Login_InvalidCredentials" />
+    		<class name="test.TimeTracker.Login.TC002_TimeTracker_Login_InvalidUsername"/>
+    		<class name="test.TimeTracker.Login.TC003_TimeTracker_Login_InvalidPassword"/>
+    		<class name="test.TimeTracker.Login.TC004_TimeTracker_Login_InvalidCredentials"/>
+    		<class name="test.TimeTracker.Login.TC005_TimeTracker_Login_NullCredentials"/>
  		</classes>
 	</test>
 </suite>

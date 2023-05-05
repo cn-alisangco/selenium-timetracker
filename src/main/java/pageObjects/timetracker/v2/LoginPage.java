@@ -27,7 +27,7 @@ public class LoginPage extends UserHelper {
     @FindBy(xpath="//span[@data-valmsg-for='Password']")
     WebElement msgErrorNullPassword;
     
-    private static String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
+    private static String methodName = "Thread.currentThread().getStackTrace()[1].getMethodName()";
     
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
@@ -44,14 +44,14 @@ public class LoginPage extends UserHelper {
     	waitForElement(txtPassword);
         moveAndHighlightElement(txtPassword);
         txtPassword.sendKeys(value);
-        reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Entered the password");
+        reportPass(methodName, "Entered the password");
     }
     
     public void clickLogin() {
     	waitForElement(btnLogin);
         moveAndHighlightElement(btnLogin);
         btnLogin.click();
-        reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked the Log In button");
+        reportPass(methodName, "Clicked the Log In button");
     }
     
     public void login(String username, String password) {
@@ -65,7 +65,7 @@ public class LoginPage extends UserHelper {
     public void verifyLoginErrorMessage(){
     	waitForElement(msgErrorLogin);
 		moveAndHighlightElement(msgErrorLogin);
-        reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Incorrect username or password error message is displayed.");
+        reportPass(methodName, "Incorrect username or password error message is displayed.");
 	}
 
 	public void verifyNullFields(){
@@ -73,6 +73,6 @@ public class LoginPage extends UserHelper {
 		waitForElement(msgErrorNullPassword);
 		moveAndHighlightElement(msgErrorNullUsername);
 		moveAndHighlightElement(msgErrorNullPassword);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Empty username and password field validators are displayed.");
+		reportPass(methodName, "Empty username and password field validators are displayed.");
 	}
 }
