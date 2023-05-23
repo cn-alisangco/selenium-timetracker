@@ -18,6 +18,12 @@ public class LoginPage extends UserHelper {
     @FindBy(id="LoginSubmit")
     WebElement btnLogin;
     
+    @FindBy(className="error")
+    WebElement errorInvalid;
+    
+    @FindBy(className="field-validation-error")
+    WebElement errorNull;
+    
 	public LoginPage(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -47,5 +53,19 @@ public class LoginPage extends UserHelper {
     	enterUsername(username);
     	enterPassword(password);
     	clickLogin();
+    }
+    
+    public boolean verifyError() {
+    	waitForElement(errorInvalid);
+    	boolean errorExists = errorInvalid!=null;
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified error message");
+    	return errorExists;
+    }
+    
+    public boolean verifyNull() {
+    	waitForElement(errorNull);
+    	boolean errorExists = errorNull!=null;
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified null input");
+    	return errorExists;
     }
 }

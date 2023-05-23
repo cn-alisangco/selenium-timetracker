@@ -19,18 +19,21 @@ public class TC004_TimeTracker_Login_InvalidCredentials extends BaseClass {
 	}
 	
 	@Test
-	 public void loginToTimeTracker(){
+	 public void loginToTimeTracker() throws Exception{
 		
 	        initialize();
 	        
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Login");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "invalid_credentials";
+	    	String id = "TC004_TimeTracker_Login_InvalidCredentials";
 	    	String username = creds.testData(id, "username");
 	    	String password = creds.testData(id, "password");
 	    	
 	    	loginPage.login(username, password);
-
+	    	//verify error message for invalid credentials appear
+	    	if(!loginPage.verifyError()) {
+	    		throw new Exception("The error message does not appear!");
+	    	}
 	    }
 }
