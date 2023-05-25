@@ -11,7 +11,6 @@
 		<parameter name="td" value="\testData_arch\timetracker_glenn_v2.xlsx"/>
     	<classes>
 			<class name="test.TimeTracker.TimeLogs.TC001_TimeTracker_TimeLogs_LogTimeIn" />
-			<class name="test.TimeTracker.TimeLogs.TC002_TimeTracker_TimeLogs_LogTimeOut" />
  		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

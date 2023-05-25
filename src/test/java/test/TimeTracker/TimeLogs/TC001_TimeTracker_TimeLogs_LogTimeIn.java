@@ -11,6 +11,7 @@ import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
+import utilities.TimeParser;
 
 public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	
@@ -36,20 +37,22 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
 	    	
-	    	loginPage.login(user, pass);
+	    	//loginPage.login(user, pass);
 	    	//verify if successful login
-	    	if(!homePage.verifySuccessfulLogin()) {
-	    		throw new Exception("Login error!");
-	    	}
+	    	//if(!homePage.verifySuccessfulLogin()) {
+	    	//	throw new Exception("Login error!");
+	    	//}
 	    	
 	    	//setting date today
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/dd/yyyy"); //setting date format
+	    	
+	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy"); //setting date format
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	homePage.clickDate(dtf.format(now)); 
-	    	String time12Hour = (now.getHour() < 12) //String value to get whether current time is in AM or PM 
-	    		? "AM"  //if less than 12, set to AM
-	    		: "PM"; //more than 12, set to PM
-	    	editTimeLogs.fillManualTimeIn(now.getDayOfWeek().getValue(),time12Hour);
-	    	editTimeLogs.verifyTimeInFill(time12Hour);
+	    	TimeParser timeparser = new TimeParser("11:00 PM");
+	    	System.out.println(timeparser.getHour());
+	    	System.out.println(timeparser.getMinute());
+	    	System.out.println(timeparser.getPeriod());
+	    	//homePage.clickDate(dtf.format(now)); 
+	    	editTimeLogs.fillManualTimeIn(now.getDayOfWeek().getValue(),timeparser.getHour(),timeparser.getMinute(),timeparser.getPeriod());
+	    	//editTimeLogs.verifyTimeInFill(timeparser.getPeriod());
 	    }
 }

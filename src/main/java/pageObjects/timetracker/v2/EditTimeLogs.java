@@ -30,7 +30,7 @@ public class EditTimeLogs extends UserHelper {
 		this.driver = driver;
 	}
 	
-    public void fillManualTimeIn(int dayOfTheWeek, String time12Hour) {
+    public void fillManualTimeIn(int dayOfTheWeek, String hour, String minute, String time12Hour) {
     	dayOfTheWeek = dayOfTheWeek-1;
     	JavascriptExecutor javascript = (JavascriptExecutor) driver;
     	//getting locators for current date
@@ -48,20 +48,20 @@ public class EditTimeLogs extends UserHelper {
     	//enter time
     	reasonTextBox.clear();
     	reasonTextBox.sendKeys("automated fill up by Selenium");
-    	int hour = LocalTime.now().getHour();
-    	if(hour > 12) {
-    		hour = hour - 12;
-    	}
-    	int minute = LocalTime.now().getMinute();
+    	//int hour = LocalTime.now().getHour();
+    	//if(hour > 12) {
+    	//	hour = hour - 12;
+    	//}
+    	//int minute = LocalTime.now().getMinute();
     	javascript.executeScript("arguments[0].value = '';", timeInHour);
     	javascript.executeScript("arguments[0].value='"+hour+"';", timeInHour);
     	javascript.executeScript("arguments[0].value = '';", timeInMinute);
     	//javascript.executeScript("arguments[0].setAttribute('value', '');", timeInMinute);
-    	if(minute < 10) {
-    		javascript.executeScript("arguments[0].value='"+"0"+minute+"';", timeInMinute);
-    	}else {
+    	//if(minute < 10) {
+    		//javascript.executeScript("arguments[0].value='"+"0"+minute+"';", timeInMinute);
+    	//}else {
     		javascript.executeScript("arguments[0].value='"+minute+"';", timeInMinute);
-    	}
+    	//}
     	//fill up dropdown menus
     	selectByVisibleText(timeInZone, time12Hour);
     	selectByVisibleText(timeInArea,"UP");
@@ -82,7 +82,6 @@ public class EditTimeLogs extends UserHelper {
     		hour = hour - 12;
     	}
     	int minute = LocalTime.now().getMinute();
-    	//minute = minute - minute +1;
     	if(minute < 10) {
     		isSame = displayedTimeIn.equals(hour+":"+"0"+minute+" "+time12Hour+" "+"UP");
     		System.out.println(hour+":"+"0"+minute+" "+time12Hour+" "+"UP");
