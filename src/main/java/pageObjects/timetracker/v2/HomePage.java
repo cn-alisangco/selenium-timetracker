@@ -1,8 +1,10 @@
 package pageObjects.timetracker.v2;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -72,15 +74,8 @@ public class HomePage extends UserHelper {
     @FindBy(linkText="Submit")
     WebElement submit;
     
-    /*---------Edit Timelogs----------*/
-    @FindBy(id="ui-dialog-title-popupEditTimeLogs")
-    WebElement editTimeLogs;
-    @FindBy(className="ui-dialog-titlebar-close ui-corner-all")
-    WebElement closeEditTimeLogs;
-    @FindBy(id="editTimeSheetCancel")
-    WebElement editCancel;
-    @FindBy(id="editTimeSheetSave")
-    WebElement editSave;
+    @FindBy(xpath="//*[@id=\"period\"]/div[3]/div[2]/div/div/span")
+    WebElement timesheetPeriod;
     
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
@@ -105,23 +100,6 @@ public class HomePage extends UserHelper {
     public void clickDate(String date) {
     	WebElement timeDate = driver.findElement(By.linkText(date));
     	timeDate.click();
-    }
-    
-    public void fillManualTimeIn(int day) {
-    	day = day-1;
-    	
-    	waitForElement(editTimeLogs);
-    	WebElement manualTimeInCheckbox = driver.findElement(By.id("manualTimeInCheck"+day));
-    	WebElement reasonTextBox = driver.findElement(By.id("txtReason"+day));
-    	
-    	manualTimeInCheckbox.click();
-    	WebElement timeInHour = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+day+"\"]/input[1])"));
-    	WebElement timeInMinute = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+day+"\"]/input[2])"));
-    	WebElement timeInZone = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+day+"\"]/select[1])"));
-    	WebElement timeInArea = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+day+"\"]/select[2])"));
-    	
-    	reasonTextBox.sendKeys("filled up by Selenium");
-    	timeInHour.sendKeys(String.valueOf(LocalTime.now().getHour()));
-    	timeInMinute.sendKeys(String.valueOf(LocalTime.now().getMinute()));
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Date for today");
     }
 }

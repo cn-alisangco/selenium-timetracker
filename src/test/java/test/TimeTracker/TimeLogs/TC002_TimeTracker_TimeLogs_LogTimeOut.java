@@ -12,7 +12,7 @@ import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 
-public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
+public class TC002_TimeTracker_TimeLogs_LogTimeOut extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
@@ -32,7 +32,7 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Time Logs");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC001_TimeTracker_TimeLogs_LogTimeIn";
+	    	String id = "TC002_TimeTracker_TimeLogs_LogTimeOut";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
 	    	
@@ -49,7 +49,7 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	String time12Hour = (now.getHour() < 12) //String value to get whether current time is in AM or PM 
 	    		? "AM"  //if less than 12, set to AM
 	    		: "PM"; //more than 12, set to PM
-	    	editTimeLogs.fillManualTimeIn(now.getDayOfWeek().getValue(),time12Hour);
-	    	editTimeLogs.verifyTimeInFill(time12Hour);
+	    	editTimeLogs.fillManualTimeOut(now.getDayOfWeek().getValue(),time12Hour);
+	    	editTimeLogs.verifyTimeOutFill(time12Hour);
 	    }
 }
