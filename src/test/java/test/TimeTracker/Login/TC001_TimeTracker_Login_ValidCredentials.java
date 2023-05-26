@@ -32,9 +32,6 @@ public class TC001_TimeTracker_Login_ValidCredentials extends BaseClass {
 	    	
 	    	loginPage.login(user, pass);
 	    	//verify if successful login
-	    	if(!homePage.verifySuccessfulLogin()) {
-	    		throw new Exception("Login error!");
-	    	}
-
+	    	homePage.verifySuccessfulLogin();
 	    }
 }

@@ -33,8 +33,6 @@ public class TC005_TimeTracker_Login_NullCredentials extends BaseClass {
 	    	//leave login empty
 	    	loginPage.login(username, password);
 	    	//verify error message for invalid credentials appear
-	    	if(!loginPage.verifyNull()) {
-	    		throw new Exception("The asterisks indicating null input does not appear!");
-	    	}
+	    	loginPage.verifyNull();
 	    }
 }

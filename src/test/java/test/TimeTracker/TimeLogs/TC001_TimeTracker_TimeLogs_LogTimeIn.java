@@ -2,6 +2,7 @@ package test.TimeTracker.TimeLogs;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
@@ -36,23 +37,25 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	String id = "TC001_TimeTracker_TimeLogs_LogTimeIn";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String timeIn = creds.testData(id, "timein");
+	    	System.out.println(timeIn);
 	    	
-	    	//loginPage.login(user, pass);
-	    	//verify if successful login
-	    	//if(!homePage.verifySuccessfulLogin()) {
-	    	//	throw new Exception("Login error!");
-	    	//}
-	    	
+	    	loginPage.login(user, pass);
+	    	homePage.verifySuccessfulLogin();
 	    	//setting date today
-	    	
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy"); //setting date format
+	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/dd/yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	TimeParser timeparser = new TimeParser("11:00 PM");
-	    	System.out.println(timeparser.getHour());
-	    	System.out.println(timeparser.getMinute());
-	    	System.out.println(timeparser.getPeriod());
-	    	//homePage.clickDate(dtf.format(now)); 
-	    	editTimeLogs.fillManualTimeIn(now.getDayOfWeek().getValue(),timeparser.getHour(),timeparser.getMinute(),timeparser.getPeriod());
-	    	//editTimeLogs.verifyTimeInFill(timeparser.getPeriod());
-	    }
+	    	//System.out.println(dtf.format(timeIn));
+	    	TimeParser timeparser = new TimeParser("11:00 AM");
+	    	//getting date and time values
+	    	int dayOfWeek = now.getDayOfWeek().getValue();
+	    	String hour = timeparser.getHour();
+	    	String minute = timeparser.getMinute();
+	    	String period = timeparser.getPeriod();
+	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+	    	
+	    	homePage.clickDate(dtf.format(now)); 
+	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hour,minute,period);
+	    	editTimeLogs.verifyTimeInFill(dayOfMonth,hour,minute,period);
+	}
 }

@@ -55,17 +55,21 @@ public class LoginPage extends UserHelper {
     	clickLogin();
     }
     
-    public boolean verifyError() {
+    public void verifyError() {
     	waitForElement(errorInvalid);
     	boolean errorExists = errorInvalid!=null;
+    	if(errorExists) {
+    		throw new Error("Error message not appearing!");
+    	}
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified error message");
-    	return errorExists;
     }
     
-    public boolean verifyNull() {
+    public void verifyNull() {
     	waitForElement(errorNull);
     	boolean errorExists = errorNull!=null;
+    	if(errorExists) {
+    		throw new Error("Null error indicators not appearing!");
+    	}
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified null input");
-    	return errorExists;
     }
 }

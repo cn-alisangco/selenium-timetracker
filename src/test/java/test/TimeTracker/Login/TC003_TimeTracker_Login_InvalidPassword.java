@@ -32,8 +32,6 @@ public class TC003_TimeTracker_Login_InvalidPassword extends BaseClass {
 	    	
 	    	loginPage.login(username, password);
 	    	//verify error message for invalid credentials appear
-	    	if(!loginPage.verifyError()) {
-	    		throw new Exception("The error message does not appear!");
-	    	}
+	    	loginPage.verifyError();
 	    }
 }

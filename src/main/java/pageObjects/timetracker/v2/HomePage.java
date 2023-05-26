@@ -81,11 +81,13 @@ public class HomePage extends UserHelper {
 		this.driver = driver;
 	}
 	
-    public boolean verifySuccessfulLogin() {
+    public void verifySuccessfulLogin() throws Exception {
         waitForElement(loggedUser);
         boolean logSuccess = loggedUser!=null;
+        if(!logSuccess) {
+    		throw new Error("Login error!");
+    	}
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified successful login");
-        return logSuccess;
     }
     
     public void clickCategory() {
