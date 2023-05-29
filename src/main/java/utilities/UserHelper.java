@@ -344,6 +344,12 @@ public class UserHelper extends ReadExcelData {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 		wait.until(ExpectedConditions.visibilityOf(e));
 	}
+	
+	public void waitForElements(List<WebElement> e) { //added May 29, 2023
+		
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
+		wait.until(ExpectedConditions.visibilityOfAllElements(e));
+	}
 
 	public void waitForClickable(WebElement e) {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
@@ -536,7 +542,13 @@ public class UserHelper extends ReadExcelData {
 	}
 	
 	public void validateElementIsNotDisplayed (WebElement webElement) {
-		boolean elementIsDisplayed = webElement.isDisplayed();
+		boolean elementIsDisplayed;
+		
+		try{
+			elementIsDisplayed = (webElement.isDisplayed());
+		}catch(Exception e){
+			elementIsDisplayed = false;
+		}
 		
 		Assert.assertFalse(elementIsDisplayed);
 	}

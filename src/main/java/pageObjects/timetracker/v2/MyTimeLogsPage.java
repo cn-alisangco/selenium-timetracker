@@ -37,12 +37,12 @@ public class MyTimeLogsPage extends UserHelper{
 
     	//verify file a leave link exists
     	for (WebElement fileALeaveLink : fileALeaveLinks) {
+    		waitForElements(fileALeaveLinks);
     		validateElementIsDisplayed(fileALeaveLink);
     		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify 'File a Leave' button exists");
     	}
     	
     }
-    
     
     public void clickRandomFileALeaveButton() {
 
@@ -58,11 +58,20 @@ public class MyTimeLogsPage extends UserHelper{
 
     public void clickFileALeaveButton(int index) {
     	//click "File A Leave" Link
+    	waitForElements(fileALeaveLinks);
     	WebElement fileLeaveLink = fileALeaveLinks.get(index);
+    	
 		fileLeaveLink.click();
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click random 'File A Leave' link");
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click 'File A Leave' link with the given index");
     }
 
+    public List<WebElement> getAllFileALeaveButtons(){
+		return fileALeaveLinks;
+    }
+    
+    
+    
+    //private methods----------------------------------------------------------------------------
     
 	private int generateRandomNumber(int min, int max) {
 		// TODO Auto-generated method stub
@@ -70,6 +79,7 @@ public class MyTimeLogsPage extends UserHelper{
 		return random.nextInt(max - min + 1) + min;
 	}
 
+	
 	
 	private List<Integer> getRowsWithRegularShift() {
 		//gets the indices of rows with "Reg" shift and stores it in a list

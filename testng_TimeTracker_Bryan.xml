@@ -12,7 +12,7 @@
 		<parameter name="td" value="\\testData\\timetracker_bryan.xlsx"/>
     	<classes>
 			
-    		<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
+    		<class name="test.TimeTracker.LeaveApplication.TC002_TimeTracker_FileALeavePopUp_CloseButton" />
 
  		</classes>
 	</test>

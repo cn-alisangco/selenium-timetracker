@@ -47,7 +47,8 @@ public class TC001_TimeTracker_File_a_Leave_Actions_Button extends BaseClass {
 	        //Verify File a Leave modal is displayed
 	        fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 	        
-	       	         
+	        //Close File a Leave modal
+	        fileALeaveModal.clickCloseButton();    
 
 	    }
 	

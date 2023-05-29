@@ -1,7 +1,9 @@
 package test.TimeTracker.LeaveApplication;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 
@@ -11,6 +13,7 @@ import pageObjects.timetracker.v2.FileALeave_Modal;
 import pageObjects.timetracker.v2.LoginPage;
 import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
+import utilities.UserHelper;
 
 public class TC002_TimeTracker_FileALeavePopUp_CloseButton extends BaseClass {
 
@@ -38,16 +41,26 @@ public class TC002_TimeTracker_FileALeavePopUp_CloseButton extends BaseClass {
 	        HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
 	        loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
 	     
-	        //verify "File a Leave" button is visible in the list of Actions
-	        myTimeLogsPage.verifyFileALeaveButtonsExist();
+	        //get all "File a Leave" links/button and store in a variable
+	        List<WebElement> fileALeaveLinks =  myTimeLogsPage.getAllFileALeaveButtons();
 	    	
-	        //Click File a Leave button
-	        myTimeLogsPage.clickRandomFileALeaveButton();
+	        //Iterate over each fileALeaveLink
+	        for (int i = 0; i < fileALeaveLinks.size(); i++) {
+	        	
 	        
-	        //Verify File a Leave modal is displayed
-	        fileALeaveModal.verifyFileALeaveModalIsDisplayed();
-	       	         
-
+	        	//1. click the link
+	        	myTimeLogsPage.clickFileALeaveButton(i);
+	        	
+	        	//2. verify File A Leave modal is displayed
+	        	fileALeaveModal.verifyFileALeaveModalIsDisplayed();
+	        	
+	        	//3. Close modal
+	        	fileALeaveModal.clickCloseButton();
+	        	
+	        	//2. verify File A Leave modal is NOT displayed
+	        	fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+	        }
+	       
 	    }
 	
 }

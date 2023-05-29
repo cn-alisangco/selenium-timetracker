@@ -47,7 +47,7 @@ public class FileALeave_Modal extends UserHelper{
     public void clickCloseButton() {
 		
     	//close "File a Leave" modal
-    	verifyFileALeaveModalIsDisplayed();
+    	waitForElement(fileALeaveModalCloseButton);
     	fileALeaveModalCloseButton.click();	
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click close button in the 'File a leave' modal");
     	
