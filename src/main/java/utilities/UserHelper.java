@@ -6,13 +6,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -527,21 +531,21 @@ public class UserHelper extends ReadExcelData {
 		
 	}
 
-	//newly added 05/26/2023
-	public void validateElementIsDisplayed (By locator) {
+	
+	public void validateElementIsDisplayed (By locator) {//newly added 05/26/2023
 		WebElement element = driver.findElement(locator);
 		boolean elementIsDisplayed = element.isDisplayed();
 		
 		Assert.assertTrue(elementIsDisplayed);
 	}
 	
-	public void validateElementIsDisplayed (WebElement webElement) {
+	public void validateElementIsDisplayed (WebElement webElement) {//newly added 05/26/2023
 		boolean elementIsDisplayed = webElement.isDisplayed();
 		
 		Assert.assertTrue(elementIsDisplayed);
 	}
 	
-	public void validateElementIsNotDisplayed (WebElement webElement) {
+	public void validateElementIsNotDisplayed (WebElement webElement) {//newly added 05/26/2023
 		boolean elementIsDisplayed;
 		
 		try{
@@ -551,5 +555,13 @@ public class UserHelper extends ReadExcelData {
 		}
 		
 		Assert.assertFalse(elementIsDisplayed);
+	}
+	
+	public String getTodayDate(String dateFormat) { //added 05/29/2023
+
+		  String pattern = dateFormat;
+		  SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		  String date = simpleDateFormat.format(new Date());
+		  return date;
 	}
 }
