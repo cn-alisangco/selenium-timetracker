@@ -521,4 +521,23 @@ public class UserHelper extends ReadExcelData {
 		
 	}
 
+	//newly added 05/26/2023
+	public void validateElementIsDisplayed (By locator) {
+		WebElement element = driver.findElement(locator);
+		boolean elementIsDisplayed = element.isDisplayed();
+		
+		Assert.assertTrue(elementIsDisplayed);
+	}
+	
+	public void validateElementIsDisplayed (WebElement webElement) {
+		boolean elementIsDisplayed = webElement.isDisplayed();
+		
+		Assert.assertTrue(elementIsDisplayed);
+	}
+	
+	public void validateElementIsNotDisplayed (WebElement webElement) {
+		boolean elementIsDisplayed = webElement.isDisplayed();
+		
+		Assert.assertFalse(elementIsDisplayed);
+	}
 }

@@ -11,7 +11,8 @@
 		<parameter name = "url" value = "http://timetracker.srv.pointwest.com.ph/"/>
 		<parameter name="td" value="\\testData\\timetracker_bryan.xlsx"/>
     	<classes>
-    		<class name="test.TimeTracker.Login.TC001_TimeTracker_Login_ValidCredentials" />
+			
+    		<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
 
  		</classes>
 	</test>

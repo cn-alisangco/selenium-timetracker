@@ -1,9 +1,14 @@
 package pageObjects.timetracker.v2;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class LoginPage extends UserHelper {
@@ -43,9 +48,28 @@ public class LoginPage extends UserHelper {
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked the Log In button");
     }
     
+    //newly added 5/26/2023
+    public HashMap<String, String> getLoginCredentialsTestData(String testDataLoc, String sheetname, String recordID) {
+    	
+    	HashMap<String, String> loginCredentials = new HashMap<String, String>();
+    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, sheetname);
+    	// user.dir + td from testng file + testsheet name
+        
+	    String id = recordID;
+	    String user = creds.testData(id, "username");
+	    String pass = creds.testData(id, "password");
+	    
+	    loginCredentials.put("username", user);
+	    loginCredentials.put("password", pass);
+	    
+		return loginCredentials;
+    }
+    
     public void login(String username, String password) {
     	enterUsername(username);
     	enterPassword(password);
     	clickLogin();
     }
+    
+ 
 }
