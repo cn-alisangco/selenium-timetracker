@@ -4,7 +4,7 @@
 	<listeners>
 		<listener class-name="utilities.TestNGListeners" />
 	</listeners>
-	<test thread-count="5" name="Login_Valid Username and Password">
+	<test thread-count="5" name="Leave Application Test Cases">
 		<parameter name="categoryXML" value="Smoke" />
 		<parameter name="browser" value="chrome" />
 		<parameter name="url" value="http://timetracker.srv.pointwest.com.ph/" />
@@ -13,9 +13,9 @@
 <!--			<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
 			<class name="test.TimeTracker.LeaveApplication.TC002_TimeTracker_FileALeavePopUp_CloseButton" />
 			<class name="test.TimeTracker.LeaveApplication.TC003_TimeTracker_File_A_Leave_PopUp_DateApplied" />
-			<class name="test.TimeTracker.LeaveApplication.TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal" />-->
-			<class name="test.TimeTracker.LeaveApplication.TC005_TimeTracker_LeaveApplication_VerifyFromAndToInTheModal" />
-			
+			<class name="test.TimeTracker.LeaveApplication.TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal" />
+			<class name="test.TimeTracker.LeaveApplication.TC005_TimeTracker_LeaveApplication_VerifyFromAndToInTheModal" />-->
+			<class name="test.TimeTracker.LeaveApplication.TC006_TimeTracker_LeaveApplication_VerifyHalfDayCheckboxInTheModal" />
 		</classes>
 	</test>
 </suite>

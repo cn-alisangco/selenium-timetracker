@@ -39,6 +39,8 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement leaveFromField;
 	@FindBy(id = "LeaveTo")
 	WebElement leaveToField;
+	@FindBy(id = "IsHalfday")
+	WebElement halfDayCheckbox;
 
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
@@ -138,7 +140,7 @@ public class FileALeave_Modal extends UserHelper {
 	public void verifyLeaveTypeIsSelected(String leaveType) {
 		// declare leavetype dropdown as an instance of the Select class
 		Select leaveTypeDrp = new Select(leaveTypeDropdown);
-		
+
 		String selectedLeaveType = leaveTypeDrp.getFirstSelectedOption().getText();
 		Assert.assertEquals(selectedLeaveType, leaveType);
 
@@ -147,9 +149,9 @@ public class FileALeave_Modal extends UserHelper {
 	}
 
 	public void isInCorrectDateFormat(String FromOrToDateType, String dateString, String format) {
-		
+
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-        boolean dateParseable;
+		boolean dateParseable;
 		try {
 			dateFormat.parse(dateString);
 		} catch (ParseException e) {
@@ -159,41 +161,66 @@ public class FileALeave_Modal extends UserHelper {
 			dateParseable = false;
 		}
 		dateParseable = true;
-		
+
 		Assert.assertTrue(dateParseable);
-		
+
 		String dateTypeString = (FromOrToDateType == "From") ? "From" : "To";
 		String methodName = "Verify the " + dateTypeString + " date : " + dateString + " is in the format: " + format;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
-	
+
 	public String getFromDate() {
 		waitForElement(leaveFromField);
 		return leaveFromField.getAttribute("value");
 	}
-	
+
 	public String getToDate() {
 		waitForElement(leaveToField);
 		return leaveToField.getAttribute("value");
 	}
-	
+
 	public void verifyFromDateIsEqualTimeLogDate(String fromDate, String timeLogDate) {
 		Assert.assertEquals(fromDate, timeLogDate);
 		String methodName = "Verify the From date: " + fromDate + " is equal to the timelog date: " + timeLogDate;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
-	
+
 	public void verifyToDateIsEqualTimeLogDate(String toDate, String timeLogDate) {
 		Assert.assertEquals(toDate, timeLogDate);
 		String methodName = "Verify the To date: " + toDate + " is equal to the timelog date: " + timeLogDate;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
+
+	public void clickHalfDayCheckbox() {
+		waitForElement(halfDayCheckbox);
+		halfDayCheckbox.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
+	}
+	
+	public void verifyHalfDayCheckIsChecked() {
+		waitForElement(halfDayCheckbox);
+		boolean isChecked = halfDayCheckbox.isSelected();
+
+		Assert.assertTrue(isChecked);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify Half Day checkbox is CHECKED");
+		
+	}
+
+	public void verifyHalfDayCheckIsUnchecked() {
+		waitForElement(halfDayCheckbox);
+		boolean isChecked = halfDayCheckbox.isSelected();
+
+		Assert.assertFalse(isChecked);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify Half Day checkbox is UNCHECKED");
+		
+	}
 	
 	
 	
 	
-	
-	//private methods------------------------------------
+	// private methods------------------------------------
 	private List<String> getLeaveTypeOptionsText() {
 
 		// returns a list of all leave type options represented as string
