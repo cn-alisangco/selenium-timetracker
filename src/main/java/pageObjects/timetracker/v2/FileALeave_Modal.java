@@ -2,8 +2,11 @@ package pageObjects.timetracker.v2;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -32,6 +35,10 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement leaveTypeDropdown;
 	@FindBy(xpath = "//select[@id='LeaveType']/option")
 	List<WebElement> leaveTypeOptions;
+	@FindBy(id = "LeaveFrom")
+	WebElement leaveFromField;
+	@FindBy(id = "LeaveTo")
+	WebElement leaveToField;
 
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
@@ -139,6 +146,54 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
+	public void isInCorrectDateFormat(String FromOrToDateType, String dateString, String format) {
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        boolean dateParseable;
+		try {
+			dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Unable to parse date to the format: " + format);
+			dateParseable = false;
+		}
+		dateParseable = true;
+		
+		Assert.assertTrue(dateParseable);
+		
+		String dateTypeString = (FromOrToDateType == "From") ? "From" : "To";
+		String methodName = "Verify the " + dateTypeString + " date : " + dateString + " is in the format: " + format;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	public String getFromDate() {
+		waitForElement(leaveFromField);
+		return leaveFromField.getAttribute("value");
+	}
+	
+	public String getToDate() {
+		waitForElement(leaveToField);
+		return leaveToField.getAttribute("value");
+	}
+	
+	public void verifyFromDateIsEqualTimeLogDate(String fromDate, String timeLogDate) {
+		Assert.assertEquals(fromDate, timeLogDate);
+		String methodName = "Verify the From date: " + fromDate + " is equal to the timelog date: " + timeLogDate;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	public void verifyToDateIsEqualTimeLogDate(String toDate, String timeLogDate) {
+		Assert.assertEquals(toDate, timeLogDate);
+		String methodName = "Verify the To date: " + toDate + " is equal to the timelog date: " + timeLogDate;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	
+	
+	
+	
+	//private methods------------------------------------
 	private List<String> getLeaveTypeOptionsText() {
 
 		// returns a list of all leave type options represented as string
