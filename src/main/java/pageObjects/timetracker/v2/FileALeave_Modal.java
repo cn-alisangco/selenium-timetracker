@@ -47,6 +47,8 @@ public class FileALeave_Modal extends UserHelper {
 	List<WebElement> leaveResonOptions;
 	@FindBy(id = "LeaveReason")
 	WebElement remarksTextBox;
+	@FindBy(id = "ContactNumber")
+	WebElement contactNumberTextBox;
 
 	// constructor
 	public FileALeave_Modal(WebDriver driver) {
@@ -120,8 +122,16 @@ public class FileALeave_Modal extends UserHelper {
 				"Enter text in the comments/remarks textbox");
 	}
 
+	public void enterContactNumber(String contactNumber) {
+		waitForElement(contactNumberTextBox);
 
-	// Verifications
+		contactNumberTextBox.sendKeys(contactNumber);
+
+		String methodName = "Enter contact number:  " + contactNumber + " in the contact number textbox";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
+	// Verifications and assertions
 	public void verifyFileALeaveModalIsDisplayed() {
 
 		// verify "File a Leave" modal exists
@@ -251,14 +261,25 @@ public class FileALeave_Modal extends UserHelper {
 	}
 
 	public void verifyRemarksTextBoxValue(String remarks) {
-		
+
 		waitForElement(remarksTextBox);
 		String text = remarksTextBox.getAttribute("value");
-		
+
 		Assert.assertEquals(text, remarks);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify value of comments/remarks textarea is equal to text entered");
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify value of comments/remarks textarea is equal to text entered");
 	}
-	
+
+	public void verifyContactNumberTextBoxValue(String contactNumber) {
+
+		waitForElement(contactNumberTextBox);
+		String textBoxValue = contactNumberTextBox.getAttribute("value");
+
+		Assert.assertEquals(textBoxValue, contactNumber);
+		String methodName = "Verify value of contact number textbox: " + textBoxValue + " is equal to contact number entered: " +  contactNumber;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
 	
 	// private methods------------------------------------
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
