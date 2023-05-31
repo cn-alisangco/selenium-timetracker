@@ -16,18 +16,14 @@ import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
-public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal extends BaseClass {
+public class TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal extends BaseClass {
 	// variables
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
 
-	List<String> leaveTypes = Arrays.asList("Banked General Leave", "Call Back Vacation Leave", "Excess Earned Leaves",
-			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
-			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
-			"Vacation Leave");
+	List<String> leaveReasonOptions = Arrays.asList("Emergency Leave", "Sick Leave", "Vacation Leave", "Others");
 
-	
 	// Login Test Data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
@@ -39,7 +35,7 @@ public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal exten
 	}
 
 	@Test
-	public void TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal() {
+	public void TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal() {
 
 		initialize();
 
@@ -57,19 +53,18 @@ public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal exten
 			// 1. click the link
 			myTimeLogsPage.clickFileALeaveButton(i);
 
-			// 2. Verify leavetypes
-			fileALeaveModal.verifyDropDownOptions(fileALeaveModal.getLeaveTypeDropdown(), fileALeaveModal.getLeaveTypeOptions(), leaveTypes);
-			
-			
-			//3. Select the leave types
-			for (String leaveType : leaveTypes) {
-				//Select a leave type
-				fileALeaveModal.selectDropDownOption(fileALeaveModal.getLeaveTypeDropdown(), leaveType);
-				
-				//Verify leave type was indeed selected
-				fileALeaveModal.verifydropDownOptionIsSelected(fileALeaveModal.getLeaveTypeDropdown(), leaveType);
+			// 2. Verify leave reasons
+			fileALeaveModal.verifyDropDownOptions(fileALeaveModal.getLeaveReasonDropdown(), fileALeaveModal.getLeaveReasonOptions(), leaveReasonOptions);
+
+			// 3. Select the leave reasons
+			for (String leaveReasonOption : leaveReasonOptions) {
+				// Select a leave reason
+				fileALeaveModal.selectDropDownOption(fileALeaveModal.getLeaveReasonDropdown(), leaveReasonOption);
+
+				// Verify leave reason was indeed selected
+				fileALeaveModal.verifydropDownOptionIsSelected(fileALeaveModal.getLeaveReasonDropdown(), leaveReasonOption);
 			}
-			
+
 			// 4. Close modal
 			fileALeaveModal.clickCloseButton();
 
@@ -77,8 +72,6 @@ public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal exten
 			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
 		}
 
-		
-	
 	}
 
 }

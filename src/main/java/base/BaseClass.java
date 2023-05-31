@@ -66,9 +66,9 @@ public class BaseClass {
 		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
 	}
 
-//	@AfterClass(alwaysRun=true)
-//	public void tearDown() {
-//		getDriver().close();
-//		getDriver().quit();
-//	}
+	@AfterClass(alwaysRun=true)
+	public void tearDown() {
+		getDriver().close();
+		getDriver().quit();
+	}
 }

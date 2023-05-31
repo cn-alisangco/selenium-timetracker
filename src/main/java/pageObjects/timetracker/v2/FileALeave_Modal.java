@@ -27,8 +27,6 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement fileALeaveModalCloseButton;
 	@FindBy(id = "dialog-modal-leave")
 	WebElement fileALeaveModalBody;
-	@FindBy(id = "LeaveReason")
-	WebElement leaveReasonField;
 	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div")
 	WebElement dateApplied;
 	@FindBy(id = "LeaveType")
@@ -41,23 +39,45 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement leaveToField;
 	@FindBy(id = "IsHalfday")
 	WebElement halfDayCheckbox;
+	@FindBy(id = "reasonDDL")
+	WebElement leaveReasonDropdown;
+	@FindBy(xpath = "//select[@id='reasonDDL']/option")
+	List<WebElement> leaveResonOptions;
 
+	// constructor
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
 	}
 
-	public void verifyFileALeaveModalIsDisplayed() {
-
-		// verify "File a Leave" modal exists
-		waitForElement(fileALeaveModalCloseButton);
-		waitForElement(fileALeaveModalBody);
-		validateElementIsDisplayed(fileALeaveModalCloseButton);
-		validateElementIsDisplayed(fileALeaveModalBody);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify 'File a Leave' modal is displayed");
-
+	// Getters
+	public WebElement getLeaveTypeDropdown() {
+		return leaveTypeDropdown;
 	}
 
+	public WebElement getLeaveReasonDropdown() {
+		return leaveReasonDropdown;
+	}
+
+	public List<WebElement> getLeaveTypeOptions() {
+		return leaveTypeOptions;
+	}
+
+	public List<WebElement> getLeaveReasonOptions() {
+		return leaveResonOptions;
+	}
+
+	public String getFromDate() {
+		waitForElement(leaveFromField);
+		return leaveFromField.getAttribute("value");
+	}
+
+	public String getToDate() {
+		waitForElement(leaveToField);
+		return leaveToField.getAttribute("value");
+	}
+
+	// public methods-------------------------------------------
+	// Actions
 	public void clickCloseButton() {
 
 		// close "File a Leave" modal
@@ -68,11 +88,35 @@ public class FileALeave_Modal extends UserHelper {
 
 	}
 
-	public void enterLeaveReason() {
+	public void selectDropDownOption(WebElement dropDown, String leaveType) {
 
-		waitForElement(leaveReasonField);
-		leaveReasonField.sendKeys("TEST");
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Enter leave reason");
+		// declare dropdown as an instance of the Select class
+		Select dropDownElement = new Select(dropDown);
+
+		// select leave type
+		dropDownElement.selectByVisibleText(leaveType);
+
+		String dropDownName = dropDown.getAttribute("name");
+		String methodName = "Select the ff. option: " + leaveType + " from the " + dropDownName + " dropdown";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
+	public void clickHalfDayCheckbox() {
+		waitForElement(halfDayCheckbox);
+		halfDayCheckbox.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
+	}
+
+	// Verifications
+	public void verifyFileALeaveModalIsDisplayed() {
+
+		// verify "File a Leave" modal exists
+		waitForElement(fileALeaveModalCloseButton);
+		waitForElement(fileALeaveModalBody);
+		validateElementIsDisplayed(fileALeaveModalCloseButton);
+		validateElementIsDisplayed(fileALeaveModalBody);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify 'File a Leave' modal is displayed");
 
 	}
 
@@ -102,49 +146,42 @@ public class FileALeave_Modal extends UserHelper {
 
 	}
 
-	public void verifyLeaveTypeOptions(List<String> leaveTypeOptions) {
-		waitForElement(leaveTypeDropdown);
+	public void verifyDropDownOptions(WebElement dropDownElement, List<WebElement> optionsList,
+			List<String> optionsListTestData) {
+		waitForElement(dropDownElement);
 
 		// get a list of all leave type options displayed in the app
-		List<String> leaveTypeOptionsText = getLeaveTypeOptionsText();
+		List<String> optionsListStrings = getOptionElementsText(optionsList);
 
 		// click dropdown
-		leaveTypeDropdown.click();
+		dropDownElement.click();
 
-		// verify that the leaveTypeOptionsText arraylist contains each string in the
-		// leaveTypeOptions parameter
-		for (String leaveTypeOption : leaveTypeOptions) {
+		// verify that the optionsListStrings arraylist contains each string in the
+		// optionsListTestData parameter
+		for (String optionTestData : optionsListTestData) {
 
-			boolean leaveTypeExists = leaveTypeOptionsText.contains(leaveTypeOption);
-			System.out.println(leaveTypeOption);
-			Assert.assertTrue(leaveTypeExists);
+			boolean optionExists = optionsListStrings.contains(optionTestData);
+			Assert.assertTrue(optionExists);
 
-			String methodName = "Verify the ff. leave type is available: " + leaveTypeOption;
+			String dropDownName = dropDownElement.getAttribute("name");
+			String methodName = "Verify the ff. option is available: " + optionTestData + " in the " + dropDownName
+					+ " dropdown";
 			reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 		}
 
 	}
 
-	public void selectLeaveType(String leaveType) {
+	public void verifydropDownOptionIsSelected(WebElement dropDown, String option) {
+		// declare dropdown as an instance of the Select class
+		Select dropDownElement = new Select(dropDown);
 
-		// declare leavetype dropdown as an instance of the Select class
-		Select leaveTypeDrp = new Select(leaveTypeDropdown);
+		// verify option is selected
+		String selectedOption = dropDownElement.getFirstSelectedOption().getText();
+		Assert.assertEquals(selectedOption, option);
 
-		// select leave type
-		leaveTypeDrp.selectByVisibleText(leaveType);
-
-		String methodName = "Select the ff. leave type: " + leaveType;
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
-	public void verifyLeaveTypeIsSelected(String leaveType) {
-		// declare leavetype dropdown as an instance of the Select class
-		Select leaveTypeDrp = new Select(leaveTypeDropdown);
-
-		String selectedLeaveType = leaveTypeDrp.getFirstSelectedOption().getText();
-		Assert.assertEquals(selectedLeaveType, leaveType);
-
-		String methodName = "Verify the ff. leave type is selected: " + leaveType;
+		String dropDownName = dropDown.getAttribute("name");
+		String methodName = "Verify the ff. option is selected: " + selectedOption + "  in the " + dropDownName
+				+ " dropdown";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
@@ -169,16 +206,6 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
-	public String getFromDate() {
-		waitForElement(leaveFromField);
-		return leaveFromField.getAttribute("value");
-	}
-
-	public String getToDate() {
-		waitForElement(leaveToField);
-		return leaveToField.getAttribute("value");
-	}
-
 	public void verifyFromDateIsEqualTimeLogDate(String fromDate, String timeLogDate) {
 		Assert.assertEquals(fromDate, timeLogDate);
 		String methodName = "Verify the From date: " + fromDate + " is equal to the timelog date: " + timeLogDate;
@@ -191,20 +218,13 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
-	public void clickHalfDayCheckbox() {
-		waitForElement(halfDayCheckbox);
-		halfDayCheckbox.click();
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
-	}
-	
 	public void verifyHalfDayCheckIsChecked() {
 		waitForElement(halfDayCheckbox);
 		boolean isChecked = halfDayCheckbox.isSelected();
 
 		Assert.assertTrue(isChecked);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify Half Day checkbox is CHECKED");
-		
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Half Day checkbox is CHECKED");
+
 	}
 
 	public void verifyHalfDayCheckIsUnchecked() {
@@ -212,23 +232,19 @@ public class FileALeave_Modal extends UserHelper {
 		boolean isChecked = halfDayCheckbox.isSelected();
 
 		Assert.assertFalse(isChecked);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify Half Day checkbox is UNCHECKED");
-		
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Half Day checkbox is UNCHECKED");
+
 	}
-	
-	
-	
-	
+
 	// private methods------------------------------------
-	private List<String> getLeaveTypeOptionsText() {
+	private List<String> getOptionElementsText(List<WebElement> optionsList) {
 
 		// returns a list of all leave type options represented as string
 		List<String> leavyTypeOptionsText = new ArrayList<String>();
 
-		for (WebElement leaveTypeOption : leaveTypeOptions) {
-			waitForElement(leaveTypeOption);
-			leavyTypeOptionsText.add(leaveTypeOption.getText());
+		for (WebElement option : optionsList) {
+			waitForElement(option);
+			leavyTypeOptionsText.add(option.getText());
 		}
 
 		return leavyTypeOptionsText;
