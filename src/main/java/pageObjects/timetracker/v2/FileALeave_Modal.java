@@ -3,6 +3,7 @@ package pageObjects.timetracker.v2;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.text.ParseException;
@@ -17,6 +18,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 
+import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class FileALeave_Modal extends UserHelper {
@@ -43,6 +45,8 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement leaveReasonDropdown;
 	@FindBy(xpath = "//select[@id='reasonDDL']/option")
 	List<WebElement> leaveResonOptions;
+	@FindBy(id = "LeaveReason")
+	WebElement remarksTextBox;
 
 	// constructor
 	public FileALeave_Modal(WebDriver driver) {
@@ -106,6 +110,16 @@ public class FileALeave_Modal extends UserHelper {
 		halfDayCheckbox.click();
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
 	}
+
+	public void enterTextInRemarksTextBox(String remark) {
+		waitForElement(remarksTextBox);
+
+		remarksTextBox.sendKeys(remark);
+
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Enter text in the comments/remarks textbox");
+	}
+
 
 	// Verifications
 	public void verifyFileALeaveModalIsDisplayed() {
@@ -236,6 +250,16 @@ public class FileALeave_Modal extends UserHelper {
 
 	}
 
+	public void verifyRemarksTextBoxValue(String remarks) {
+		
+		waitForElement(remarksTextBox);
+		String text = remarksTextBox.getAttribute("value");
+		
+		Assert.assertEquals(text, remarks);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify value of comments/remarks textarea is equal to text entered");
+	}
+	
+	
 	// private methods------------------------------------
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
 
