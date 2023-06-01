@@ -14,7 +14,7 @@ import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
-public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
+public class TC005_TimeTracker_TimeLogs_ReasonNull extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
@@ -34,29 +34,40 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Time Logs");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC001_TimeTracker_TimeLogs_LogTimeIn";
+	    	String id = "TC005_TimeTracker_TimeLogs_ReasonNull";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
 	    	
 	    	loginPage.login(user, pass);
+	    	//verify successful login
 	    	homePage.verifySuccessfulLogin();
 	    	//setting date today
 	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy");
 	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	TimeParser timeparser = new TimeParser("9:00 AM");
-	    	//getting date and time values
-	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex(); //set index for choosing date
-	    	String hour = timeparser.getHour();
-	    	String minute = timeparser.getMinute();
-	    	String period = timeparser.getPeriod();
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
-	    	//click the date to add logs, fill up the fields, and verify tracker registered data successfully
+	    	/*----------Getting date and time values----------*/
+	    	//TIME IN
+	    	TimeParser timeparserIn = new TimeParser("9:00 AM");	    	
+	    	String hourIn = timeparserIn.getHour();
+	    	String minuteIn = timeparserIn.getMinute();
+	    	String periodIn = timeparserIn.getPeriod();
+	    	//TIME OUT
+	    	TimeParser timeparserOut = new TimeParser("8:00 PM");
+	    	String hourOut = timeparserOut.getHour();
+	    	String minuteOut = timeparserOut.getMinute();
+	    	String periodOut = timeparserOut.getPeriod();
+	    	
+	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex();
+	    	/*----------Add Logs----------*/
 	    	homePage.selectCurrentTimesheetPeriod(tsFormat.format(now));
-	    	homePage.clickDate(dtf.format(now)); 
-	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hour,minute,period);
-	    	editTimeLogs.enterReasonOverride(dayOfWeek, "automated fillup by Selenium");
+	    	homePage.clickDate(dtf.format(now));
+	    	//TIME LOGS
+	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hourIn,minuteIn,periodIn);
+	    	editTimeLogs.fillManualTimeOut(dayOfWeek,hourOut,minuteOut,periodOut);
+	    	editTimeLogs.enterReasonOverride(dayOfWeek, "");
 	    	editTimeLogs.saveLogs();
-	    	editTimeLogs.verifyTimeInFill(dayOfMonth,hour,minute,period,false);
+	    	//Verify reason message appears
+	    	editTimeLogs.verifyReasonError(dayOfWeek);
+	    	
 	}
 }

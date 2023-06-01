@@ -459,6 +459,8 @@ public class UserHelper extends ReadExcelData {
 		WebElement element = driver.findElement(locator);
 		return element.getAttribute("value");
 	}
+	
+//newly added 
 
 	// ReportLogs-----------------------------------------------------------
 	public void reportPass(String methodName, String desc) {

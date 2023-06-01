@@ -41,18 +41,22 @@ public class TC002_TimeTracker_TimeLogs_LogTimeOut extends BaseClass {
 	    	//verify if successful login
 	    	homePage.verifySuccessfulLogin();
 	    	//setting date today
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/dd/yyyy"); //setting date format
+	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy"); //setting date format
+	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	TimeParser timeparser = new TimeParser("11:00 PM");
+	    	TimeParser timeparser = new TimeParser("7:00 PM");
 	    	//getting date and time values
-	    	int dayOfWeek = now.getDayOfWeek().getValue();
+	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex();
 	    	String hour = timeparser.getHour();
 	    	String minute = timeparser.getMinute();
 	    	String period = timeparser.getPeriod();
 	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
-	    	
+	    	//click the date to add logs, fill up the fields, and verify tracker registered data successfully
+	    	homePage.selectCurrentTimesheetPeriod(tsFormat.format(now));
 	    	homePage.clickDate(dtf.format(now)); 
 	    	editTimeLogs.fillManualTimeOut(dayOfWeek,hour,minute,period);
-	    	editTimeLogs.verifyTimeOutFill(dayOfMonth,hour,minute,period);
-	    }
+	    	editTimeLogs.enterReasonOverride(dayOfWeek, "automated fillup by Selenium");
+	    	editTimeLogs.saveLogs();
+	    	editTimeLogs.verifyTimeOutFill(dayOfMonth,hour,minute,period,false);
+	}
 }

@@ -1,4 +1,4 @@
-package test.TimeTracker.TimeLogs;
+package test.TimeTracker.ChargeHours;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,22 +8,23 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 
 import base.BaseClass;
+import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
-public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
+public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
-	EditTimeLogs editTimeLogs;
+	DailyWorkHours dailyWorkHours;
 	
 	private void initialize() {
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		homePage = PageFactory.initElements(getDriver(), HomePage.class);
-		editTimeLogs = PageFactory.initElements(getDriver(), EditTimeLogs.class);
+		dailyWorkHours = PageFactory.initElements(getDriver(), DailyWorkHours.class);
 	}
 	
 	@Test
@@ -40,23 +41,16 @@ public class TC001_TimeTracker_TimeLogs_LogTimeIn extends BaseClass {
 	    	
 	    	loginPage.login(user, pass);
 	    	homePage.verifySuccessfulLogin();
-	    	//setting date today
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy");
+	    	
+	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+	    	System.out.println(dayOfMonth);
+	    	homePage.clickInputWhizHours(dayOfMonth);
+	    	dailyWorkHours.verifyInputWhizExists();
+	    	
 	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	TimeParser timeparser = new TimeParser("9:00 AM");
-	    	//getting date and time values
-	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex(); //set index for choosing date
-	    	String hour = timeparser.getHour();
-	    	String minute = timeparser.getMinute();
-	    	String period = timeparser.getPeriod();
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
-	    	//click the date to add logs, fill up the fields, and verify tracker registered data successfully
-	    	homePage.selectCurrentTimesheetPeriod(tsFormat.format(now));
-	    	homePage.clickDate(dtf.format(now)); 
-	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hour,minute,period);
-	    	editTimeLogs.enterReasonOverride(dayOfWeek, "automated fillup by Selenium");
-	    	editTimeLogs.saveLogs();
-	    	editTimeLogs.verifyTimeInFill(dayOfMonth,hour,minute,period,false);
+	    	//System.out.println(tsFormat.format(now)+""+dayOfMonth);
+	    	dailyWorkHours.verifyProperDay(tsFormat.format(now),dayOfMonth);
+	    	
 	}
 }

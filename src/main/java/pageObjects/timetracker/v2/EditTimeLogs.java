@@ -1,5 +1,7 @@
 package pageObjects.timetracker.v2;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -30,94 +32,164 @@ public class EditTimeLogs extends UserHelper {
 		this.driver = driver;
 	}
 	
+	public void enterReasonOverride(int dayOfTheWeek, String reason) {
+		WebElement reasonTextBox = driver.findElement(By.id("txtReason"+dayOfTheWeek));
+		reasonTextBox.clear();
+    	reasonTextBox.sendKeys(reason);
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "entered Reason Override");
+	}
+	
+	public void saveLogs() {
+    	editSave.click();
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Save");
+	}
+	
+	public boolean cancelLogs() {
+		editCancel.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Cancel");
+		return true;
+	}
+	
+	public void tickManual(WebElement checkbox) {
+		if(!checkbox.isSelected()) { //if manual override not yet ticked, tick to release manual time fields
+    		checkbox.click();
+    	}
+	}
+	
     public void fillManualTimeIn(int dayOfTheWeek, String hour, String minute, String time12Hour) {
-    	dayOfTheWeek = dayOfTheWeek-1;
     	JavascriptExecutor javascript = (JavascriptExecutor) driver;
     	//getting locators for current date
     	waitForElement(editTimeLogs);
-    	//getting locators for manual fields
     	WebElement manualTimeInCheckbox = driver.findElement(By.id("manualTimeInCheck"+dayOfTheWeek));
-    	WebElement reasonTextBox = driver.findElement(By.id("txtReason"+dayOfTheWeek));
-    	if(!manualTimeInCheckbox.isSelected()) { //if manual override not yet ticked, tick to release manual time fields
-    		manualTimeInCheckbox.click();
-    	}
-    	WebElement timeInHour = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/input[1]"));
-    	WebElement timeInMinute = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/input[2]"));
+    	tickManual(manualTimeInCheckbox);
+    	//getting locators for manual fields
+    	//fill up dropdown menus
     	WebElement timeInZone = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/select[1]"));
     	WebElement timeInArea = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/select[2]"));
-    	//enter reason text field
-    	reasonTextBox.clear();
-    	reasonTextBox.sendKeys("automated fill up by Selenium");
-    	//enter time in hours, using JSE since field does not work properly with regular WebElement functions
-    	javascript.executeScript("arguments[0].value = '';", timeInHour);
-    	javascript.executeScript("arguments[0].value='"+hour+"';", timeInHour);
-    	javascript.executeScript("arguments[0].value = '';", timeInMinute);
-    	javascript.executeScript("arguments[0].value='"+minute+"';", timeInMinute);
-    	//fill up dropdown menus
     	selectByVisibleText(timeInZone, time12Hour);
-    	selectByVisibleText(timeInArea,"UP");
-    	//save entered data
-    	editSave.click();
+    	selectByVisibleText(timeInArea,"UP");   	
+    	WebElement timeInHour = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/input[1]"));
+    	WebElement timeInMinute = driver.findElement(By.xpath("//*[@id=\"divTimeInManual"+dayOfTheWeek+"\"]/input[2]"));
+    	//enter time in hours, using JSE since field does not work properly with regular WebElement functions
+    	timeInHour.clear();
+    	javascript.executeScript("arguments[0].value='"+hour+"';", timeInHour);
+    	timeInMinute.clear();
+    	javascript.executeScript("arguments[0].value='"+minute+"';", timeInMinute);
+    	
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully filled up manual time in");
     }
     
-    public void verifyTimeInFill(int dayOfMonth, String hour, String minute, String time12Hour) {
-    	//compare entered time with displayed 
-    	WebElement timeInEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[4]"));
-    	String displayedTimeIn = timeInEntered.getText();
-    	System.out.println(displayedTimeIn);
-    	boolean isSame;
-    	
-    	isSame = displayedTimeIn.equals(hour+":"+minute+" "+time12Hour+" "+"UP");
-    	//System.out.println(hour+":"+minute+" "+time12Hour+" "+"UP");
-    	if(!isSame) {
-    		throw new Error("Entered time not the same!");
-    	}
-    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
-    }
-
     public void fillManualTimeOut(int dayOfTheWeek, String hour, String minute, String time12Hour) {
-    	dayOfTheWeek = dayOfTheWeek-1;
     	JavascriptExecutor javascript = (JavascriptExecutor) driver;
     	//getting locators for current date
     	waitForElement(editTimeLogs);
     	WebElement manualTimeOutCheckbox = driver.findElement(By.id("manualTimeOutCheck"+dayOfTheWeek));
-    	WebElement reasonTextBox = driver.findElement(By.id("txtReason"+dayOfTheWeek));
+    	tickManual(manualTimeOutCheckbox);
     	//getting locators for manual fields
-    	if(!manualTimeOutCheckbox.isSelected()) {	//if manual override not yet ticked, tick to release manual time fields
-    		manualTimeOutCheckbox.click();
-    	}
-    	WebElement timeOutHour = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/input[1]"));
-    	WebElement timeOutMinute = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/input[2]"));
     	WebElement timeOutZone = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/select[1]"));
     	WebElement timeOutArea = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/select[2]"));
-    	//enter time
-    	reasonTextBox.clear();
-    	reasonTextBox.sendKeys("automated fill up by Selenium");
-    	javascript.executeScript("arguments[0].value = '';", timeOutHour);
-    	javascript.executeScript("arguments[0].value='"+hour+"';", timeOutHour);
-    	javascript.executeScript("arguments[0].setAttribute('value', '');", timeOutMinute);
-    	javascript.executeScript("arguments[0].value='"+minute+"';", timeOutMinute);
     	//fill up dropdown menus
     	selectByVisibleText(timeOutZone, time12Hour);
     	selectByVisibleText(timeOutArea,"UP");
-    	//save entered data
-    	editSave.click();
+    	WebElement timeOutHour = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/input[1]"));
+      	WebElement timeOutMinute = driver.findElement(By.xpath("//*[@id=\"divTimeOutManual"+dayOfTheWeek+"\"]/input[2]"));
+    	//enter time
+    	timeOutHour.clear();
+    	javascript.executeScript("arguments[0].value='"+hour+"';", timeOutHour);
+    	timeOutMinute.clear();
+    	javascript.executeScript("arguments[0].value='"+minute+"';", timeOutMinute);
+    	
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully filled up manual time out");
     }
-
-    public void verifyTimeOutFill(int dayOfMonth, String hour, String minute, String time12Hour) {	
+    
+    public void verifyTimeInFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {
     	//compare entered time with displayed 
-    	WebElement timeOutEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[5]"));
-    	String displayedTimeOut = timeOutEntered.getText();
-    	System.out.println(displayedTimeOut);
-    	boolean isSame;
-    		
-    	isSame = displayedTimeOut.equals(hour+":"+minute+" "+time12Hour+" "+"UP");
-    	//System.out.println(hour+":"+minute+" "+time12Hour+" "+"UP");
-    	if(!isSame) {
+    	WebElement timeInEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[4]"));
+    	moveAndHighlightElement(timeInEntered);
+    	String displayedTimeIn = timeInEntered.getText();
+    	boolean isSame = displayedTimeIn.equals(hour+":"+minute+" "+time12Hour+" "+"UP");
+    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
+    	}else if(!isCanceled&&isSame) { //not canceled, same value
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
+    	}else if(isCanceled&&isSame) { //canceled, but same value 
+    		throw new Error("Time was changed!");
+    	}else { //not canceled and not the same as input
     		throw new Error("Entered time not the same!");
     	}
-    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified manual time out");
     }
+
+    public void verifyTimeOutFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {	
+    	//compare entered time with displayed 
+    	WebElement timeOutEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[5]"));
+    	moveAndHighlightElement(timeOutEntered);
+    	String displayedTimeOut = timeOutEntered.getText();
+    	System.out.println(displayedTimeOut);
+    	boolean isSame = displayedTimeOut.equals(hour+":"+minute+" "+time12Hour+" "+"UP");	
+    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
+    	}else if(!isCanceled&&isSame) { //not canceled, same value
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
+    	}else if(isCanceled&&isSame) { //canceled, but same value 
+    		throw new Error("Time was changed!");
+    	}else { //not canceled and not the same as input
+    		throw new Error("Entered time not the same!");
+    	}
+    }
+    
+    public void verifyTimeInError(int dayOfWeek) {
+    	WebElement timeInError = driver.findElement(By.xpath("//*[@id=\"timeInValidation"+dayOfWeek+"\"]"));
+    	waitElementToLoad(timeInError);
+		moveAndHighlightElement(timeInError);
+    	String errorMessage = timeInError.getText();
+    	boolean isLaterOrEqual = errorMessage.equals("Time-In cannot be later than or equal to Time-Out");
+    	System.out.println(errorMessage);
+    	if(!isLaterOrEqual) {
+    		throw new Error("Different error message!");
+    	}
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified correct TimeIn error message");
+    }
+    
+    public void verifyTimeOutError(int dayOfWeek) {
+    	WebElement timeOutError = driver.findElement(By.xpath("//*[@id=\"timeOutValidation"+dayOfWeek+"\"]"));
+    	waitElementToLoad(timeOutError);
+		moveAndHighlightElement(timeOutError);
+    	String errorMessage = timeOutError.getText();
+    	boolean isEarlierOrEqual = errorMessage.equals("Time-Out cannot be earlier than or equal to Time-In");
+    	if(!isEarlierOrEqual) {
+    		throw new Error("Different error message!");
+    	}
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified correct TimeOut error message");
+    }
+
+    public void verifyReasonError(int dayOfWeek) {
+    	dayOfWeek = dayOfWeek + 2;
+    	WebElement reasonError = driver.findElement(By.xpath("//*[@id=\"tblManualEditTimeLogs\"]/tbody/tr["+dayOfWeek+"]/td[6]/div/label"));
+    	waitElementToLoad(reasonError);
+		moveAndHighlightElement(reasonError);
+    	String errorMessage = reasonError.getText();
+    	boolean noOverrideReason = errorMessage.equals("Please add reason for manual override.");
+    	if(!noOverrideReason) {
+    		throw new Error("Different error message!");
+    	}
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified correct Reason error message");
+    }
+    
+    public static int setTimeLogIndex() {
+    	LocalDate currentDate = LocalDate.now();
+        // Get the last day of the current week
+        LocalDate lastDayOfWeek = currentDate.with(DayOfWeek.SATURDAY);
+	    // Get the current day for the month, current day of the week in number format
+	    int lastDay = lastDayOfWeek.getDayOfMonth();
+        int dayOfWeek = currentDate.getDayOfWeek().getValue();
+        int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+        //if start of the month, offset property to get proper index in timetracker
+        if(dayOfMonth<7&&lastDay<7) {
+        	//weekIndex is equal to <dayOfTheWeek> minus offset
+        	dayOfWeek = dayOfWeek-7+lastDay;
+        }
+        //if not start of the month, maintain current index
+        return dayOfWeek;
+    }
+    
 }

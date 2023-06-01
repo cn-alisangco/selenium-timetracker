@@ -74,19 +74,24 @@ public class HomePage extends UserHelper {
     @FindBy(linkText="Submit")
     WebElement submit;
     
-    @FindBy(xpath="//*[@id=\"period\"]/div[3]/div[2]/div/div/span")
+    @FindBy(className="jqTransformSelectWrapper")
     WebElement timesheetPeriod;
+    @FindBy(className="jqTransformSelectOpen")
+    WebElement timesheetPeriodArrow;
+    @FindBy(xpath="//*[@id=\"period\"]/div[3]/div[2]/div/ul/li[1]/a")
+    WebElement currentMonth;
     
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
 	
-    public void verifySuccessfulLogin() throws Exception {
+    public void verifySuccessfulLogin() {
         waitForElement(loggedUser);
         boolean logSuccess = loggedUser!=null;
         if(!logSuccess) {
     		throw new Error("Login error!");
     	}
+        moveAndHighlightElement(loggedUser);
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified successful login");
     }
     
@@ -101,7 +106,22 @@ public class HomePage extends UserHelper {
     
     public void clickDate(String date) {
     	WebElement timeDate = driver.findElement(By.linkText(date));
+    	moveAndHighlightElement(timeDate);
     	timeDate.click();
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Date for today");
+    }
+    
+    public void selectCurrentTimesheetPeriod(String period) {
+    	waitForElement(timesheetPeriod);
+    	moveAndHighlightElement(timesheetPeriod);
+    	timesheetPeriodArrow.click();
+    	currentMonth.click(); 
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked chosen period");
+    }
+    
+    public void clickInputWhizHours(int dayOfMonth) {
+    	WebElement day = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[8]/div/a[2]/img"));
+    	day.click();
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Input Whiz Hours");
     }
 }
