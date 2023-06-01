@@ -40,6 +40,8 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement fileALeaveModalCloseButton;
 	@FindBy(id = "CancelLeaveApplication")
 	WebElement cancelButton;
+	@FindBy(id = "SubmitLeaveApplication")
+	WebElement submitButton;
 
 	// textbox
 	@FindBy(id = "LeaveReason")
@@ -55,13 +57,13 @@ public class FileALeave_Modal extends UserHelper {
 
 	// error/required messages
 	@FindBy(id = "errorLeaveType")
-	WebElement leaveTypeRequiredMessage;
+	WebElement leaveTypeErrorMessage;
 	@FindBy(id = "errorReasonDDL")
-	WebElement leaveReasonRequiredMessage;
+	WebElement leaveReasonErrorMessage;
 	@FindBy(id = "errorReason1")
-	WebElement commentRequiredMessage;
+	WebElement commentErrorMessage;
 	@FindBy(id = "errorContact")
-	WebElement contactNumberRequiredMessage;
+	WebElement contactNumberErrorMessage;
 
 	// others (e.g. containers, lists)
 	@FindBy(id = "dialog-modal-leave")
@@ -77,8 +79,13 @@ public class FileALeave_Modal extends UserHelper {
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
 	}
-
+	
+	
 	// Getters
+	
+	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
+	
+	//GETTERS--------------------------------------------------------------------------------------------
 	public WebElement getLeaveTypeDropdown() {
 		return leaveTypeDropdown;
 	}
@@ -105,8 +112,33 @@ public class FileALeave_Modal extends UserHelper {
 		return leaveToField.getAttribute("value");
 	}
 
-	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
-	// ACTIONS--------------------------------------------------------------------------------------------
+	public WebElement getRemarksField() {
+		return remarksTextBox;
+		
+	}
+	
+	public WebElement getContactNumberField() {
+		return remarksTextBox;
+		
+	}
+	
+	public WebElement getLeaveTypeErrorMessage() {
+		return leaveTypeErrorMessage;
+	}
+	
+	public WebElement getLeaveReasonErrorMessage() {
+		return leaveReasonErrorMessage;
+	}
+	
+	public WebElement getCommentErrorMessage() {
+		return commentErrorMessage;
+	}
+	
+	public WebElement getContactNumberErrorMessage() {
+		return contactNumberErrorMessage;
+	}
+	
+	//ACTIONS--------------------------------------------------------------------------------------------
 	// Actions
 	public void clickCloseButton() {
 
@@ -158,7 +190,13 @@ public class FileALeave_Modal extends UserHelper {
 	public void clickCancelButton() {
 		waitForElement(cancelButton);
 		cancelButton.click();
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the cancel button");
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the Cancel button");
+	}
+	
+	public void clickSubmitButton() {
+		waitForElement(submitButton);
+		submitButton.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the Submit button");
 	}
 
 	// VERIFICATIONS---------------------------------------------------------------------------------------
@@ -312,6 +350,41 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
+	public void verifyFieldIsEmpty(WebElement field) {
+		
+		//verify field value is equal to ""
+		waitForElement(field);
+		String fieldValue = field.getAttribute("value");
+		Assert.assertEquals(fieldValue, "");
+		
+		//reporting
+		String fieldName = field.getAttribute("name");
+		String methodName = "Verify " + fieldName + " field is empty";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	public void verifyErrorMessageForFieldIsDisplayed (WebElement field, WebElement errorMessage) {
+
+		//verify error message is displayed 
+		validateElementIsDisplayed(errorMessage);
+	
+		String fieldName = field.getAttribute("name");
+		String methodName = "Verify error message for " + fieldName + " field is displayed";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+		
+	}
+	
+	public void verifyErrorMessageText (WebElement errorMessageElement, String errorMessage) {
+
+		//verify error message is equal to the errorMessage parameter
+		waitForElement(errorMessageElement);
+		String errorMessageElementText = errorMessageElement.getText();
+		Assert.assertEquals(errorMessageElementText, errorMessage);
+		
+		String methodName = "Verify error message displayed is '" + errorMessage + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+		
+	}
 	
 	/* --------------------------------------------PRIVATE METHODS --------------------------------------- */
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {

@@ -18,8 +18,9 @@
 			<class name="test.TimeTracker.LeaveApplication.TC006_TimeTracker_LeaveApplication_VerifyHalfDayCheckboxInTheModal" />
 			<class name="test.TimeTracker.LeaveApplication.TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal" />
 			<class name="test.TimeTracker.LeaveApplication.TC008_TimeTracker_FileALeavePopUp_Comment" />
-			<class name="test.TimeTracker.LeaveApplication.TC009_TimeTracker_FileALeavePopUp_ContactNumber" />-->
-			<class name="test.TimeTracker.LeaveApplication.TC0010_TimeTracker_FileALeavePopUp_CancelButton" />
+			<class name="test.TimeTracker.LeaveApplication.TC009_TimeTracker_FileALeavePopUp_ContactNumber" />
+			<class name="test.TimeTracker.LeaveApplication.TC0010_TimeTracker_FileALeavePopUp_CancelButton" />-->
+			<class name="test.TimeTracker.LeaveApplication.TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty" />
 		</classes>
 	</test>
 </suite>
