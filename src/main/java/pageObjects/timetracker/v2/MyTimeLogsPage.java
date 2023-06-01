@@ -107,11 +107,6 @@ public class MyTimeLogsPage extends UserHelper {
 
 	// private methods----------------------------------------------------------------------------
 
-	private int generateRandomNumber(int min, int max) {
-		// TODO Auto-generated method stub
-		Random random = new Random();
-		return random.nextInt(max - min + 1) + min;
-	}
 
 	private List<Integer> getRowsWithRegularShift() {
 		// gets the indices of rows with "Reg" shift and stores it in a list

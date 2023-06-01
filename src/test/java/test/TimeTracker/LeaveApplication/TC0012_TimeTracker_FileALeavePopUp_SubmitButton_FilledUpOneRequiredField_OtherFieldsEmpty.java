@@ -1,7 +1,9 @@
 package test.TimeTracker.LeaveApplication;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -15,7 +17,7 @@ import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
-public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty extends BaseClass {
+public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty extends BaseClass {
 
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
@@ -34,11 +36,16 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 	WebElement commentErrorMessage;
 	WebElement contactNumberErrorMessage;
 	
-	//Login Test Data
+	//Login Test Data---------------------
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
 	
-
+	//test data---------------------------
+	List<String> leaveTypes = Arrays.asList("Banked General Leave", "Call Back Vacation Leave", "Excess Earned Leaves",
+			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
+			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
+			"Vacation Leave");
+	
 	
 	
 	private void initialize() {
@@ -59,8 +66,10 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 		contactNumberErrorMessage = fileALeaveModal.getContactNumberErrorMessage();
 	}
 	
+	
+	
 	@Test
-	 public void TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty(){
+	 public void TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty(){
 		
 	        initialize();
 	        
@@ -80,24 +89,29 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 	        	//verify File A Leave modal is displayed
 	        	fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 	        	
+	        	//Select a random Leave Type
+	        		//get a random leave type
+	        		int index = UserHelper.generateRandomNumber(0, leaveTypes.size() - 1);
+	        		String randomLeaveType = leaveTypes.get(index);
+	        	
+	        		//select the random leave type
+	        		fileALeaveModal.selectDropDownOption(leaveTypeDropDown, randomLeaveType);
+	        	
 	        	//Verify required fields are blank/has no value
-		        	fileALeaveModal.verifyFieldIsEmpty(leaveTypeDropDown);
-		        	fileALeaveModal.verifyFieldIsEmpty(leaveReasonDropDown);
-		        	fileALeaveModal.verifyFieldIsEmpty(commentField);
-		        	fileALeaveModal.verifyFieldIsEmpty(contactNumberField);
+		        fileALeaveModal.verifyFieldIsEmpty(leaveReasonDropDown);
+		        fileALeaveModal.verifyFieldIsEmpty(commentField);
+		        fileALeaveModal.verifyFieldIsEmpty(contactNumberField);
 	        	
 	        	//Click Submit button
 	        	fileALeaveModal.clickSubmitButton();
 	        	
 	        	//Verify error/required messages are displayed
 	        		//verify error messages for the fields are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(leaveTypeDropDown, leaveTypeErrorMessage, "Choose a Leave Type");
 	        		fileALeaveModal.verifyErrorMessageTextForField(leaveReasonDropDown, leaveReasonErrorMessage, "Choose a Reason");
 	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, commentErrorMessage, "Required");
 	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");

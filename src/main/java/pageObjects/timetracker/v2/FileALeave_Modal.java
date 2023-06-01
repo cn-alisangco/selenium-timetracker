@@ -112,13 +112,13 @@ public class FileALeave_Modal extends UserHelper {
 		return leaveToField.getAttribute("value");
 	}
 
-	public WebElement getRemarksField() {
+	public WebElement getCommentsField() {
 		return remarksTextBox;
 		
 	}
 	
 	public WebElement getContactNumberField() {
-		return remarksTextBox;
+		return contactNumberTextBox;
 		
 	}
 	
@@ -355,7 +355,10 @@ public class FileALeave_Modal extends UserHelper {
 		//verify field value is equal to ""
 		waitForElement(field);
 		String fieldValue = field.getAttribute("value");
-		Assert.assertEquals(fieldValue, "");
+		System.out.println("Field value is equal to " + fieldValue);
+		
+		boolean isEmpty = (fieldValue == null || fieldValue.isEmpty());
+		Assert.assertTrue(isEmpty);
 		
 		//reporting
 		String fieldName = field.getAttribute("name");
@@ -374,14 +377,14 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
-	public void verifyErrorMessageText (WebElement errorMessageElement, String errorMessage) {
+	public void verifyErrorMessageTextForField (WebElement field, WebElement errorMessageElement, String expectedErrorMessage) {
 
 		//verify error message is equal to the errorMessage parameter
 		waitForElement(errorMessageElement);
 		String errorMessageElementText = errorMessageElement.getText();
-		Assert.assertEquals(errorMessageElementText, errorMessage);
+		Assert.assertEquals(errorMessageElementText, expectedErrorMessage);
 		
-		String methodName = "Verify error message displayed is '" + errorMessage + "'";
+		String methodName = "Verify error message displayed for field " + field.getAttribute("name") + " is '" + expectedErrorMessage + "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 		
 	}

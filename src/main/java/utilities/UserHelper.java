@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.time.format.DateTimeFormatter;
@@ -403,6 +404,7 @@ public class UserHelper extends ReadExcelData {
 	}
 	//Newly Added
 	
+	//Input Actions
 	public void actionsClick(By locator) {
 		WebElement element = driver.findElement(locator);
 		Actions actions = new Actions(driver);
@@ -448,6 +450,8 @@ public class UserHelper extends ReadExcelData {
 		}
 
 	}
+	
+	
 	// newly added 05/27
 	public String getDataFromExcel(String sheetName, String tcName, String columnName) {
 		String value = getExcelData(sheetName, tcName, columnName);
@@ -532,6 +536,7 @@ public class UserHelper extends ReadExcelData {
 	}
 
 	
+	//Element existence validation
 	public void validateElementIsDisplayed (By locator) {//newly added 05/26/2023
 		WebElement element = driver.findElement(locator);
 		boolean elementIsDisplayed = element.isDisplayed();
@@ -557,6 +562,8 @@ public class UserHelper extends ReadExcelData {
 		Assert.assertFalse(elementIsDisplayed);
 	}
 	
+	
+	//Date generators
 	public String getTodayDate(String dateFormat) { //added 05/29/2023
 
 		  String pattern = dateFormat;
@@ -565,4 +572,11 @@ public class UserHelper extends ReadExcelData {
 		  return date;
 	}
 
+	
+	//random data generators
+	public static int generateRandomNumber(int min, int max) { //added 6/1/2023
+		// TODO Auto-generated method stub
+		Random random = new Random();
+		return random.nextInt(max - min + 1) + min;
+	}
 }

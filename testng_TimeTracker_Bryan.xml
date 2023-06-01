@@ -10,7 +10,7 @@
 		<parameter name="url" value="http://timetracker.srv.pointwest.com.ph/" />
 		<parameter name="td" value="\\testData\\timetracker_bryan.xlsx" />
 		<classes>
-<!--			<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
+			<!--			<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
 			<class name="test.TimeTracker.LeaveApplication.TC002_TimeTracker_FileALeavePopUp_CloseButton" />
 			<class name="test.TimeTracker.LeaveApplication.TC003_TimeTracker_File_A_Leave_PopUp_DateApplied" />
 			<class name="test.TimeTracker.LeaveApplication.TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal" />
@@ -21,6 +21,7 @@
 			<class name="test.TimeTracker.LeaveApplication.TC009_TimeTracker_FileALeavePopUp_ContactNumber" />
 			<class name="test.TimeTracker.LeaveApplication.TC0010_TimeTracker_FileALeavePopUp_CancelButton" />-->
 			<class name="test.TimeTracker.LeaveApplication.TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty" />
+			<class name="test.TimeTracker.LeaveApplication.TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty" />
 		</classes>
 	</test>
 </suite>
