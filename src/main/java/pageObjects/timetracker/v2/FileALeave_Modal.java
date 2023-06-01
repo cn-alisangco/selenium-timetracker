@@ -24,31 +24,55 @@ import utilities.UserHelper;
 public class FileALeave_Modal extends UserHelper {
 	WebDriver driver;
 
-	// locators
-	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a")
-	WebElement fileALeaveModalCloseButton;
-	@FindBy(id = "dialog-modal-leave")
-	WebElement fileALeaveModalBody;
-	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div")
-	WebElement dateApplied;
-	@FindBy(id = "LeaveType")
-	WebElement leaveTypeDropdown;
-	@FindBy(xpath = "//select[@id='LeaveType']/option")
-	List<WebElement> leaveTypeOptions;
+	
+	/* Locators --------------------------------------*/
+	//fields
 	@FindBy(id = "LeaveFrom")
 	WebElement leaveFromField;
 	@FindBy(id = "LeaveTo")
 	WebElement leaveToField;
 	@FindBy(id = "IsHalfday")
 	WebElement halfDayCheckbox;
-	@FindBy(id = "reasonDDL")
-	WebElement leaveReasonDropdown;
-	@FindBy(xpath = "//select[@id='reasonDDL']/option")
-	List<WebElement> leaveResonOptions;
+	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div")
+	WebElement dateApplied;
+	
+	//buttons
+	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a")
+	WebElement fileALeaveModalCloseButton;
+	@FindBy(id = "CancelLeaveApplication")
+	WebElement cancelButton;
+	
+	//textbox
 	@FindBy(id = "LeaveReason")
 	WebElement remarksTextBox;
 	@FindBy(id = "ContactNumber")
 	WebElement contactNumberTextBox;
+	
+	//dropdowns
+	@FindBy(id = "reasonDDL")
+	WebElement leaveReasonDropdown;
+	@FindBy(id = "LeaveType")
+	WebElement leaveTypeDropdown;
+	
+	//error/required messages
+	@FindBy(id = "errorLeaveType")
+	WebElement leaveTypeRequiredMessage;
+	@FindBy(id = "errorReasonDDL")
+	WebElement leaveReasonRequiredMessage;
+	@FindBy(id = "errorReason1")
+	WebElement commentRequiredMessage;
+	@FindBy(id = "errorContact")
+	WebElement contactNumberRequiredMessage;
+	
+	//others (e.g. containers, lists)
+	@FindBy(id = "dialog-modal-leave")
+	WebElement fileALeaveModalBody;
+	@FindBy(xpath = "//select[@id='LeaveType']/option")
+	List<WebElement> leaveTypeOptions;
+	@FindBy(xpath = "//select[@id='reasonDDL']/option")
+	List<WebElement> leaveResonOptions;
+	
+	
 
 	// constructor
 	public FileALeave_Modal(WebDriver driver) {
@@ -280,6 +304,11 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
+	public void clickCancelButton() {
+		waitForElement(cancelButton);
+		cancelButton.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the cancel button");
+	}
 	
 	// private methods------------------------------------
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
