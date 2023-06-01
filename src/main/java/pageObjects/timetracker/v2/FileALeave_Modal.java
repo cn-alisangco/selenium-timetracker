@@ -24,9 +24,8 @@ import utilities.UserHelper;
 public class FileALeave_Modal extends UserHelper {
 	WebDriver driver;
 
-	
-	/* Locators --------------------------------------*/
-	//fields
+	/* --------------------------------------------LOCATORS --------------------------------------- */
+	// fields
 	@FindBy(id = "LeaveFrom")
 	WebElement leaveFromField;
 	@FindBy(id = "LeaveTo")
@@ -35,26 +34,26 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement halfDayCheckbox;
 	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div")
 	WebElement dateApplied;
-	
-	//buttons
+
+	// buttons
 	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a")
 	WebElement fileALeaveModalCloseButton;
 	@FindBy(id = "CancelLeaveApplication")
 	WebElement cancelButton;
-	
-	//textbox
+
+	// textbox
 	@FindBy(id = "LeaveReason")
 	WebElement remarksTextBox;
 	@FindBy(id = "ContactNumber")
 	WebElement contactNumberTextBox;
-	
-	//dropdowns
+
+	// dropdowns
 	@FindBy(id = "reasonDDL")
 	WebElement leaveReasonDropdown;
 	@FindBy(id = "LeaveType")
 	WebElement leaveTypeDropdown;
-	
-	//error/required messages
+
+	// error/required messages
 	@FindBy(id = "errorLeaveType")
 	WebElement leaveTypeRequiredMessage;
 	@FindBy(id = "errorReasonDDL")
@@ -63,18 +62,18 @@ public class FileALeave_Modal extends UserHelper {
 	WebElement commentRequiredMessage;
 	@FindBy(id = "errorContact")
 	WebElement contactNumberRequiredMessage;
-	
-	//others (e.g. containers, lists)
+
+	// others (e.g. containers, lists)
 	@FindBy(id = "dialog-modal-leave")
 	WebElement fileALeaveModalBody;
 	@FindBy(xpath = "//select[@id='LeaveType']/option")
 	List<WebElement> leaveTypeOptions;
 	@FindBy(xpath = "//select[@id='reasonDDL']/option")
 	List<WebElement> leaveResonOptions;
-	
-	
 
-	// constructor
+	
+	
+	/* --------------------------------------------CONSTRUCTOR --------------------------------------- */
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
 	}
@@ -106,7 +105,8 @@ public class FileALeave_Modal extends UserHelper {
 		return leaveToField.getAttribute("value");
 	}
 
-	// public methods-------------------------------------------
+	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
+	// ACTIONS--------------------------------------------------------------------------------------------
 	// Actions
 	public void clickCloseButton() {
 
@@ -155,6 +155,13 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
+	public void clickCancelButton() {
+		waitForElement(cancelButton);
+		cancelButton.click();
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the cancel button");
+	}
+
+	// VERIFICATIONS---------------------------------------------------------------------------------------
 	// Verifications and assertions
 	public void verifyFileALeaveModalIsDisplayed() {
 
@@ -300,17 +307,13 @@ public class FileALeave_Modal extends UserHelper {
 		String textBoxValue = contactNumberTextBox.getAttribute("value");
 
 		Assert.assertEquals(textBoxValue, contactNumber);
-		String methodName = "Verify value of contact number textbox: " + textBoxValue + " is equal to contact number entered: " +  contactNumber;
+		String methodName = "Verify value of contact number textbox: " + textBoxValue
+				+ " is equal to contact number entered: " + contactNumber;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
-	public void clickCancelButton() {
-		waitForElement(cancelButton);
-		cancelButton.click();
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the cancel button");
-	}
 	
-	// private methods------------------------------------
+	/* --------------------------------------------PRIVATE METHODS --------------------------------------- */
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
 
 		// returns a list of all leave type options represented as string
