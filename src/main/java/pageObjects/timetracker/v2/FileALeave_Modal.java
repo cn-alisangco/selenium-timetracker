@@ -208,8 +208,10 @@ public class FileALeave_Modal extends UserHelper {
 		waitForElement(fileALeaveModalBody);
 		validateElementIsDisplayed(fileALeaveModalCloseButton);
 		validateElementIsDisplayed(fileALeaveModalBody);
+		
+		String timeLogDate = leaveFromField.getAttribute("value");
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify 'File a Leave' modal is displayed");
+				"Verify 'File a Leave' modal is displayed for the " + timeLogDate + " timelog");
 
 	}
 
@@ -355,7 +357,7 @@ public class FileALeave_Modal extends UserHelper {
 		//verify field value is equal to ""
 		waitForElement(field);
 		String fieldValue = field.getAttribute("value");
-		System.out.println("Field value is equal to " + fieldValue);
+		//System.out.println("Field value is equal to " + fieldValue);
 		
 		boolean isEmpty = (fieldValue == null || fieldValue.isEmpty());
 		Assert.assertTrue(isEmpty);

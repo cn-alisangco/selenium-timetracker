@@ -17,7 +17,7 @@ import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
-public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty extends BaseClass {
+public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequiredFields_OtherFieldsEmpty extends BaseClass {
 
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
@@ -45,7 +45,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
 			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
 			"Vacation Leave");
-	
+	List<String> leaveReasons = Arrays.asList("Emergency Leave", "Vacation Leave", "Sick Leave", "Others");
 	
 	
 	private void initialize() {
@@ -69,7 +69,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	
 	
 	@Test
-	 public void TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty(){
+	 public void TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequiredFields_OtherFieldsEmpty(){
 		
 	        initialize();
 	        
@@ -99,9 +99,19 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	        		
 	        		//verify random leave reason was indeed selected
 	        		fileALeaveModal.verifydropDownOptionIsSelected(leaveTypeDropDown, randomLeaveType);
+	        		
+	        	//Select a random Leave Reason
+	        		//get a random leave reason
+	        		int index1 = UserHelper.generateRandomNumber(0, leaveReasons.size() - 1);
+	        		String randomLeaveReason = leaveReasons.get(index1);
+	        	
+	        		//select the random leave reason
+	        		fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
+	        		
+	        		//verify random leave reason was indeed selected
+	        		fileALeaveModal.verifydropDownOptionIsSelected(leaveReasonDropDown, randomLeaveReason);
 	        	
 	        	//Verify required fields are blank/has no value
-		        fileALeaveModal.verifyFieldIsEmpty(leaveReasonDropDown);
 		        fileALeaveModal.verifyFieldIsEmpty(commentField);
 		        fileALeaveModal.verifyFieldIsEmpty(contactNumberField);
 	        	
@@ -110,12 +120,10 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	        	
 	        	//Verify error/required messages are displayed
 	        		//verify error messages for the fields are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(leaveReasonDropDown, leaveReasonErrorMessage, "Choose a Reason");
 	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, commentErrorMessage, "Required");
 	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");
 	        	
