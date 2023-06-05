@@ -17,7 +17,7 @@ import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
-public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty extends BaseClass {
+public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty extends BaseClass {
 
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
@@ -45,7 +45,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
 			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
 			"Vacation Leave");
-	
+	List<String> leaveReasons = Arrays.asList("Emergency Leave", "Vacation Leave", "Sick Leave", "Others");
 	
 	
 	private void initialize() {
@@ -69,7 +69,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	
 	
 	@Test
-	 public void TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty(){
+	 public void TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty(){
 		
 	        initialize();
 	        
@@ -89,7 +89,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	        	//verify File A Leave modal is displayed
 	        	fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 	        	
-	        	//Select a random Leave Type
+	        	//Select a random Leave Type---------------------------------
 	        		//get a random leave type
 	        		int index = UserHelper.generateRandomNumber(0, leaveTypes.size() - 1);
 	        		String randomLeaveType = leaveTypes.get(index);
@@ -99,28 +99,41 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 	        		
 	        		//verify random leave reason was indeed selected
 	        		fileALeaveModal.verifydropDownOptionIsSelected(leaveTypeDropDown, randomLeaveType);
+	        		
+	        	//Select a random Leave Reason---------------------------------
+	        		//get a random leave reason
+	        		int index1 = UserHelper.generateRandomNumber(0, leaveReasons.size() - 1);
+	        		String randomLeaveReason = leaveReasons.get(index1);
 	        	
-	        	//Verify required fields are blank/has no value
-		        fileALeaveModal.verifyFieldIsEmpty(leaveReasonDropDown);
-		        fileALeaveModal.verifyFieldIsEmpty(commentField);
+	        		//select the random leave reason
+	        		fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
+	        		
+	        		//verify random leave reason was indeed selected
+	        		fileALeaveModal.verifydropDownOptionIsSelected(leaveReasonDropDown, randomLeaveReason);
+	        	
+	        		
+	        	//Fill out Remarks/Comment field---------------------------------
+		        fileALeaveModal.enterTextInRemarksTextBox("TEST COMMENT/REMARK");
+		        
+		        
+		        //Verify other required fields are blank/has no value
 		        fileALeaveModal.verifyFieldIsEmpty(contactNumberField);
 	        	
+		        
 	        	//Click Submit button
 	        	fileALeaveModal.clickSubmitButton();
 	        	
 	        	//Verify error/required messages are displayed
-	        		
+	        	
 		        	//verify error messages for the fields WITH input are NOT displayed
 	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField, commentErrorMessage);
 	        		
 	        		//verify error messages for the fields WITHOUT input are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(leaveReasonDropDown, leaveReasonErrorMessage, "Choose a Reason");
-	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, commentErrorMessage, "Required");
 	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");
 	        	
 	        		

@@ -368,11 +368,25 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 	
+	public void verifyErrorMessageForFieldIsNotDisplayed (WebElement field, WebElement errorMessage) {
+
+		//verify error message is displayed 
+		validateElementIsNotDisplayed(errorMessage);
+		
+		String fieldName = field.getAttribute("name");
+		String methodName = "Verify error message for " + fieldName + " field is NOT displayed";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+		
+	}
+	
 	public void verifyErrorMessageForFieldIsDisplayed (WebElement field, WebElement errorMessage) {
 
 		//verify error message is displayed 
-		validateElementIsDisplayed(errorMessage);
-	
+		waitForElement(errorMessage);
+		String errorText = errorMessage.getAttribute("innerText");
+		boolean isNotBlank = !errorText.isEmpty();
+		Assert.assertTrue(isNotBlank);
+		
 		String fieldName = field.getAttribute("name");
 		String methodName = "Verify error message for " + fieldName + " field is displayed";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);

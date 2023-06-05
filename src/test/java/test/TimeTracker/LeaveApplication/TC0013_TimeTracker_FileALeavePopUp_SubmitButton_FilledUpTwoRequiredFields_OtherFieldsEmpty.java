@@ -89,7 +89,7 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 	        	//verify File A Leave modal is displayed
 	        	fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 	        	
-	        	//Select a random Leave Type
+	        	//Select a random Leave Type---------------------------------------
 	        		//get a random leave type
 	        		int index = UserHelper.generateRandomNumber(0, leaveTypes.size() - 1);
 	        		String randomLeaveType = leaveTypes.get(index);
@@ -100,7 +100,7 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 	        		//verify random leave reason was indeed selected
 	        		fileALeaveModal.verifydropDownOptionIsSelected(leaveTypeDropDown, randomLeaveType);
 	        		
-	        	//Select a random Leave Reason
+	        	//Select a random Leave Reason----------------------------------------
 	        		//get a random leave reason
 	        		int index1 = UserHelper.generateRandomNumber(0, leaveReasons.size() - 1);
 	        		String randomLeaveReason = leaveReasons.get(index1);
@@ -119,7 +119,12 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 	        	fileALeaveModal.clickSubmitButton();
 	        	
 	        	//Verify error/required messages are displayed
-	        		//verify error messages for the fields are displayed
+	        	
+	        		//verify error messages for the fields WITH input are NOT displayed
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
+        		
+	        		//verify error messages for the fields WITHOUT input are displayed
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
 	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
 	        		

@@ -1,7 +1,9 @@
 package test.TimeTracker.LeaveApplication;
 
 import java.util.HashMap;
+import java.util.List;
 
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.Test;
 
@@ -11,12 +13,14 @@ import pageObjects.timetracker.v2.FileALeave_Modal;
 import pageObjects.timetracker.v2.LoginPage;
 import pageObjects.timetracker.v2.MyTimeLogsPage;
 import utilities.ExcelReader;
+import utilities.UserHelper;
 
 public class TC001_TimeTracker_File_a_Leave_Actions_Button extends BaseClass {
 
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	List<WebElement> fileLeaveLinks;
 	
 	//Login Test Data
 	String sheetName = "Login";
@@ -27,6 +31,8 @@ public class TC001_TimeTracker_File_a_Leave_Actions_Button extends BaseClass {
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
+		
+		fileLeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
 	}
 	
 	@Test
@@ -42,7 +48,8 @@ public class TC001_TimeTracker_File_a_Leave_Actions_Button extends BaseClass {
 	        myTimeLogsPage.verifyFileALeaveButtonsExist();
 	    	
 	        //Click File a Leave button
-	        myTimeLogsPage.clickFileALeaveButton(1);
+	        int randomIndex = UserHelper.generateRandomNumber(0, fileLeaveLinks.size() - 1);
+	        myTimeLogsPage.clickFileALeaveButton(randomIndex);
 	        
 	        //Verify File a Leave modal is displayed
 	        fileALeaveModal.verifyFileALeaveModalIsDisplayed();

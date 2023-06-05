@@ -26,9 +26,10 @@ public class MyTimeLogsPage extends UserHelper {
 	WebElement timeLogsTable;
 	@FindBy(xpath = "//tbody/tr[contains (@id, '0')]")
 	List<WebElement> timeLogsTableRows;
-	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink']")
+	//@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink']")
+	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink' and not(@style)]")
 	List<WebElement> fileALeaveLinks;
-	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr/td[contains(@class, 'selectDate')]")
+	@FindBy(xpath = "//td[contains(text(),'Reg')]/following-sibling::td[position()=2 and not(contains(text(),'PM'))]/parent::tr/td[contains(@class, 'selectDate')]")
 	List<WebElement> regularShiftDates;
 
 	public MyTimeLogsPage(WebDriver driver) {
@@ -103,7 +104,7 @@ public class MyTimeLogsPage extends UserHelper {
     	
     }
 
-	
+
 
 	// private methods----------------------------------------------------------------------------
 
@@ -112,11 +113,15 @@ public class MyTimeLogsPage extends UserHelper {
 		// gets the indices of rows with "Reg" shift and stores it in a list
 		String shiftType = "Reg";
 		List<Integer> regularShiftRowIndices = new ArrayList<Integer>();
+		
+		
 
 		waitForElement(timeLogsTable);
 		for (int i = 0; i < timeLogsTableRows.size(); i++) {
 			String rowText = timeLogsTableRows.get(i).getText();
-			if (rowText.contains(shiftType)) {
+			
+			//add the Row that contains "Reg" and does NOT contain "Time Out" in its innerText and add it to the list
+			if (rowText.contains(shiftType) && !(rowText.contains("Time Out"))) {
 				regularShiftRowIndices.add(i);
 			}
 		}
