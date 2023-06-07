@@ -23,55 +23,44 @@ import utilities.UserHelper;
 
 public class FileALeave_Modal extends UserHelper {
 	WebDriver driver;
-
+	/* --------------------------------------------VARIABLES--------------------------------------- */
+	String initialSubmitToastMessage = "Please Wait...";
+	
 	/* --------------------------------------------LOCATORS --------------------------------------- */
 	// fields
-	@FindBy(id = "LeaveFrom")
-	WebElement leaveFromField;
-	@FindBy(id = "LeaveTo")
-	WebElement leaveToField;
-	@FindBy(id = "IsHalfday")
-	WebElement halfDayCheckbox;
-	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div")
-	WebElement dateApplied;
+	@FindBy(id = "LeaveFrom") WebElement leaveFromField;
+	@FindBy(id = "LeaveTo") WebElement leaveToField;
+	@FindBy(id = "IsHalfday") WebElement halfDayCheckbox;
+	@FindBy(xpath = "//div[contains(text(),'Date Applied')]/following-sibling::div") WebElement dateApplied;
+	@FindBy(id = "available") WebElement availableLeaveBalance;
 
 	// buttons
-	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a")
-	WebElement fileALeaveModalCloseButton;
-	@FindBy(id = "CancelLeaveApplication")
-	WebElement cancelButton;
-	@FindBy(id = "SubmitLeaveApplication")
-	WebElement submitButton;
+	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a") WebElement fileALeaveModalCloseButton;
+	@FindBy(id = "CancelLeaveApplication") WebElement cancelButton;
+	@FindBy(id = "SubmitLeaveApplication") WebElement submitButton;
 
 	// textbox
-	@FindBy(id = "LeaveReason")
-	WebElement remarksTextBox;
-	@FindBy(id = "ContactNumber")
-	WebElement contactNumberTextBox;
+	@FindBy(id = "LeaveReason") WebElement remarksTextBox;
+	@FindBy(id = "ContactNumber") WebElement contactNumberTextBox;
 
 	// dropdowns
-	@FindBy(id = "reasonDDL")
-	WebElement leaveReasonDropdown;
-	@FindBy(id = "LeaveType")
-	WebElement leaveTypeDropdown;
+	@FindBy(id = "LeaveType") WebElement leaveTypeDropdown;
+	@FindBy(id = "reasonDDL") WebElement leaveReasonDropdown;
 
-	// error/required messages
-	@FindBy(id = "errorLeaveType")
-	WebElement leaveTypeErrorMessage;
-	@FindBy(id = "errorReasonDDL")
-	WebElement leaveReasonErrorMessage;
-	@FindBy(id = "errorReason1")
-	WebElement commentErrorMessage;
-	@FindBy(id = "errorContact")
-	WebElement contactNumberErrorMessage;
+	//messages(errors, toasts)
+	@FindBy(id = "errorLeaveType") WebElement leaveTypeErrorMessage;
+	@FindBy(id = "errorReasonDDL") WebElement leaveReasonErrorMessage;
+	@FindBy(id = "errorReason1") WebElement commentErrorMessage;
+	@FindBy(id = "errorContact") WebElement contactNumberErrorMessage;
+	@FindBy(xpath = "//div[@id='dialog-modal']//div[@class='loaderMessage']") WebElement toastMessage;
 
+	//toasts
+	@FindBy(xpath = "//div[@id='dialog-modal']/div[@class='loader']") WebElement toast;
+	
 	// others (e.g. containers, lists)
-	@FindBy(id = "dialog-modal-leave")
-	WebElement fileALeaveModalBody;
-	@FindBy(xpath = "//select[@id='LeaveType']/option")
-	List<WebElement> leaveTypeOptions;
-	@FindBy(xpath = "//select[@id='reasonDDL']/option")
-	List<WebElement> leaveResonOptions;
+	@FindBy(id = "dialog-modal-leave") WebElement fileALeaveModalBody;
+	@FindBy(xpath = "//select[@id='LeaveType']/option") List<WebElement> leaveTypeOptions;
+	@FindBy(xpath = "//select[@id='reasonDDL']/option[not(@id = '') and contains(@style, 'display: block')]") List<WebElement> leaveReasonOptions;
 
 	
 	
@@ -99,7 +88,7 @@ public class FileALeave_Modal extends UserHelper {
 	}
 
 	public List<WebElement> getLeaveReasonOptions() {
-		return leaveResonOptions;
+		return leaveReasonOptions;
 	}
 
 	public String getFromDate() {
@@ -138,6 +127,32 @@ public class FileALeave_Modal extends UserHelper {
 		return contactNumberErrorMessage;
 	}
 	
+	public String getAvailableLeaveBalance(String leaveType) {
+		//Select leaveType
+		waitForElement(leaveTypeDropdown);
+		selectDropDownOption(leaveTypeDropdown, leaveType);
+		
+		//get running balance
+		waitForElement(availableLeaveBalance);
+		String runningBalanceString = availableLeaveBalance.getAttribute("innerText");
+		
+		return runningBalanceString;
+	}
+	
+	public String getRandomLeaveType() {
+		int randomIndex = generateRandomNumber(0, leaveTypeOptions.size()-1);
+		String randomLeaveType = leaveTypeOptions.get(randomIndex).getText();
+		
+		return randomLeaveType;
+	}
+	
+	public String getRandomLeaveReason() {
+		int randomIndex = generateRandomNumber(0, leaveReasonOptions.size()-1);
+		String randomLeaveReason = leaveReasonOptions.get(randomIndex).getText();
+		
+		return randomLeaveReason;
+	}
+	
 	//ACTIONS--------------------------------------------------------------------------------------------
 	// Actions
 	public void clickCloseButton() {
@@ -159,10 +174,11 @@ public class FileALeave_Modal extends UserHelper {
 		dropDownElement.selectByVisibleText(leaveType);
 
 		String dropDownName = dropDown.getAttribute("name");
-		String methodName = "Select the ff. option: " + leaveType + " from the " + dropDownName + " dropdown";
+		String methodName = "Select the option '" + leaveType + "' from the " + dropDownName + " dropdown";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
+	
 	public void clickHalfDayCheckbox() {
 		waitForElement(halfDayCheckbox);
 		halfDayCheckbox.click();
@@ -275,12 +291,12 @@ public class FileALeave_Modal extends UserHelper {
 		Assert.assertEquals(selectedOption, option);
 
 		String dropDownName = dropDown.getAttribute("name");
-		String methodName = "Verify the ff. option is selected: " + selectedOption + "  in the " + dropDownName
+		String methodName = "Verify that the option '" + selectedOption + "' is selected in the " + dropDownName
 				+ " dropdown";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
-	public void isInCorrectDateFormat(String FromOrToDateType, String dateString, String format) {
+	public void isInCorrectDateFormat(String dateString, String format) {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
 		boolean dateParseable;
@@ -296,8 +312,8 @@ public class FileALeave_Modal extends UserHelper {
 
 		Assert.assertTrue(dateParseable);
 
-		String dateTypeString = (FromOrToDateType == "From") ? "From" : "To";
-		String methodName = "Verify the " + dateTypeString + " date : " + dateString + " is in the format: " + format;
+		
+		String methodName = "Verify the date : " + dateString + " is in the format: " + format;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
@@ -337,8 +353,8 @@ public class FileALeave_Modal extends UserHelper {
 		String text = remarksTextBox.getAttribute("value");
 
 		Assert.assertEquals(text, remarks);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify value of comments/remarks textarea is equal to text entered");
+		String methodName = "Verify that the value of comments/remarks textarea is equal to '" + remarks + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),methodName);
 	}
 
 	public void verifyContactNumberTextBoxValue(String contactNumber) {
@@ -347,8 +363,7 @@ public class FileALeave_Modal extends UserHelper {
 		String textBoxValue = contactNumberTextBox.getAttribute("value");
 
 		Assert.assertEquals(textBoxValue, contactNumber);
-		String methodName = "Verify value of contact number textbox: " + textBoxValue
-				+ " is equal to contact number entered: " + contactNumber;
+		String methodName = "Verify that the value of contact number textbox is equal to '" + contactNumber + "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
@@ -368,10 +383,16 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 	
-	public void verifyErrorMessageForFieldIsNotDisplayed (WebElement field, WebElement errorMessage) {
+	public void verifyErrorMessageForFieldIsNotDisplayed (WebElement field) {
 
-		//verify error message is displayed 
-		validateElementIsNotDisplayed(errorMessage);
+		//get error message of given field parameter
+		String fieldID =  field.getAttribute("id");
+		String errorMessageXpath = "//*[@id='" + fieldID + "']/following-sibling::*[starts-with(@id,'error')]";
+		WebElement errorMessageElement = driver.findElement(By.xpath(errorMessageXpath));
+		
+		//verify error message is not displayed
+		validateElementIsNotDisplayed(errorMessageElement);
+		
 		
 		String fieldName = field.getAttribute("name");
 		String methodName = "Verify error message for " + fieldName + " field is NOT displayed";
@@ -379,11 +400,15 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
-	public void verifyErrorMessageForFieldIsDisplayed (WebElement field, WebElement errorMessage) {
+	public void verifyErrorMessageForFieldIsDisplayed (WebElement field) {
 
-		//verify error message is displayed 
-		waitForElement(errorMessage);
-		String errorText = errorMessage.getAttribute("innerText");
+		//get error message of given field parameter
+		String fieldID =  field.getAttribute("id");
+		String errorMessageXpath = "//*[@id='" + fieldID + "']/following-sibling::*[starts-with(@id,'error')]";
+		WebElement errorMessageElement = driver.findElement(By.xpath(errorMessageXpath));
+		
+		//verify error message is displayed and is not blank
+		String errorText = errorMessageElement.getAttribute("innerText");
 		boolean isNotBlank = !errorText.isEmpty();
 		Assert.assertTrue(isNotBlank);
 		
@@ -393,10 +418,14 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
-	public void verifyErrorMessageTextForField (WebElement field, WebElement errorMessageElement, String expectedErrorMessage) {
+	public void verifyErrorMessageTextForField (WebElement field, String expectedErrorMessage) {
 
+		//get error message of given field parameter
+		String fieldID =  field.getAttribute("id");
+		String errorMessageXpath = "//*[@id='" + fieldID + "']/following-sibling::*[starts-with(@id,'error')]";
+		WebElement errorMessageElement = driver.findElement(By.xpath(errorMessageXpath));
+		
 		//verify error message is equal to the errorMessage parameter
-		waitForElement(errorMessageElement);
 		String errorMessageElementText = errorMessageElement.getText();
 		Assert.assertEquals(errorMessageElementText, expectedErrorMessage);
 		
@@ -405,6 +434,33 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
+	public void verifyToastIsDisplayed() {
+		waitForElement(toast);
+		validateElementIsDisplayed(toast);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast is displayed");
+	}
+	
+	public void waitForFileALeaveModalToDisappear() {
+		waitElementToBeInvinsible(fileALeaveModalBody);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify 'File A Leave' modal has disappeared");
+	}
+	
+	public void verifyToastMessage(String message) {
+		waitForElementTextToChange(toastMessage, initialSubmitToastMessage);
+		String toastMessageString = toastMessage.getText();
+		Assert.assertEquals(toastMessageString, message);
+		
+		String methodName = "Verify toast message displayed is '" + message + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	
+	
+	
+	
+	
+	
+	//-------------------------------------------------------------------
 	/* --------------------------------------------PRIVATE METHODS --------------------------------------- */
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
 

@@ -30,12 +30,6 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 	WebElement commentField;
 	WebElement contactNumberField;
 	
-	//error message elements
-	WebElement leaveTypeErrorMessage;
-	WebElement leaveReasonErrorMessage;
-	WebElement commentErrorMessage;
-	WebElement contactNumberErrorMessage;
-	
 	//Login Test Data---------------------
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
@@ -58,12 +52,7 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 		leaveReasonDropDown = fileALeaveModal.getLeaveReasonDropdown();
 		commentField = fileALeaveModal.getCommentsField();
 		contactNumberField = fileALeaveModal.getContactNumberField();
-		
-		//Set error message elements
-		leaveTypeErrorMessage = fileALeaveModal.getLeaveTypeErrorMessage();
-		leaveReasonErrorMessage = fileALeaveModal.getLeaveReasonErrorMessage();
-		commentErrorMessage = fileALeaveModal.getCommentErrorMessage();
-		contactNumberErrorMessage = fileALeaveModal.getContactNumberErrorMessage();
+
 	}
 	
 	
@@ -121,16 +110,16 @@ public class TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequired
 	        	//Verify error/required messages are displayed
 	        	
 	        		//verify error messages for the fields WITH input are NOT displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown);
         		
 	        		//verify error messages for the fields WITHOUT input are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, commentErrorMessage, "Required");
-	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");
+	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, "Required");
+	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, "Required");
 	        	
 	        		
 	        	//Click cancel button

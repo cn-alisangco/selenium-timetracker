@@ -18,6 +18,7 @@ public class BaseClass {
 	public static ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
 	public static String category;
 	public static String testDataLoc;
+
 	
 	public WebDriver getDriver() {
         //Get driver from ThreadLocalMap

@@ -322,7 +322,7 @@ public class UserHelper extends ReadExcelData {
 		jse.executeScript(highlighter, e);
 	}
 
-	// Wait-----------------------------------------------------------------
+	// Waits-----------------------------------------------------------------
 	public void pageLoadTimeout(Duration duration) {
 		driver.manage().timeouts().pageLoadTimeout(duration);
 	}
@@ -394,15 +394,33 @@ public class UserHelper extends ReadExcelData {
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 	}
 	
+	public void waitElementToBeClickable(WebElement element) { // added 6/6/2023
+		wait = new WebDriverWait(driver, Duration.ofSeconds(120)); // you can modify the time here
+		wait.until(ExpectedConditions.elementToBeClickable(element));
+	}
+	
 	public void waitElementToBeInvinsible(By locator) {
-		//WebElement element = 
+
 		driver.findElement(locator);
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, Duration.ofSeconds(5)); // you can modify the time here
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
 
 	}
-	//Newly Added
+	
+	public void waitElementToBeInvinsible(WebElement element) { //added 6/6/2023
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+		wait = new WebDriverWait(driver, Duration.ofSeconds(5)); // you can modify the time here
+		wait.until(ExpectedConditions.invisibilityOf(element));
+
+	}
+	
+	public void waitForElementTextToChange(WebElement element, String initialText) { // added 06/06/2023
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
+		wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(element, initialText)));
+	}
+	
+	
 	
 	//Input Actions
 	public void actionsClick(By locator) {

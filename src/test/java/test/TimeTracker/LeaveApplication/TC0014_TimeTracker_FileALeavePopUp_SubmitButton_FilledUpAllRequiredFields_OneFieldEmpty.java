@@ -30,22 +30,12 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	WebElement commentField;
 	WebElement contactNumberField;
 	
-	//error message elements
-	WebElement leaveTypeErrorMessage;
-	WebElement leaveReasonErrorMessage;
-	WebElement commentErrorMessage;
-	WebElement contactNumberErrorMessage;
+	//lists
+	List<WebElement> fileALeaveLinks;
 	
 	//Login Test Data---------------------
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
-	
-	//test data---------------------------
-	List<String> leaveTypes = Arrays.asList("Banked General Leave", "Call Back Vacation Leave", "Excess Earned Leaves",
-			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
-			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
-			"Vacation Leave");
-	List<String> leaveReasons = Arrays.asList("Emergency Leave", "Vacation Leave", "Sick Leave", "Others");
 	
 	
 	private void initialize() {
@@ -53,17 +43,14 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
 		
+		//set File A Leave links
+		fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+		
 		//Set field elements
 		leaveTypeDropDown = fileALeaveModal.getLeaveTypeDropdown();
 		leaveReasonDropDown = fileALeaveModal.getLeaveReasonDropdown();
 		commentField = fileALeaveModal.getCommentsField();
 		contactNumberField = fileALeaveModal.getContactNumberField();
-		
-		//Set error message elements
-		leaveTypeErrorMessage = fileALeaveModal.getLeaveTypeErrorMessage();
-		leaveReasonErrorMessage = fileALeaveModal.getLeaveReasonErrorMessage();
-		commentErrorMessage = fileALeaveModal.getCommentErrorMessage();
-		contactNumberErrorMessage = fileALeaveModal.getContactNumberErrorMessage();
 	}
 	
 	
@@ -77,9 +64,6 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	        HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
 	        loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
 	     
-	        //get all "File a Leave" links/button and store in a variable
-	        List<WebElement> fileALeaveLinks =  myTimeLogsPage.getAllFileALeaveButtons();
-	    	
 	        //Iterate over each fileALeaveLink
 	        for (int i = 0; i < fileALeaveLinks.size(); i++) {
 	        	
@@ -91,8 +75,7 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	        	
 	        	//Select a random Leave Type---------------------------------
 	        		//get a random leave type
-	        		int index = UserHelper.generateRandomNumber(0, leaveTypes.size() - 1);
-	        		String randomLeaveType = leaveTypes.get(index);
+	        		String randomLeaveType = fileALeaveModal.getRandomLeaveType();
 	        	
 	        		//select the random leave type
 	        		fileALeaveModal.selectDropDownOption(leaveTypeDropDown, randomLeaveType);
@@ -102,8 +85,7 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	        		
 	        	//Select a random Leave Reason---------------------------------
 	        		//get a random leave reason
-	        		int index1 = UserHelper.generateRandomNumber(0, leaveReasons.size() - 1);
-	        		String randomLeaveReason = leaveReasons.get(index1);
+	        		String randomLeaveReason = fileALeaveModal.getRandomLeaveReason();
 	        	
 	        		//select the random leave reason
 	        		fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
@@ -113,7 +95,12 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	        	
 	        		
 	        	//Fill out Remarks/Comment field---------------------------------
-		        fileALeaveModal.enterTextInRemarksTextBox("TEST COMMENT/REMARK");
+	        		//enter text in comments text box
+	        		String comment = "TEST COMMENT/REMARK";
+	        		fileALeaveModal.enterTextInRemarksTextBox(comment);
+	        		
+	        		//verify entered text is displayed
+	        		fileALeaveModal.verifyRemarksTextBoxValue(comment);
 		        
 		        
 		        //Verify other required fields are blank/has no value
@@ -126,15 +113,15 @@ public class TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequired
 	        	//Verify error/required messages are displayed
 	        	
 		        	//verify error messages for the fields WITH input are NOT displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField, commentErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField);
 	        		
 	        		//verify error messages for the fields WITHOUT input are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");
+	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, "Required");
 	        	
 	        		
 	        	//Click cancel button

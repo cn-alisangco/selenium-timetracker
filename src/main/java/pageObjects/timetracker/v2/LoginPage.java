@@ -65,11 +65,28 @@ public class LoginPage extends UserHelper {
 		return loginCredentials;
     }
     
+    
     public void login(String username, String password) {
     	enterUsername(username);
     	enterPassword(password);
     	clickLogin();
+    	
+    	String methodName = "Log in to time tracker";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
     }
+    
+    
+    //login with account precondition
+    public void login(String username, String password, String accountPrecondition) {
+    	enterUsername(username);
+    	enterPassword(password);
+    	clickLogin();
+    	
+    	String methodName = "Log in to time tracker using an account with the following precondition/s: '" + accountPrecondition + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+    }
+    
+    
     
  
 }

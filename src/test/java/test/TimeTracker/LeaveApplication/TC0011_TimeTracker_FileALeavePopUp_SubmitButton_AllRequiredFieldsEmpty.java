@@ -28,12 +28,6 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 	WebElement commentField;
 	WebElement contactNumberField;
 	
-	//error message elements
-	WebElement leaveTypeErrorMessage;
-	WebElement leaveReasonErrorMessage;
-	WebElement commentErrorMessage;
-	WebElement contactNumberErrorMessage;
-	
 	//Login Test Data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
@@ -52,11 +46,6 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 		commentField = fileALeaveModal.getCommentsField();
 		contactNumberField = fileALeaveModal.getContactNumberField();
 		
-		//Set error message elements
-		leaveTypeErrorMessage = fileALeaveModal.getLeaveTypeErrorMessage();
-		leaveReasonErrorMessage = fileALeaveModal.getLeaveReasonErrorMessage();
-		commentErrorMessage = fileALeaveModal.getCommentErrorMessage();
-		contactNumberErrorMessage = fileALeaveModal.getContactNumberErrorMessage();
 	}
 	
 	@Test
@@ -91,16 +80,16 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 	        	
 	        	//Verify error/required messages are displayed
 	        		//verify error messages for the fields are displayed
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveTypeDropDown, leaveTypeErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveReasonDropDown, leaveReasonErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField, commentErrorMessage);
-	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField, contactNumberErrorMessage);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveTypeDropDown);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(leaveReasonDropDown);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(commentField);
+	        		fileALeaveModal.verifyErrorMessageForFieldIsDisplayed(contactNumberField);
 	        		
 	        		//verify error message text are correct
-	        		fileALeaveModal.verifyErrorMessageTextForField(leaveTypeDropDown, leaveTypeErrorMessage, "Choose a Leave Type");
-	        		fileALeaveModal.verifyErrorMessageTextForField(leaveReasonDropDown, leaveReasonErrorMessage, "Choose a Reason");
-	        		fileALeaveModal.verifyErrorMessageTextForField(commentField, commentErrorMessage, "Required");
-	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, contactNumberErrorMessage, "Required");
+	        		fileALeaveModal.verifyErrorMessageTextForField(leaveTypeDropDown, "Choose a Leave Type");
+	        		fileALeaveModal.verifyErrorMessageTextForField(leaveReasonDropDown, "Choose a Reason");
+	        		fileALeaveModal.verifyErrorMessageTextForField(commentField,  "Required");
+	        		fileALeaveModal.verifyErrorMessageTextForField(contactNumberField, "Required");
 	        	
 	        		
 	        	//Click cancel button
