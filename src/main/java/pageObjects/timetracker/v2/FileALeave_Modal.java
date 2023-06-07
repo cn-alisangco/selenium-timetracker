@@ -38,6 +38,7 @@ public class FileALeave_Modal extends UserHelper {
 	@FindBy(xpath = "//span[@id=\"ui-dialog-title-dialog-modal-leave\"]/following-sibling::a") WebElement fileALeaveModalCloseButton;
 	@FindBy(id = "CancelLeaveApplication") WebElement cancelButton;
 	@FindBy(id = "SubmitLeaveApplication") WebElement submitButton;
+	@FindBy(id = "OkBtn") WebElement popupOkButton;
 
 	// textbox
 	@FindBy(id = "LeaveReason") WebElement remarksTextBox;
@@ -154,7 +155,6 @@ public class FileALeave_Modal extends UserHelper {
 	}
 	
 	//ACTIONS--------------------------------------------------------------------------------------------
-	// Actions
 	public void clickCloseButton() {
 
 		// close "File a Leave" modal
@@ -177,7 +177,6 @@ public class FileALeave_Modal extends UserHelper {
 		String methodName = "Select the option '" + leaveType + "' from the " + dropDownName + " dropdown";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
-
 	
 	public void clickHalfDayCheckbox() {
 		waitForElement(halfDayCheckbox);
@@ -215,6 +214,14 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the Submit button");
 	}
 
+	public void clickOkButtonInPopup(){
+		waitForElement(popupOkButton);
+		popupOkButton.click();
+		
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the pop-up displayed");
+	}
+	
+	
 	// VERIFICATIONS---------------------------------------------------------------------------------------
 	// Verifications and assertions
 	public void verifyFileALeaveModalIsDisplayed() {
@@ -249,7 +256,7 @@ public class FileALeave_Modal extends UserHelper {
 
 	public void verifyFileALeaveModalIsNotDislayed() {
 
-		// verify "File a Leave" modal exists
+		// verify "File a Leave" modal does not exist
 		validateElementIsNotDisplayed(fileALeaveModalCloseButton);
 		validateElementIsNotDisplayed(fileALeaveModalBody);
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
@@ -437,7 +444,12 @@ public class FileALeave_Modal extends UserHelper {
 	public void verifyToastIsDisplayed() {
 		waitForElement(toast);
 		validateElementIsDisplayed(toast);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast is displayed");
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is displayed");
+	}
+	
+	public void verifyToastIsNotDisplayed() {
+		waitElementToBeInvinsible(toast);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is not displayed");
 	}
 	
 	public void waitForFileALeaveModalToDisappear() {
@@ -445,12 +457,12 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify 'File A Leave' modal has disappeared");
 	}
 	
-	public void verifyToastMessage(String message) {
+	public void verifyToastMessage(String expectedMessage) {
 		waitForElementTextToChange(toastMessage, initialSubmitToastMessage);
 		String toastMessageString = toastMessage.getText();
-		Assert.assertEquals(toastMessageString, message);
+		Assert.assertEquals(toastMessageString, expectedMessage);
 		
-		String methodName = "Verify toast message displayed is '" + message + "'";
+		String methodName = "Verify toast/popup message displayed is '" + expectedMessage + "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 	

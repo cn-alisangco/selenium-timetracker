@@ -24,8 +24,9 @@
 			<class name="test.TimeTracker.LeaveApplication.TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty" />
 			<class name="test.TimeTracker.LeaveApplication.TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty" />
 			<class name="test.TimeTracker.LeaveApplication.TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequiredFields_OtherFieldsEmpty" />
-			<class name="test.TimeTracker.LeaveApplication.TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty" />-->
-			<class name="test.TimeTracker.LeaveApplication.TC0015_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields" />
+			<class name="test.TimeTracker.LeaveApplication.TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty" />
+			<class name="test.TimeTracker.LeaveApplication.TC0015_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields" />-->
+			<class name="test.TimeTracker.LeaveApplication.TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNotHaveBalance" />
 			
 		</classes>
 	</test>

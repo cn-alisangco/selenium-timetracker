@@ -40,14 +40,10 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 
 	// Login Test Data---------------------
 	String sheetName = "Login";
-	String recordID = "valid_credentials";
+	String recordID = "accountWithZeroVacationLeaveBalance";
 
 	// test data---------------------------
-	List<String> leaveTypes = Arrays.asList("Banked General Leave", "Call Back Vacation Leave", "Excess Earned Leaves",
-			"Excess General Leaves", "General Leave", "Leave Without Pay", "On-call Vacation Leave",
-			"Overtime Vacation Leave", "Service Incentive Leave", "Solo Parent Leave", "Unauthorized LWOP",
-			"Vacation Leave");
-	List<String> leaveReasons = Arrays.asList("Emergency Leave", "Vacation Leave", "Sick Leave", "Others");
+	String errorMessage = "You don't have enough balance (0 day/s) to cover your leave (1 day/s).";
 
 	private void initialize() {
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
@@ -55,11 +51,9 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
 		leaveApplicationsPage = PageFactory.initElements(getDriver(), LeaveApplicationsPage.class);
-		
-		
+
 		// set File A Leave links
 		fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
-		
 
 		// Set field elements
 		leaveTypeDropDown = fileALeaveModal.getLeaveTypeDropdown();
@@ -75,107 +69,79 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 		// Initialize
 		initialize();
 
-		// Log in to Timetracker with valid credentials of account whose Vacation Leave balance is zero
+		// Log in to Timetracker with valid credentials of account whose Vacation Leave
+		// balance is zero
 		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
 				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), "");
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"),
+				"Vacation Leave balance = 0");
 
-		// click a file a random leave link and get the corresponding date
-		
-			// generate random index
-			int randomFileALeaveLinkIndex = UserHelper.generateRandomNumber(0, fileALeaveLinks.size() - 1);
-	
-			// get file a leave link date with the random index
-			fileALeaveLinkDates = myTimeLogsPage.getFileALeaveLinkDates("M/d/yyyy");
-			String fileALeavelinkDate = fileALeaveLinkDates.get(randomFileALeaveLinkIndex);
-			System.out.println(fileALeavelinkDate);
-	
-			// click File A Leave link with random index
-			myTimeLogsPage.clickFileALeaveButton(randomFileALeaveLinkIndex);
-	
+		for (int i = 0; i < fileALeaveLinks.size(); i++) {
+
+			// click File A Leave link with index i
+			myTimeLogsPage.clickFileALeaveButton(i);
+
 			// verify File A Leave modal is displayed
 			fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 
-		// Select 'Vacation Leave' with zero balance---------------------------------
-			boolean leaveTypeFound = false;
-			String leaveType = "";
-			for (int i = 0; i < leaveTypes.size(); i++) {
-	
-				// get leave type with index i
-				String currentLeaveType = leaveTypes.get(i);
-	
-				// select leave type and check running balance
-				String runningBalance = fileALeaveModal.getAvailableLeaveBalance(currentLeaveType);
-				if (runningBalance != "0") {
-	
-					leaveTypeFound = true;
-					leaveType = currentLeaveType;
-					System.out.println(leaveType);
-					
-					// verify random leave reason was indeed selected
-					fileALeaveModal.verifydropDownOptionIsSelected(leaveTypeDropDown, leaveType);
-	
-					break;
-				}
-			}
+			// Select 'Vacation Leave' with zero balance---------------------------------
+			fileALeaveModal.selectDropDownOption(leaveTypeDropDown, "Vacation Leave");
 
-		// Select a random Leave Reason---------------------------------
-			//get a random leave reason
-    		String randomLeaveReason = fileALeaveModal.getRandomLeaveReason();
-    	
-    		//select the random leave reason
-    		fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
-	
+			// Select a random Leave Reason---------------------------------
+			// get a random leave reason
+			String randomLeaveReason = fileALeaveModal.getRandomLeaveReason();
+
+			// select the random leave reason
+			fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
+
 			// verify random leave reason was indeed selected
 			fileALeaveModal.verifydropDownOptionIsSelected(leaveReasonDropDown, randomLeaveReason);
-	
-		// Fill out Remarks/Comment field---------------------------------
+
+			// Fill out Remarks/Comment field---------------------------------
 			// enter text in comments text box
 			String comment = "TEST COMMENT/REMARK";
 			fileALeaveModal.enterTextInRemarksTextBox(comment);
-	
+
 			// verify entered text is displayed
 			fileALeaveModal.verifyRemarksTextBoxValue(comment);
-	
-		// Fill out Contact Number field
+
+			// Fill out Contact Number field
 			// Verify other required fields are blank/has no value
 			String contactNumber = "0123456789";
 			fileALeaveModal.enterContactNumber(contactNumber);
-			
+
 			// verify entered text is displayed
 			fileALeaveModal.verifyContactNumberTextBoxValue(contactNumber);
-			
-		// Click Submit button
+
+			// Click Submit button
 			fileALeaveModal.clickSubmitButton();
 
-		// Verify error/required messages are displayed
 			// verify error messages for the fields WITH input are NOT displayed
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown);
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown);
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField);
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(contactNumberField);
-			
-		//Verify Success Toast
-			//Verify toast is displayed
+
+			// Verify Warning Popup
+			// Verify toast is displayed
 			fileALeaveModal.verifyToastIsDisplayed();
-			
-			//verify toast message
-			fileALeaveModal.verifyToastMessage("Leave Application Saved!");
-			
-			//wait for file a leave modal to disappear
-			fileALeaveModal.waitForFileALeaveModalToDisappear();
-			
-			
-			//Verify submitted leave is in the remarks column  of corresponding timelog date
-			myTimeLogsPage.verifySubmittedLeaveIsInRemarksColumn(fileALeavelinkDate, leaveType);
-			  
-			//Recall filed leave //go to leave applications page
-			 navigationBar.navigateToPage("Leaves", "Applications");
-			  
-			//
-			 leaveApplicationsPage.verifySubmittedLeaveIsDisplayedInLeaveAppTable(fileALeavelinkDate, leaveType);
-			 leaveApplicationsPage.recallAllLeaveApplications();
-			 leaveApplicationsPage.verifyLeaveApplicationsTableIsNotDisplayed();
+
+			// verify toast message
+			fileALeaveModal.verifyToastMessage(errorMessage);
+
+			// Click OK in the Warning popup
+			fileALeaveModal.clickOkButtonInPopup();
+
+			// Verify toast is NOT displayed
+			fileALeaveModal.verifyToastIsNotDisplayed();
+
+			// Click cancel button
+			fileALeaveModal.clickCancelButton();
+
+			// verify File A Leave modal is NOT displayed
+			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+		}
+
 	}
 
 }
