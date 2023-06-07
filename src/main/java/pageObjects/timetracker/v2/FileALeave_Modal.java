@@ -39,6 +39,7 @@ public class FileALeave_Modal extends UserHelper {
 	@FindBy(id = "CancelLeaveApplication") WebElement cancelButton;
 	@FindBy(id = "SubmitLeaveApplication") WebElement submitButton;
 	@FindBy(id = "OkBtn") WebElement popupOkButton;
+	@FindBy(xpath = "//span[@class='ui-button-text']") WebElement warningPopupOkButton;
 
 	// textbox
 	@FindBy(id = "LeaveReason") WebElement remarksTextBox;
@@ -54,9 +55,11 @@ public class FileALeave_Modal extends UserHelper {
 	@FindBy(id = "errorReason1") WebElement commentErrorMessage;
 	@FindBy(id = "errorContact") WebElement contactNumberErrorMessage;
 	@FindBy(xpath = "//div[@id='dialog-modal']//div[@class='loaderMessage']") WebElement toastMessage;
+	@FindBy(xpath = "//div[@id='dialog-modal-confirm']/p") WebElement warningPopupMessage;
 
 	//toasts
 	@FindBy(xpath = "//div[@id='dialog-modal']/div[@class='loader']") WebElement toast;
+	@FindBy(xpath = "//div[@id='dialog-modal-confirm']") WebElement warningPopUp;
 	
 	// others (e.g. containers, lists)
 	@FindBy(id = "dialog-modal-leave") WebElement fileALeaveModalBody;
@@ -132,6 +135,14 @@ public class FileALeave_Modal extends UserHelper {
 		//Select leaveType
 		waitForElement(leaveTypeDropdown);
 		selectDropDownOption(leaveTypeDropdown, leaveType);
+		
+		//get running balance
+		waitForElement(availableLeaveBalance);
+		String runningBalanceString = availableLeaveBalance.getAttribute("innerText");
+		
+		return runningBalanceString;
+	}
+	public String getAvailableLeaveBalance() {
 		
 		//get running balance
 		waitForElement(availableLeaveBalance);
@@ -221,6 +232,12 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the pop-up displayed");
 	}
 	
+	public void clickOkButtonInWarningPopup(){
+		waitForElement(warningPopupOkButton);
+		warningPopupOkButton.click();
+		
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the warning pop-up displayed");
+	}
 	
 	// VERIFICATIONS---------------------------------------------------------------------------------------
 	// Verifications and assertions
@@ -447,6 +464,17 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is displayed");
 	}
 	
+	public void verifyWarningPopupIsDisplayed() {
+		waitForElement(warningPopUp);
+		validateElementIsDisplayed(warningPopUp);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is displayed");
+	}
+	
+	public void verifyWarningPopupIsNotDisplayed() {
+		validateElementIsNotDisplayed(warningPopUp);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is NOT displayed");
+	}
+	
 	public void verifyToastIsNotDisplayed() {
 		waitElementToBeInvinsible(toast);
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is not displayed");
@@ -463,6 +491,14 @@ public class FileALeave_Modal extends UserHelper {
 		Assert.assertEquals(toastMessageString, expectedMessage);
 		
 		String methodName = "Verify toast/popup message displayed is '" + expectedMessage + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
+	public void verifyWarningPopupMessage(String expectedMessage) {
+		String warningMessageString = warningPopupMessage.getText();
+		Assert.assertEquals(warningMessageString, expectedMessage);
+		
+		String methodName = "Verify warning message displayed is '" + expectedMessage + "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 	

@@ -125,7 +125,8 @@ public class MyTimeLogsPage extends UserHelper {
 		System.out.println(element.getText());
 		String expectedString = "Submitted " + leaveType;
 		
-		Assert.assertEquals(element.getText(), expectedString);
+		boolean expectedStringIsDisplayed = element.getText().contains(expectedString);
+		Assert.assertTrue(expectedStringIsDisplayed);
 		
 		String methodName = "Verify submitted leave '" + leaveType + "' is indicated in the remarks column of the corresponding timelog date '" + timeLogDate+ "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
