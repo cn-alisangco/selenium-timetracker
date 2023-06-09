@@ -10,7 +10,7 @@
 		<parameter name="url" value="http://timetracker21.srv.pointwest.com.ph/" />
 		<parameter name="td" value="\\testData\\timetracker_bryan.xlsx" />
 		<classes>
-<!--		<class name="test.TimeTracker.LeaveApplication.SandBox" />
+			<!--		<class name="test.TimeTracker.LeaveApplication.SandBox" />
 			<class name="test.TimeTracker.LeaveApplication.TC001_TimeTracker_File_a_Leave_Actions_Button" />
 			<class name="test.TimeTracker.LeaveApplication.TC002_TimeTracker_FileALeavePopUp_CloseButton" />
 			<class name="test.TimeTracker.LeaveApplication.TC003_TimeTracker_File_A_Leave_PopUp_DateApplied" />
@@ -21,13 +21,13 @@
 			<class name="test.TimeTracker.LeaveApplication.TC008_TimeTracker_FileALeavePopUp_Comment" />
 			<class name="test.TimeTracker.LeaveApplication.TC009_TimeTracker_FileALeavePopUp_ContactNumber" />
 			<class name="test.TimeTracker.LeaveApplication.TC0010_TimeTracker_FileALeavePopUp_CancelButton" />
-			<class name="test.TimeTracker.LeaveApplication.TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty" />
+			<class name="test.TimeTracker.LeaveAppli                                                               cation.TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEmpty" />
 			<class name="test.TimeTracker.LeaveApplication.TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequiredField_OtherFieldsEmpty" />
 			<class name="test.TimeTracker.LeaveApplication.TC0013_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpTwoRequiredFields_OtherFieldsEmpty" />
-			<class name="test.TimeTracker.LeaveApplication.TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty" />
+			<class name="test.TimeTracker.LeaveApplication.TC0014_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields_OneFieldEmpty" />-->
 			<class name="test.TimeTracker.LeaveApplication.TC0015_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpAllRequiredFields" />
-			<class name="test.TimeTracker.LeaveApplication.TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNotHaveBalance" />-->
-			<class name="test.TimeTracker.LeaveApplication.TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNotHaveBalance" />
+			<!--<class name="test.TimeTracker.LeaveApplication.TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNotHaveBalance" />
+			<class name="test.TimeTracker.LeaveApplication.TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNotHaveBalance" />-->
 		</classes>
 	</test>
 </suite>

@@ -49,7 +49,7 @@ import base.BaseClass;
 public class UserHelper extends ReadExcelData {
 	private BaseClass bcObj = new BaseClass();
 	private WebDriver driver = bcObj.getDriver();
-	private final int WAITING_TIME_IN_SECONDS = 10;
+	private final int WAITING_TIME_IN_SECONDS = 20;
 	
 	public static Select selectObj;
 	public static LocalDateTime now = LocalDateTime.now();
@@ -468,9 +468,8 @@ public class UserHelper extends ReadExcelData {
 		}
 
 	}
+
 	
-	
-	// newly added 05/27
 	public String getDataFromExcel(String sheetName, String tcName, String columnName) {
 		String value = getExcelData(sheetName, tcName, columnName);
 		//Wait(1000);
@@ -478,21 +477,19 @@ public class UserHelper extends ReadExcelData {
 		
 	}
 
-//	newly added 11/24
-	public boolean elementExistenceFlag(By locator){
+	public boolean elementExistenceFlag(By locator){//newly added 11/24
 		waitToLoadPage();
 		//waitElementToLoad(locator);
 		WebElement element = driver.findElement(locator);
 		return element.isDisplayed();
 	}
 
-//	newly added 12/16
-	public String getValueAttribute(By locator){
+	public String getValueAttribute(By locator){//newly added 11/24
 		WebElement element = driver.findElement(locator);
 		return element.getAttribute("value");
 	}
 
-	// ReportLogs-----------------------------------------------------------
+	// ReportLogs--------------------------------------------------------------------
 	public void reportPass(String methodName, String desc) {
 
 		// Added
@@ -553,8 +550,12 @@ public class UserHelper extends ReadExcelData {
 		
 	}
 
+	public static void customReportLog(String desc) {
+		Reporter.log(desc);
+	}
 	
-	//Element existence validation
+	
+	//Element existence validation----------------------------------------------------
 	public void validateElementIsDisplayed (By locator) {//newly added 05/26/2023
 		WebElement element = driver.findElement(locator);
 		boolean elementIsDisplayed = element.isDisplayed();
@@ -581,7 +582,7 @@ public class UserHelper extends ReadExcelData {
 	}
 	
 	
-	//Date generators
+	//Date generators----------------------------------------------------------------
 	public String getTodayDate(String dateFormat) { //added 05/29/2023
 
 		  String pattern = dateFormat;
@@ -591,7 +592,7 @@ public class UserHelper extends ReadExcelData {
 	}
 
 	
-	//random data generators
+	//random data generators---------------------------------------------------------
 	public static int generateRandomNumber(int min, int max) { //added 6/1/2023
 		// TODO Auto-generated method stub
 		Random random = new Random();

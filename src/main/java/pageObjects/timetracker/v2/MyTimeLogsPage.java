@@ -20,14 +20,14 @@ public class MyTimeLogsPage extends UserHelper {
 
 	// variables
 	String dateFormat = "MM/dd/yyyy";
-	
-	
+
 	// locators
 	@FindBy(id = "TimelogsTable")
 	WebElement timeLogsTable;
 	@FindBy(xpath = "//tbody/tr[contains (@id, '0')]")
 	List<WebElement> timeLogsTableRows;
-	//@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink']")
+	// @FindBy(xpath =
+	// "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink']")
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink' and not(@style)]")
 	List<WebElement> fileALeaveLinks;
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/following-sibling::td[position()=2 and not(contains(text(),'PM'))]/parent::tr/td[contains(@class, 'selectDate')]")
@@ -37,44 +37,43 @@ public class MyTimeLogsPage extends UserHelper {
 		this.driver = driver;
 	}
 
-	//GETTERS--------------------------------------------------------------------------------------------
-	
+	// GETTERS--------------------------------------------------------------------------------------------
+
 	public List<WebElement> getAllFileALeaveButtons() {
 		return fileALeaveLinks;
 	}
 
 	public List<String> getFileALeaveLinkDates(String parseFormat) {
-		
+
 		List<String> parsedDateStrings = new ArrayList<String>();
-		
+
 		for (WebElement dateElement : fileALeaveLinkDates) {
-			
+
 			String dateString = dateElement.getText();
-			
+
 			String parsedDateString = null;
-			
+
 			try {
 				Date date = new SimpleDateFormat(parseFormat).parse(dateString);
 				SimpleDateFormat dateFormat = new SimpleDateFormat(parseFormat);
 
 				parsedDateString = dateFormat.format(date);
-				
+
 				parsedDateStrings.add(parsedDateString);
-				
+
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				System.out.println("Unable to parse date to the format: " + parseFormat);
 			}
-			
+
 		}
-		System.out.println("Dates:" + parsedDateStrings);  
-    	return parsedDateStrings;
-    	
-    }
-	
-	
-	//ACTIONS--------------------------------------------------------------------------------------------
+		System.out.println("Dates:" + parsedDateStrings);
+		return parsedDateStrings;
+
+	}
+
+	// ACTIONS--------------------------------------------------------------------------------------------
 
 	public void clickRandomFileALeaveButton() {
 
@@ -92,19 +91,33 @@ public class MyTimeLogsPage extends UserHelper {
 		// click "File A Leave" Link
 		waitForElements(fileALeaveLinks);
 		WebElement fileLeaveLink = fileALeaveLinks.get(index);
+		moveAndHighlightElement(fileLeaveLink);
 
 		fileLeaveLink.click();
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
 				"Click 'File A Leave' link with the given index");
 	}
 
+	public void clickFileALeaveButton(String timeLogDate) {
+		// click "File A Leave" Link
+		waitForElements(fileALeaveLinks);
+
+		String elementXpath = "//a[text()='" + timeLogDate + "']/ancestor::tr//a[@class='fileLeaveLink']";
+		WebElement fileLeaveLink = driver.findElement(By.xpath(elementXpath));
+		moveAndHighlightElement(fileLeaveLink);
+
+		fileLeaveLink.click();
+
+		String methodName = "Click 'File A Leave' link for timelog date: '" + timeLogDate + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
 	public void refreshPage() {
 		driver.navigate().refresh();
 	}
 
-	
-	//VERIFICATIONS--------------------------------------------------------------------------------------------
-	
+	// VERIFICATIONS--------------------------------------------------------------------------------------------
+
 	public void verifyFileALeaveButtonsExist() {
 
 		// verify file a leave link exists
@@ -116,26 +129,25 @@ public class MyTimeLogsPage extends UserHelper {
 		}
 
 	}
-	
-	public void verifySubmittedLeaveIsInRemarksColumn (String timeLogDate, String leaveType) {
-		String xpath = "//a[contains(text(),'" + timeLogDate + "')]/parent::td/following-sibling::td/p[(contains(text(), '" + leaveType + "'))]";
+
+	public void verifySubmittedLeaveIsInRemarksColumn(String timeLogDate, String leaveType) {
+		String xpath = "//a[contains(text(),'" + timeLogDate
+				+ "')]/parent::td/following-sibling::td/p[(contains(text(), '" + leaveType + "'))]";
 		WebElement element = driver.findElement(By.xpath(xpath));
 		waitForElement(element);
-		
+
 		System.out.println(element.getText());
 		String expectedString = "Submitted " + leaveType;
-		
+
 		boolean expectedStringIsDisplayed = element.getText().contains(expectedString);
 		Assert.assertTrue(expectedStringIsDisplayed);
-		
-		String methodName = "Verify submitted leave '" + leaveType + "' is indicated in the remarks column of the corresponding timelog date '" + timeLogDate+ "'";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				methodName);
+
+		String methodName = "Verify submitted leave '" + leaveType
+				+ "' is indicated in the remarks column of the corresponding timelog date '" + timeLogDate + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
-	
-	// private methods----------------------------------------------------------------------------
 
+	// private
+	// methods----------------------------------------------------------------------------
 
-
-	
 }

@@ -76,23 +76,25 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 				recordID);
 		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
 
+		// get dates with file a leave link
+		fileALeaveLinkDates = myTimeLogsPage.getFileALeaveLinkDates("M/d/yyyy");
+
 		for (int i = 0; i < fileALeaveLinks.size(); i++) {
 
 			// get file a leave link date with the index i
-			fileALeaveLinkDates = myTimeLogsPage.getFileALeaveLinkDates("M/d/yyyy");
 			String fileALeavelinkDate = fileALeaveLinkDates.get(i);
 
 			// Select a Leave Type with a running balance equal to zero
 			for (String leaveType : leaveTypes) {
-				// click File A Leave link with index i
-				myTimeLogsPage.clickFileALeaveButton(i);
+				// click File A Leave link for the corresponding date
+				myTimeLogsPage.clickFileALeaveButton(fileALeavelinkDate);
 
 				// verify File A Leave modal is displayed
 				fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 
 				// check running balance
 				String runningBalance = fileALeaveModal.getAvailableLeaveBalance(leaveType);
-				System.out.println(runningBalance);
+			
 
 				switch (runningBalance) {
 				case "0":
@@ -144,18 +146,18 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 
 					// click OK
 					fileALeaveModal.clickOkButtonInWarningPopup();
-					
-					//verify success toast is not displayed
+
+					// verify success toast is not displayed
 					fileALeaveModal.verifyWarningPopupIsNotDisplayed();
-					
-					//Verify Success Toast
-					//Verify toast is displayed
+
+					// Verify Success Toast
+					// Verify toast is displayed
 					fileALeaveModal.verifyToastIsDisplayed();
-					
-					//verify toast message
+
+					// verify toast message
 					fileALeaveModal.verifyToastMessage("Leave Application Saved!");
-					
-					//wait for file a leave modal to disappear
+
+					// wait for file a leave modal to disappear
 					fileALeaveModal.waitForFileALeaveModalToDisappear();
 
 					// Verify submitted leave is in the remarks column of corresponding timelog date
@@ -169,9 +171,9 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 
 					// navigate back to timelogs
 					navigationBar.navigateToPage("Time Logs", "My Time Logs");
-					
+
 					break;
-					
+
 				default:
 					// Click cancel button
 					fileALeaveModal.clickCancelButton();
@@ -180,75 +182,6 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 					fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
 
 				}
-
-				/*
-				 * if (runningBalance != "0") { // Click cancel button
-				 * fileALeaveModal.clickCancelButton();
-				 * 
-				 * // verify File A Leave modal is NOT displayed
-				 * fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
-				 * 
-				 * } else { // verify leave type was selected
-				 * fileALeaveModal.verifydropDownOptionIsSelected(leaveTypeDropDown, leaveType);
-				 * 
-				 * // Select a random Leave Reason--------------------------------- // get a
-				 * random leave reason String randomLeaveReason =
-				 * fileALeaveModal.getRandomLeaveReason();
-				 * 
-				 * // select the random leave reason
-				 * fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
-				 * 
-				 * // verify random leave reason was indeed selected
-				 * fileALeaveModal.verifydropDownOptionIsSelected(leaveReasonDropDown,
-				 * randomLeaveReason);
-				 * 
-				 * // Fill out Remarks/Comment field--------------------------------- // enter
-				 * text in comments text box String comment = "TEST COMMENT/REMARK";
-				 * fileALeaveModal.enterTextInRemarksTextBox(comment);
-				 * 
-				 * // verify entered text is displayed
-				 * fileALeaveModal.verifyRemarksTextBoxValue(comment);
-				 * 
-				 * // Fill out Contact Number field // Verify other required fields are
-				 * blank/has no value String contactNumber = "0123456789";
-				 * fileALeaveModal.enterContactNumber(contactNumber);
-				 * 
-				 * // verify entered text is displayed
-				 * fileALeaveModal.verifyContactNumberTextBoxValue(contactNumber);
-				 * 
-				 * // Click Submit button fileALeaveModal.clickSubmitButton();
-				 * 
-				 * // Verify error/required messages are displayed // verify error messages for
-				 * the fields WITH input are NOT displayed
-				 * fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveTypeDropDown);
-				 * fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(leaveReasonDropDown)
-				 * ; fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField);
-				 * fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(contactNumberField);
-				 * 
-				 * // Verify Success Toast // Verify warning popup is displayed
-				 * fileALeaveModal.verifyWarningPopupIsDisplayed();
-				 * 
-				 * // verify warning popup message
-				 * fileALeaveModal.verifyWarningPopupMessage(warningMessage);
-				 * 
-				 * // click OK fileALeaveModal.clickOkButtonInWarningPopup();
-				 * 
-				 * fileALeaveModal.verifyWarningPopupIsNotDisplayed();
-				 * 
-				 * // Verify submitted leave is in the remarks column of corresponding timelog
-				 * date myTimeLogsPage.verifySubmittedLeaveIsInRemarksColumn(fileALeavelinkDate,
-				 * leaveType);
-				 * 
-				 * // Recall filed leave //go to leave applications page
-				 * navigationBar.navigateToPage("Leaves", "Applications");
-				 * leaveApplicationsPage.verifySubmittedLeaveIsDisplayedInLeaveAppTable(
-				 * fileALeavelinkDate, leaveType);
-				 * leaveApplicationsPage.recallAllLeaveApplications();
-				 * leaveApplicationsPage.verifyLeaveApplicationsTableIsNotDisplayed();
-				 * 
-				 * // navigate back to timelogs navigationBar.navigateToPage("Time Logs",
-				 * "My Time Logs"); }
-				 */
 
 			}
 

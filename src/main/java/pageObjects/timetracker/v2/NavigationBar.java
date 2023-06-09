@@ -45,7 +45,7 @@ public class NavigationBar extends UserHelper{
 		//click subsection
 		WebElement navBarSublink = driver.findElement(By.xpath(elementXPath));
 		waitElementToBeClickable(navBarSublink);
-		moveAndHighlightElement(navBarSublink);
+		//moveAndHighlightElement(navBarSublink);
 		
 		navBarSublink.click();
 		

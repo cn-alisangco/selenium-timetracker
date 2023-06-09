@@ -140,6 +140,9 @@ public class FileALeave_Modal extends UserHelper {
 		waitForElement(availableLeaveBalance);
 		String runningBalanceString = availableLeaveBalance.getAttribute("innerText");
 		
+		String methodName = "Get balance for leave type '" + leaveType + "': " + runningBalanceString;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+		
 		return runningBalanceString;
 	}
 	public String getAvailableLeaveBalance() {
@@ -195,11 +198,12 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
 	}
 
-	public void enterTextInRemarksTextBox(String remark) {
+	public void enterTextInRemarksTextBox(String comment) {
 		waitForElement(remarksTextBox);
 
-		remarksTextBox.sendKeys(remark);
-
+		remarksTextBox.sendKeys(comment);
+		
+		String methodName = "Enter text:  '" + comment + "' in the comments/remarks textbox";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
 				"Enter text in the comments/remarks textbox");
 	}
@@ -209,7 +213,7 @@ public class FileALeave_Modal extends UserHelper {
 
 		contactNumberTextBox.sendKeys(contactNumber);
 
-		String methodName = "Enter contact number:  " + contactNumber + " in the contact number textbox";
+		String methodName = "Enter contact number:  '" + contactNumber + "' in the contact number textbox";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
