@@ -29,9 +29,8 @@ public class TC005_TimeTracker_Login_NullCredentials extends BaseClass {
 	    	String id = "TC005_TimeTracker_Login_NullCredentials";
 	    	String username = creds.testData(id, "username");
 	    	String password = creds.testData(id, "password");
-	    	
-	    	//leave login empty
-	    	loginPage.login(username, password);
+	    	/*Logging in to TimeTracker*/
+	    	loginPage.login(username, password); //note for this case, obtained username and password should be null
 	    	//verify error message for invalid credentials appear
 	    	loginPage.verifyNull();
 	    }

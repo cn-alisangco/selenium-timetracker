@@ -40,10 +40,9 @@ public class TC001_TimeTracker_ChargeHours_ClickInputWhizHours extends BaseClass
 	    	String pass = creds.testData(id, "password");
 	    	
 	    	loginPage.login(user, pass);
-	    	homePage.verifySuccessfulLogin();
+	    	homePage.verifyInHomePage();
 	    	
 	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
-	    	System.out.println(dayOfMonth);
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
 	    	

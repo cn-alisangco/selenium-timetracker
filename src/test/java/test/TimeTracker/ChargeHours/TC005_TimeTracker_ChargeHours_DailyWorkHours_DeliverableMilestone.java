@@ -15,7 +15,7 @@ import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
-public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends BaseClass {
+public class TC005_TimeTracker_ChargeHours_DailyWorkHours_DeliverableMilestone extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
@@ -35,9 +35,11 @@ public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends B
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Charge Hours");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed";
+	    	String id = "TC005_TimeTracker_ChargeHours_DailyWorkHours_DeliverableMilestone";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String project = creds.testData(id, "project");
+	    	String milestone = creds.testData(id, "milestone");
 	    	
 	    	loginPage.login(user, pass);
 	    	homePage.verifyInHomePage();
@@ -45,10 +47,10 @@ public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends B
 	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
-	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
-	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	dailyWorkHours.verifyProperDay(tsFormat.format(now),dayOfMonth);
+	    	dailyWorkHours.chooseProjectFromDropdown(project);
+	    	dailyWorkHours.verifyChosenProject(project);
+	    	dailyWorkHours.chooseMilestoneFromDropdown(milestone);
+	    	dailyWorkHours.verifyChosenMilestone(milestone);
 	    	
 	}
 }

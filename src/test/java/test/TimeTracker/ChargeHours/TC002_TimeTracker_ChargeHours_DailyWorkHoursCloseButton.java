@@ -31,42 +31,26 @@ public class TC002_TimeTracker_ChargeHours_DailyWorkHoursCloseButton extends Bas
 		homePage = PageFactory.initElements(getDriver(), HomePage.class);
 		dailyWorkHours = PageFactory.initElements(getDriver(), DailyWorkHours.class);
 	}
-	
-	@BeforeClass
-	public void disablePopup() {
-		ChromeOptions options = new ChromeOptions(); 
-		//options.setExperimentalOption("excludeSwitches", new String[]{"enable-automation"});
-		options.addArguments("disable-infobars");
-	}
-	
+		
 	@Test
 	 public void loginToTimeTracker() throws Exception{
 		
 	        initialize();
-	        dailyWorkHours.setBrowserZoom(80);
-	        //disablePopup();
-	        
-	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Time Logs");
+	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Charge Hours");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC001_TimeTracker_TimeLogs_LogTimeIn";
+	    	String id = "TC002_TimeTracker_ChargeHours_DailyWorkHoursCloseButton";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
 	    	
 	    	loginPage.login(user, pass);
-	    	homePage.verifySuccessfulLogin();
+	    	homePage.verifyInHomePage();
 	    	
 	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
-	    	
-	    	//initialize();
-	        //WebElement e = driver.findElement(By.xpath("/html/body/div[9]/div[1]/a/span"));
-	        //e.click();
-	    	
 	    	dailyWorkHours.closeInputWhizHours();
-	    	//homePage.verifySuccessfulLogin();
+	    	homePage.verifyInHomePage();
 	}
 }

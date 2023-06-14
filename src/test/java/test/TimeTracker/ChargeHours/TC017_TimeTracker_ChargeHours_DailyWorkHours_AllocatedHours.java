@@ -15,7 +15,7 @@ import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
-public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends BaseClass {
+public class TC017_TimeTracker_ChargeHours_DailyWorkHours_AllocatedHours extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
@@ -35,20 +35,25 @@ public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends B
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Charge Hours");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed";
+	    	String id = "TC017_TimeTracker_ChargeHours_DailyWorkHours_AllocatedHours";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String project = creds.testData(id, "project");
+	    	String tab = creds.testData(id, "tab"); 
+	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	
 	    	loginPage.login(user, pass);
+	    	
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
+	    	
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
-	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
-	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	dailyWorkHours.verifyProperDay(tsFormat.format(now),dayOfMonth);
-	    	
+	    	dailyWorkHours.chooseProjectFromDropdown(project);
+	    	dailyWorkHours.verifyChosenProject(project);
+	    	dailyWorkHours.clickTab(tab);
+	    	dailyWorkHours.verifySelectedTasks();
+	    	String randomTask = dailyWorkHours.chooseRandomTask(1);
+	    	dailyWorkHours.verifyTaskChosen();
+	    	dailyWorkHours.verifyAllocatedHours(randomTask);
 	}
 }

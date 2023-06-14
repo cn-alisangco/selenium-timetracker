@@ -7,7 +7,7 @@
   <test thread-count="5" name="Login_Valid Username and Password">
   <parameter name="categoryXML" value="Smoke" />
 		<parameter name="browser" value="chrome" />
-		<parameter name="url" value = "http://timetracker.srv.pointwest.com.ph/"/>
+		<parameter name="url" value = "http://timetracker21.srv.pointwest.com.ph/"/>
 		<parameter name="td" value="\testData_arch\timetracker_glenn_v2.xlsx"/>
     	<classes>
 			<class name="test.TimeTracker.TimeLogs.TC001_TimeTracker_TimeLogs_LogTimeIn" />

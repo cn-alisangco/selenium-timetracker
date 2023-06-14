@@ -37,17 +37,22 @@ public class TC003_TimeTracker_TimeLogs_EqualTimeInTimeOut extends BaseClass {
 	    	String id = "TC003_TimeTracker_TimeLogs_EqualTimeInTimeOut";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String reason = creds.testData(id, "remarks");
 	    	
 	    	loginPage.login(user, pass);
 	    	//verify successful login
-	    	homePage.verifySuccessfulLogin();
-	    	//setting date today
+	    	homePage.verifyInHomePage();
+	    	/*----------setting date today----------
+	    	 * Pattern is <M/d/yyyy> in order to remove 0's from single-digit instances (1/1/2023 instead of 01/01/2023)
+	    	 * Pattern <MMMM yyyy> for choosing the period*/
 	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy");
 	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	/*----------Getting date and time values----------*/
-	    	TimeParser timeparserIn = new TimeParser("11:00 AM");
-	    	TimeParser timeparserOut = new TimeParser("11:00 AM");
+	    	
+	    	TimeParser timeparserIn = new TimeParser("11:00 AM"); 	/*Enter the chosen time in here*/
+	    	TimeParser timeparserOut = new TimeParser("11:00 AM"); 	/*Enter the chosen time out here*/
+	    	
+	    	//getting date and time values
 	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex();
 	    	//TIME IN
 	    	String hourIn = timeparserIn.getHour();
@@ -63,7 +68,7 @@ public class TC003_TimeTracker_TimeLogs_EqualTimeInTimeOut extends BaseClass {
 	    	//TIME LOGS
 	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hourIn,minuteIn,periodIn);
 	    	editTimeLogs.fillManualTimeOut(dayOfWeek,hourOut,minuteOut,periodOut);
-	    	editTimeLogs.enterReasonOverride(dayOfWeek, "automated fillup by Selenium");
+	    	editTimeLogs.enterReasonOverride(dayOfWeek, reason);
 	    	editTimeLogs.saveLogs();
 	    	//Verify error messages appear
 	    	editTimeLogs.verifyTimeInError(dayOfWeek);

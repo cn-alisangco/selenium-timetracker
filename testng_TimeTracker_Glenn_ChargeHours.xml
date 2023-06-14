@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+<listeners>
+		<listener class-name="utilities.TestNGListeners" />
+</listeners>
+  <test thread-count="5" name="Login_Valid Username and Password">
+  <parameter name="categoryXML" value="Smoke" />
+		<parameter name="browser" value="chrome" />
+		<parameter name="url" value = "http://timetracker21.srv.pointwest.com.ph/"/>
+		<parameter name="td" value="\testData_arch\timetracker_glenn_v2.xlsx"/>
+    	<classes>
+			<class name="test.TimeTracker.ChargeHours.TC001_TimeTracker_ChargeHours_ClickInputWhizHours" />
+			<class name="test.TimeTracker.ChargeHours.TC002_TimeTracker_ChargeHours_DailyWorkHoursCloseButton" />
+			<class name="test.TimeTracker.ChargeHours.TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed" />
+			<class name="test.TimeTracker.ChargeHours.TC004_TimeTracker_ChargeHours_DailyWorkHoursProjectsDropdown" />
+			<class name="test.TimeTracker.ChargeHours.TC005_TimeTracker_ChargeHours_DailyWorkHours_DeliverableMilestone" />
+			<class name="test.TimeTracker.ChargeHours.TC014_TimeTracker_ChargeHours_DailyWorkHours_AllTasksTasks" />
+			<class name="test.TimeTracker.ChargeHours.TC015_TimeTracker_ChargeHours_DailyWorkHours_GeneralTasks" />
+			<class name="test.TimeTracker.ChargeHours.TC016_TimeTracker_ChargeHours_DailyWorkHours_GeneralTasksTasks" />
+			<class name="test.TimeTracker.ChargeHours.TC017_TimeTracker_ChargeHours_DailyWorkHours_AllocatedHours" />
+			<class name="test.TimeTracker.ChargeHours.TC018_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursNumberOfHours" />
+			<class name="test.TimeTracker.ChargeHours.TC019_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursTypeOfWork" />
+			<class name="test.TimeTracker.ChargeHours.TC020_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursDescription" />
+			<class name="test.TimeTracker.ChargeHours.TC021_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursSaveButton" />
+			<class name="test.TimeTracker.ChargeHours.TC022_TimeTracker_ChargeHours_DailyWorkHours_ActualHoursAndLoggedHours" />
+ 		</classes>
+	</test> <!-- Test -->
+</suite> <!-- Suite -->

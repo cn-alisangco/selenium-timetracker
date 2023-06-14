@@ -31,6 +31,7 @@ public class LoginPage extends UserHelper {
     public void enterUsername(String value) {
         waitForElement(txtUsername);
         moveAndHighlightElement(txtUsername);
+        txtUsername.clear();
         txtUsername.sendKeys(value);
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Entered the username");
     }	
@@ -38,6 +39,7 @@ public class LoginPage extends UserHelper {
     public void enterPassword(String value) {
     	waitForElement(txtPassword);
         moveAndHighlightElement(txtPassword);
+        txtPassword.clear();
         txtPassword.sendKeys(value);
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Entered the password");
     }

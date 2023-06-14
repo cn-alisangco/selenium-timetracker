@@ -85,11 +85,11 @@ public class HomePage extends UserHelper {
 		this.driver = driver;
 	}
 	
-    public void verifySuccessfulLogin() {
+    public void verifyInHomePage() {
         waitForElement(loggedUser);
         boolean logSuccess = loggedUser!=null;
         if(!logSuccess) {
-    		throw new Error("Login error!");
+    		throw new Error("Not in HomePage!");
     	}
         moveAndHighlightElement(loggedUser);
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified successful login");
@@ -123,5 +123,53 @@ public class HomePage extends UserHelper {
     	WebElement day = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[8]/div/a[2]/img"));
     	day.click();
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Input Whiz Hours");
+    }
+    
+    public void verifyEnteredHours(int day) {
+    	WebElement dailyHours = driver.findElement(By.xpath("//*[@id=\"0"+day+"\"]/td[7]/span"));
+    	moveAndHighlightElement(dailyHours);
+    	Wait(3000);
+    	String enteredHours = dailyHours.getText();
+    	System.out.println(enteredHours);
+    	boolean isSame = enteredHours.equals("8");
+    	if(!isSame) {
+    		throw new Error("Different entered hours!");
+    	}
+    	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same entered hours");
+    }
+    
+    public void verifyTimeInFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {
+    	//compare entered time with displayed 
+    	WebElement timeInEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[4]"));
+    	moveAndHighlightElement(timeInEntered);
+    	String displayedTimeIn = timeInEntered.getText();
+    	boolean isSame = displayedTimeIn.equals(hour+":"+minute+" "+time12Hour+" "+"UP");
+    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
+    	}else if(!isCanceled&&isSame) { //not canceled, same value
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
+    	}else if(isCanceled&&isSame) { //canceled, but same value 
+    		throw new Error("Time was changed!");
+    	}else { //not canceled and not the same as input
+    		throw new Error("Entered time not the same!");
+    	}
+    }
+    
+    public void verifyTimeOutFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {	
+    	//compare entered time with displayed 
+    	WebElement timeOutEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[5]"));
+    	moveAndHighlightElement(timeOutEntered);
+    	String displayedTimeOut = timeOutEntered.getText();
+    	System.out.println(displayedTimeOut);
+    	boolean isSame = displayedTimeOut.equals(hour+":"+minute+" "+time12Hour+" "+"UP");	
+    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
+    	}else if(!isCanceled&&isSame) { //not canceled, same value
+    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
+    	}else if(isCanceled&&isSame) { //canceled, but same value 
+    		throw new Error("Time was changed!");
+    	}else { //not canceled and not the same as input
+    		throw new Error("Entered time not the same!");
+    	}
     }
 }

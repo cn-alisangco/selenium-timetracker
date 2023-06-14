@@ -101,41 +101,8 @@ public class EditTimeLogs extends UserHelper {
     	
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully filled up manual time out");
     }
-    
-    public void verifyTimeInFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {
-    	//compare entered time with displayed 
-    	WebElement timeInEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[4]"));
-    	moveAndHighlightElement(timeInEntered);
-    	String displayedTimeIn = timeInEntered.getText();
-    	boolean isSame = displayedTimeIn.equals(hour+":"+minute+" "+time12Hour+" "+"UP");
-    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
-    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
-    	}else if(!isCanceled&&isSame) { //not canceled, same value
-    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
-    	}else if(isCanceled&&isSame) { //canceled, but same value 
-    		throw new Error("Time was changed!");
-    	}else { //not canceled and not the same as input
-    		throw new Error("Entered time not the same!");
-    	}
-    }
 
-    public void verifyTimeOutFill(int dayOfMonth, String hour, String minute, String time12Hour, boolean isCanceled) {	
-    	//compare entered time with displayed 
-    	WebElement timeOutEntered = driver.findElement(By.xpath("//*[@id=\"0"+dayOfMonth+"\"]/td[5]"));
-    	moveAndHighlightElement(timeOutEntered);
-    	String displayedTimeOut = timeOutEntered.getText();
-    	System.out.println(displayedTimeOut);
-    	boolean isSame = displayedTimeOut.equals(hour+":"+minute+" "+time12Hour+" "+"UP");	
-    	if(isCanceled&&!isSame) { //if edit was canceled and value is not same
-    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Successfully verified canceled manual time out");
-    	}else if(!isCanceled&&isSame) { //not canceled, same value
-    		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified same time in");
-    	}else if(isCanceled&&isSame) { //canceled, but same value 
-    		throw new Error("Time was changed!");
-    	}else { //not canceled and not the same as input
-    		throw new Error("Entered time not the same!");
-    	}
-    }
+    
     
     public void verifyTimeInError(int dayOfWeek) {
     	WebElement timeInError = driver.findElement(By.xpath("//*[@id=\"timeInValidation"+dayOfWeek+"\"]"));
@@ -187,8 +154,11 @@ public class EditTimeLogs extends UserHelper {
         if(dayOfMonth<7&&lastDay<7) {
         	//weekIndex is equal to <dayOfTheWeek> minus offset
         	dayOfWeek = dayOfWeek-7+lastDay;
+        }else {
+        	//if not start of the month, subtract one to offset index
+        	dayOfWeek = dayOfWeek-1;
         }
-        //if not start of the month, maintain current index
+        
         return dayOfWeek;
     }
     

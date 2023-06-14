@@ -36,17 +36,21 @@ public class TC002_TimeTracker_TimeLogs_LogTimeOut extends BaseClass {
 	    	String id = "TC002_TimeTracker_TimeLogs_LogTimeOut";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String reason = creds.testData(id, "remarks");
 	    	
 	    	loginPage.login(user, pass);
-	    	//verify if successful login
-	    	homePage.verifySuccessfulLogin();
-	    	//setting date today
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy"); //setting date format
+	    	homePage.verifyInHomePage();
+	    	/*----------setting date today----------
+	    	 * Pattern is <M/d/yyyy> in order to remove 0's from single-digit instances (1/1/2023 instead of 01/01/2023)
+	    	 * Pattern <MMMM yyyy> for choosing the period*/
+	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy");
 	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
 	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	TimeParser timeparser = new TimeParser("7:00 PM");
+	    	
+	    	TimeParser timeparser = new TimeParser("7:00 PM");/*Enter the chosen time here*/
+	    	
 	    	//getting date and time values
-	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex();
+	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex(); //set index for choosing date
 	    	String hour = timeparser.getHour();
 	    	String minute = timeparser.getMinute();
 	    	String period = timeparser.getPeriod();
@@ -54,9 +58,11 @@ public class TC002_TimeTracker_TimeLogs_LogTimeOut extends BaseClass {
 	    	//click the date to add logs, fill up the fields, and verify tracker registered data successfully
 	    	homePage.selectCurrentTimesheetPeriod(tsFormat.format(now));
 	    	homePage.clickDate(dtf.format(now)); 
+	    	
 	    	editTimeLogs.fillManualTimeOut(dayOfWeek,hour,minute,period);
-	    	editTimeLogs.enterReasonOverride(dayOfWeek, "automated fillup by Selenium");
+	    	editTimeLogs.enterReasonOverride(dayOfWeek, reason);
 	    	editTimeLogs.saveLogs();
-	    	editTimeLogs.verifyTimeOutFill(dayOfMonth,hour,minute,period,false);
+	    	//verify entered time in is reflected on page
+	    	homePage.verifyTimeOutFill(dayOfMonth,hour,minute,period,false);
 	}
 }

@@ -10,7 +10,11 @@
 		<parameter name="url" value = "http://timetracker21.srv.pointwest.com.ph/"/>
 		<parameter name="td" value="\testData_arch\timetracker_glenn_v2.xlsx"/>
     	<classes>
-			<class name="test.TimeTracker.ChargeHours.TC021_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursSaveButton" />
+			<class name="test.TimeTracker.Login.TC001_TimeTracker_Login_ValidCredentials" />
+			<class name="test.TimeTracker.Login.TC002_TimeTracker_Login_InvalidUsername" />
+			<class name="test.TimeTracker.Login.TC003_TimeTracker_Login_InvalidPassword" />
+			<class name="test.TimeTracker.Login.TC004_TimeTracker_Login_InvalidCredentials" />
+			<class name="test.TimeTracker.Login.TC005_TimeTracker_Login_NullCredentials" />
  		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

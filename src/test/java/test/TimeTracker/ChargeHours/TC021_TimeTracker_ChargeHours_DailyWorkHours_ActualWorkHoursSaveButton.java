@@ -15,7 +15,7 @@ import pageObjects.timetracker.v2.LoginPage;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
-public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends BaseClass {
+public class TC021_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursSaveButton extends BaseClass {
 	
 	LoginPage loginPage;
 	HomePage homePage;
@@ -35,20 +35,37 @@ public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends B
 	    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, "Charge Hours");
 	    	// user.dir + td from testng file + testsheet name
 	        
-	    	String id = "TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed";
+	    	String id = "TC021_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursSaveButton";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	String project = creds.testData(id, "project");
+	    	String actualHours = creds.testData(id, "actualHours");
+	    	String tab = creds.testData(id, "tab");
+	    	String reason = creds.testData(id, "remarks");
+	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	
 	    	loginPage.login(user, pass);
+	    	
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
+	    	//verify successful login
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
-	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
-	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	dailyWorkHours.verifyProperDay(tsFormat.format(now),dayOfMonth);
-	    	
+	    	//choose and then verify chosen project
+	    	dailyWorkHours.chooseProjectFromDropdown(project);
+	    	dailyWorkHours.verifyChosenProject(project);
+	    	//click and verify in General Tasks
+	    	dailyWorkHours.clickTab(tab);
+	    	dailyWorkHours.verifySelectedTasks();
+	    	dailyWorkHours.chooseRandomTask(1);
+	    	dailyWorkHours.verifyTaskChosen();
+	    	//enter your Work Hours
+	    	dailyWorkHours.enterActualHours(actualHours);
+	    	dailyWorkHours.enterTaskDescription(reason);
+	    	dailyWorkHours.clickSave();
+	    	dailyWorkHours.handleWarningPopup();
+	    	//verify successful return to homepage and correct entered hours
+	    	dailyWorkHours.closeInputWhizHours();
+	    	homePage.verifyInHomePage();
+	    	homePage.verifyEnteredHours(dayOfMonth);
 	}
 }

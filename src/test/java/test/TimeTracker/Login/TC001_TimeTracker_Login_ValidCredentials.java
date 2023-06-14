@@ -29,9 +29,9 @@ public class TC001_TimeTracker_Login_ValidCredentials extends BaseClass {
 	    	String id = "TC001_TimeTracker_Login_ValidCredentials";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
-	    	
+	    	/*Logging in to TimeTracker*/
 	    	loginPage.login(user, pass);
 	    	//verify if successful login
-	    	homePage.verifySuccessfulLogin();
+	    	homePage.verifyInHomePage();
 	    }
 }
