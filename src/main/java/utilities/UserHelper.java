@@ -12,12 +12,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
@@ -50,7 +52,7 @@ public class UserHelper extends ReadExcelData {
 	private BaseClass bcObj = new BaseClass();
 	private WebDriver driver = bcObj.getDriver();
 	private final int WAITING_TIME_IN_SECONDS = 20;
-	
+
 	public static Select selectObj;
 	public static LocalDateTime now = LocalDateTime.now();
 	public static String dt = now.toString().replace(":", ".");
@@ -64,25 +66,25 @@ public class UserHelper extends ReadExcelData {
 	public JavascriptExecutor jse;
 
 	public void setBrowserZoom(int percentage) {
-		JavascriptExecutor jse = (JavascriptExecutor)driver;
-		jse.executeScript("document.body.style.zoom = '"+ percentage + "%';");
+		JavascriptExecutor jse = (JavascriptExecutor) driver;
+		jse.executeScript("document.body.style.zoom = '" + percentage + "%';");
 	}
-	
+
 	public void selectByVisibleText(WebElement e, String value) {
 		Select dropdown = new Select(e);
 		dropdown.selectByVisibleText(value);
 	}
 
-	public void selectByValue(WebElement e, String value){
+	public void selectByValue(WebElement e, String value) {
 		Select dropdown = new Select(e);
 		dropdown.selectByValue(value);
 	}
-	
+
 	public List<WebElement> selectOptions(WebElement e) {
 		Select dropdown = new Select(e);
 		return dropdown.getOptions();
 	}
-	
+
 	public void doubleClick(WebElement e) {
 		Actions actions = new Actions(driver);
 		actions.moveToElement(e).doubleClick().build().perform();
@@ -101,12 +103,12 @@ public class UserHelper extends ReadExcelData {
 	// Text Validation-----------------------------------------------------
 	public void validateText(String keyword, String actualText, String expectedText) {
 		switch (keyword.toUpperCase()) {
-			case "EQUAL":
-				//WebElement element = driver.findElement(actualLocator);
-				Assert.assertEquals(actualText, expectedText);
-				break;
-			case "CONTAINS":
-				Assert.assertTrue(actualText.contains(expectedText));
+		case "EQUAL":
+			// WebElement element = driver.findElement(actualLocator);
+			Assert.assertEquals(actualText, expectedText);
+			break;
+		case "CONTAINS":
+			Assert.assertTrue(actualText.contains(expectedText));
 		}
 	}
 
@@ -314,7 +316,7 @@ public class UserHelper extends ReadExcelData {
 
 	// Move and Highlight---------------------------------------------------
 	public void moveAndHighlightElement(WebElement e) {
-		
+
 		Actions actions = new Actions(driver);
 		jse = (JavascriptExecutor) driver;
 		actions.moveToElement(e).build().perform();
@@ -326,7 +328,7 @@ public class UserHelper extends ReadExcelData {
 	public void pageLoadTimeout(Duration duration) {
 		driver.manage().timeouts().pageLoadTimeout(duration);
 	}
-	
+
 	// deprecated
 	public void waitElementToLoad(WebElement e) {
 		waitToLoadPage();
@@ -337,21 +339,22 @@ public class UserHelper extends ReadExcelData {
 					break;
 				}
 			} catch (NoSuchElementException ex) {
-				wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS)); // you can modify the time here
+				wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS)); // you can modify the
+																								// time here
 				wait.until(ExpectedConditions.visibilityOf(e));
 			}
 		}
 	}
-	
+
 	// to replace waitElementToLoad()
 	public void waitForElement(WebElement e) {
-		
+
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 		wait.until(ExpectedConditions.visibilityOf(e));
 	}
-	
-	public void waitForElements(List<WebElement> e) { //added May 29, 2023
-		
+
+	public void waitForElements(List<WebElement> e) { // added May 29, 2023
+
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 		wait.until(ExpectedConditions.visibilityOfAllElements(e));
 	}
@@ -360,7 +363,7 @@ public class UserHelper extends ReadExcelData {
 		wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 		wait.until(ExpectedConditions.elementToBeClickable(e));
 	}
-	
+
 	public void waitToLoadPage() {
 		jse = (JavascriptExecutor) driver;
 
@@ -371,7 +374,8 @@ public class UserHelper extends ReadExcelData {
 				if (state.equalsIgnoreCase("complete")) {
 					break;
 				} else {
-					//driver.manage().timeouts().pageLoadTimeout(120, TimeUnit.SECONDS); // you can modify the time here
+					// driver.manage().timeouts().pageLoadTimeout(120, TimeUnit.SECONDS); // you can
+					// modify the time here
 					pageLoadTimeout(Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 				}
 			} catch (Exception ex) {
@@ -387,18 +391,18 @@ public class UserHelper extends ReadExcelData {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void waitElementToBeClickable(By locator) {
 		WebElement element = driver.findElement(locator);
 		wait = new WebDriverWait(driver, Duration.ofSeconds(120)); // you can modify the time here
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 	}
-	
+
 	public void waitElementToBeClickable(WebElement element) { // added 6/6/2023
 		wait = new WebDriverWait(driver, Duration.ofSeconds(120)); // you can modify the time here
 		wait.until(ExpectedConditions.elementToBeClickable(element));
 	}
-	
+
 	public void waitElementToBeInvinsible(By locator) {
 
 		driver.findElement(locator);
@@ -407,42 +411,41 @@ public class UserHelper extends ReadExcelData {
 		wait.until(ExpectedConditions.invisibilityOfElementLocated(locator));
 
 	}
-	
-	public void waitElementToBeInvinsible(WebElement element) { //added 6/6/2023
+
+	public void waitElementToBeInvinsible(WebElement element) { // added 6/6/2023
 		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		wait = new WebDriverWait(driver, Duration.ofSeconds(5)); // you can modify the time here
 		wait.until(ExpectedConditions.invisibilityOf(element));
 
 	}
-	
+
 	public void waitForElementTextToChange(WebElement element, String initialText) { // added 06/06/2023
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(WAITING_TIME_IN_SECONDS));
 		wait.until(ExpectedConditions.not(ExpectedConditions.textToBePresentInElement(element, initialText)));
 	}
-	
-	
-	
-	//Input Actions
+
+	// Input Actions
 	public void actionsClick(By locator) {
 		WebElement element = driver.findElement(locator);
 		Actions actions = new Actions(driver);
-		actions.moveToElement(element).click().build().perform();;
+		actions.moveToElement(element).click().build().perform();
+		;
 	}
-	
+
 	public void actionsSendKeys(By locator, String sheetName, String tcName, String columnName) {
 		WebElement element = driver.findElement(locator);
 		String value = getExcelData(sheetName, tcName, columnName);
 		Actions actions = new Actions(driver);
 		actions.sendKeys(element, value).build().perform();
-		
+
 	}
-	
+
 	public void sendKeysEsc(By locator) {
 		WebElement element = driver.findElement(locator);
 		element.click();
 		element.sendKeys(Keys.ESCAPE);
 	}
-	
+
 	public void sendKeysCtrlADelete(By locator) {
 		WebElement element = driver.findElement(locator);
 		element.click();
@@ -469,22 +472,21 @@ public class UserHelper extends ReadExcelData {
 
 	}
 
-	
 	public String getDataFromExcel(String sheetName, String tcName, String columnName) {
 		String value = getExcelData(sheetName, tcName, columnName);
-		//Wait(1000);
+		// Wait(1000);
 		return value;
-		
+
 	}
 
-	public boolean elementExistenceFlag(By locator){//newly added 11/24
+	public boolean elementExistenceFlag(By locator) {// newly added 11/24
 		waitToLoadPage();
-		//waitElementToLoad(locator);
+		// waitElementToLoad(locator);
 		WebElement element = driver.findElement(locator);
 		return element.isDisplayed();
 	}
 
-	public String getValueAttribute(By locator){//newly added 11/24
+	public String getValueAttribute(By locator) {// newly added 11/24
 		WebElement element = driver.findElement(locator);
 		return element.getAttribute("value");
 	}
@@ -508,21 +510,20 @@ public class UserHelper extends ReadExcelData {
 			e.printStackTrace();
 		}
 
-		/*try {
-			TestNGListeners.extentTest.get().pass(desc,
-					MediaEntityBuilder.createScreenCaptureFromBase64String(SrcBase64String).build());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
+		/*
+		 * try { TestNGListeners.extentTest.get().pass(desc,
+		 * MediaEntityBuilder.createScreenCaptureFromBase64String(SrcBase64String).build
+		 * ()); } catch (IOException e) { // TODO Auto-generated catch block
+		 * e.printStackTrace(); }
+		 */
+
 		TestNGListeners.extentTest.get().pass(desc,
 				MediaEntityBuilder.createScreenCaptureFromBase64String(SrcBase64String).build());
 
 		Reporter.log(desc);
 
 	}
-	
+
 	public void reportFail(String methodName, String desc) {
 		// Added
 //				SrcBase64String = "";
@@ -544,58 +545,89 @@ public class UserHelper extends ReadExcelData {
 //						MediaEntityBuilder.createScreenCaptureFromBase64String(SrcBase64String).build());
 //
 //				//Reporter.log(desc);
-				
-				org.testng.Assert.fail(desc);
 
-		
+		org.testng.Assert.fail(desc);
+
 	}
 
 	public static void customReportLog(String desc) {
 		Reporter.log(desc);
 	}
-	
-	
-	//Element existence validation----------------------------------------------------
-	public void validateElementIsDisplayed (By locator) {//newly added 05/26/2023
+
+	// Element existence validation----------------------------------------------------
+	public void validateElementIsDisplayed(By locator) {// newly added 05/26/2023
 		WebElement element = driver.findElement(locator);
 		boolean elementIsDisplayed = element.isDisplayed();
-		
+
 		Assert.assertTrue(elementIsDisplayed);
 	}
-	
-	public void validateElementIsDisplayed (WebElement webElement) {//newly added 05/26/2023
+
+	public void validateElementIsDisplayed(WebElement webElement) {// newly added 05/26/2023
 		boolean elementIsDisplayed = webElement.isDisplayed();
-		
+
 		Assert.assertTrue(elementIsDisplayed);
 	}
-	
-	public void validateElementIsNotDisplayed (WebElement webElement) {//newly added 05/26/2023
+
+	public void validateElementIsNotDisplayed(WebElement webElement) {// newly added 05/26/2023
 		boolean elementIsDisplayed;
-		
-		try{
+
+		try {
 			elementIsDisplayed = (webElement.isDisplayed());
-		}catch(Exception e){
+		} catch (Exception e) {
 			elementIsDisplayed = false;
 		}
-		
+
 		Assert.assertFalse(elementIsDisplayed);
 	}
-	
-	
-	//Date generators----------------------------------------------------------------
-	public String getTodayDate(String dateFormat) { //added 05/29/2023
 
-		  String pattern = dateFormat;
-		  SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		  String date = simpleDateFormat.format(new Date());
-		  return date;
+	// Date generators----------------------------------------------------------------
+	public String getTodayDate(String dateFormat) { // added 05/29/2023
+
+		String pattern = dateFormat;
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String date = simpleDateFormat.format(new Date());
+		return date;
 	}
 
-	
-	//random data generators---------------------------------------------------------
-	public static int generateRandomNumber(int min, int max) { //added 6/1/2023
+	public static String parseDate(String dateString, String parseFormat) { // added 6/13/2023
+		String parsedDateString = null;
+
+		try {
+			Date date = new SimpleDateFormat(parseFormat).parse(dateString);
+			SimpleDateFormat dateFormat = new SimpleDateFormat(parseFormat);
+
+			parsedDateString = dateFormat.format(date);
+
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Unable to parse date " + dateString + " to the format: " + parseFormat);
+		}
+
+		return parsedDateString;
+	}
+
+	// Test Data---------------------------------------------------------
+	public HashMap<String, String> getLoginCredentialsTestData(String testDataLoc, String sheetname, String recordID) { //added 6/14/2023
+
+		HashMap<String, String> loginCredentials = new HashMap<String, String>();
+		ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, sheetname);
+		// user.dir + td from testng file + testsheet name
+
+		String id = recordID;
+		String user = creds.testData(id, "username");
+		String pass = creds.testData(id, "password");
+
+		loginCredentials.put("username", user);
+		loginCredentials.put("password", pass);
+
+		return loginCredentials;
+	}
+
+	public static int generateRandomNumber(int min, int max) { // added 6/1/2023
 		// TODO Auto-generated method stub
 		Random random = new Random();
 		return random.nextInt(max - min + 1) + min;
 	}
+
 }

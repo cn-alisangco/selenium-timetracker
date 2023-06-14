@@ -17,48 +17,68 @@ import utilities.UserHelper;
 
 public class TC001_TimeTracker_File_a_Leave_Actions_Button extends BaseClass {
 
+	String testDescription = "Verify that user has 'File a Leave' action and button can be clickable";
+
+	// Pages and elements
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
-	List<WebElement> fileLeaveLinks;
-	
-	//Login Test Data
+	List<WebElement> fileALeaveLinkDates;
+
+	// Login data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
-	
-	
+	String accountPrecondition = "Has valid credentials";
+	HashMap<String, String> loginCredentials;
+
+	// Test date
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
+
 	private void initialize() {
+		// initialize page elements
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
-		
-		fileLeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
-	
+
 	@Test
-	 public void TC001_TimeTracker_File_a_Leave_Actions_Button(){
-		
-	        initialize();
-	        
-	        //Log in to Timetracker with valid credentials
-	        HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
-	        loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
-	     
-	        //verify "File a Leave" button is visible in the list of Actions
-	        myTimeLogsPage.verifyFileALeaveButtonsExist();
-	    	
-	        //Click File a Leave button
-	        int randomIndex = UserHelper.generateRandomNumber(0, fileLeaveLinks.size() - 1);
-	        myTimeLogsPage.clickFileALeaveButton(randomIndex);
-	        
-	        //Verify File a Leave modal is displayed
-	        fileALeaveModal.verifyFileALeaveModalIsDisplayed();
-	        
-	        //Close File a Leave modal
-	        fileALeaveModal.clickCloseButton();    
+	public void TC001_TimeTracker_File_a_Leave_Actions_Button() {
 
-	    }
-	
+		initialize();
+
+		// Log in to Timetracker with valid credentials
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
+
+		// Get timelog date strings with 'File A Leave' button/link
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
+
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
+
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
+
+			// verify "File a Leave" button is visible in the list of Actions
+			myTimeLogsPage.verifyFileALeaveLinkForDateIsDisplayed(fileALeaveLinkDate);
+
+			// Click File a Leave button
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
+
+			// Verify File a Leave modal is displayed
+			fileALeaveModal.verifyFileALeaveModalForDateIsDisplayed(fileALeaveLinkDate);
+
+			// Close File a Leave modal
+			fileALeaveModal.clickCloseButton();
+		}
+
+	}
+
 }
-
-

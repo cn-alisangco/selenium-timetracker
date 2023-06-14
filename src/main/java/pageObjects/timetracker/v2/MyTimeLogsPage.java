@@ -26,8 +26,7 @@ public class MyTimeLogsPage extends UserHelper {
 	WebElement timeLogsTable;
 	@FindBy(xpath = "//tbody/tr[contains (@id, '0')]")
 	List<WebElement> timeLogsTableRows;
-	// @FindBy(xpath =
-	// "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink']")
+
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink' and not(@style)]")
 	List<WebElement> fileALeaveLinks;
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/following-sibling::td[position()=2 and not(contains(text(),'PM'))]/parent::tr/td[contains(@class, 'selectDate')]")
@@ -43,11 +42,18 @@ public class MyTimeLogsPage extends UserHelper {
 		return fileALeaveLinks;
 	}
 
-	public List<String> getFileALeaveLinkDates(String parseFormat) {
+	public List<WebElement> getFileALeaveLinkDates(){
+		return fileALeaveLinkDates;
+	}
+	
+	
+	public List<String> getFileALeaveLinkDateStrings(List<WebElement> dateElements, String parseFormat) {
 
 		List<String> parsedDateStrings = new ArrayList<String>();
+		
+		
 
-		for (WebElement dateElement : fileALeaveLinkDates) {
+		for (WebElement dateElement : dateElements) {
 
 			String dateString = dateElement.getText();
 
@@ -71,6 +77,44 @@ public class MyTimeLogsPage extends UserHelper {
 		System.out.println("Dates:" + parsedDateStrings);
 		return parsedDateStrings;
 
+	}
+	
+	public List<String> getFileALeaveLinkDateStrings(String parseFormat) {
+
+		List<WebElement> dateElements = this.getFileALeaveLinkDates();
+		List<String> parsedDateStrings = new ArrayList<String>();
+		
+		for (WebElement dateElement : dateElements) {
+
+			String dateString = dateElement.getText();
+
+			String parsedDateString = null;
+
+			try {
+				Date date = new SimpleDateFormat(parseFormat).parse(dateString);
+				SimpleDateFormat dateFormat = new SimpleDateFormat(parseFormat);
+
+				parsedDateString = dateFormat.format(date);
+
+				parsedDateStrings.add(parsedDateString);
+
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.out.println("Unable to parse date to the format: " + parseFormat);
+			}
+
+		}
+		System.out.println("Dates:" + parsedDateStrings);
+		return parsedDateStrings;
+
+	}
+
+	public WebElement getFileALeaveLinkForDate(String date) {
+		String xpath = "//a[text()='" + date + "']/parent::td/following-sibling::td//a[@class='fileLeaveLink']";
+		WebElement fileALeaveLink = driver.findElement(By.xpath(xpath));
+
+		return fileALeaveLink;
 	}
 
 	// ACTIONS--------------------------------------------------------------------------------------------
@@ -99,7 +143,6 @@ public class MyTimeLogsPage extends UserHelper {
 	}
 
 	public void clickFileALeaveButton(String timeLogDate) {
-		// click "File A Leave" Link
 		waitForElements(fileALeaveLinks);
 
 		String elementXpath = "//a[text()='" + timeLogDate + "']/ancestor::tr//a[@class='fileLeaveLink']";
@@ -117,6 +160,16 @@ public class MyTimeLogsPage extends UserHelper {
 	}
 
 	// VERIFICATIONS--------------------------------------------------------------------------------------------
+
+	public void verifyFileALeaveLinkForDateIsDisplayed(String timeLogDate) {
+
+		String elementXpath = "//a[text()='" + timeLogDate + "']/ancestor::tr//a[@class='fileLeaveLink']";
+		WebElement fileLeaveLink = driver.findElement(By.xpath(elementXpath));
+		validateElementIsDisplayed(fileLeaveLink);
+
+		String methodName = "Verify 'File a Leave'button for timelog date: " + timeLogDate + " is displayed";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
 
 	public void verifyFileALeaveButtonsExist() {
 

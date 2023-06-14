@@ -15,103 +15,113 @@ import pageObjects.timetracker.v2.FileALeave_Modal;
 import pageObjects.timetracker.v2.LeaveApplicationsPage;
 import pageObjects.timetracker.v2.LoginPage;
 import pageObjects.timetracker.v2.MyTimeLogsPage;
-import pageObjects.timetracker.v2.NavigationBar;
+import pageObjects.timetracker.v2.TopNavigationBar;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNotHaveBalance extends BaseClass {
 
+	String testDescription = "Verify that there will be a Warning when 'Vacation Leave' type is selected and Submit button is clicked";
+
+	// Pages and elements
 	LoginPage loginPage;
-	NavigationBar navigationBar;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	TopNavigationBar topNavigationBar;
 	LeaveApplicationsPage leaveApplicationsPage;
-
-	// Initialize web element variables--------------------
-	// links
-	List<WebElement> fileALeaveLinks;
-	List<String> fileALeaveLinkDates;
-
-	// field elements
+	List<WebElement> fileALeaveLinkDates;
 	WebElement leaveTypeDropDown;
 	WebElement leaveReasonDropDown;
 	WebElement commentField;
 	WebElement contactNumberField;
 
-	// Login Test Data---------------------
+	// Login data
 	String sheetName = "Login";
 	String recordID = "accountWithZeroVacationLeaveBalance";
+	String accountPrecondition = "Account with 0 Balance for leave type: Vacation Leave";
+	HashMap<String, String> loginCredentials;
 
 	// test data---------------------------
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
+	String leaveType = "Vacation Leave";
+	String randomLeaveReason;
+	String testComment = "TEST COMMENT/REMARK";
+	String testContactNumber = "0123456789";
 	String errorMessage = "You don't have enough balance (0 day/s) to cover your leave (1 day/s).";
+
 
 	private void initialize() {
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
-		navigationBar = PageFactory.initElements(getDriver(), NavigationBar.class);
+		topNavigationBar = PageFactory.initElements(getDriver(), TopNavigationBar.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
 		leaveApplicationsPage = PageFactory.initElements(getDriver(), LeaveApplicationsPage.class);
-
-		// set File A Leave links
-		fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
-
+		
 		// Set field elements
 		leaveTypeDropDown = fileALeaveModal.getLeaveTypeDropdown();
 		leaveReasonDropDown = fileALeaveModal.getLeaveReasonDropdown();
 		commentField = fileALeaveModal.getCommentsField();
 		contactNumberField = fileALeaveModal.getContactNumberField();
 
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
+
 	}
 
 	@Test
 	public void TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNotHaveBalance() {
 
-		// Initialize
 		initialize();
 
-		// Log in to Timetracker with valid credentials of account whose Vacation Leave
-		// balance is zero
-		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
-				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"),
-				"Vacation Leave balance = 0");
+		// Log in to Timetracker with valid credentials
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
 
-		for (int i = 0; i < fileALeaveLinks.size(); i++) {
+		// get all regular shift dates in the M/d/yyyy format
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
 
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
+
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
+
+			/*-----------------------TIME LOGS PAGE---------------------------------------------------------------*/
+			
 			// click File A Leave link with index i
-			myTimeLogsPage.clickFileALeaveButton(i);
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
 
+			
+			/*-----------------------FILE A LEAVE MODAL-----------------------------------------------------------*/
+			
 			// verify File A Leave modal is displayed
 			fileALeaveModal.verifyFileALeaveModalIsDisplayed();
 
 			// Select 'Vacation Leave' with zero balance---------------------------------
-			fileALeaveModal.selectDropDownOption(leaveTypeDropDown, "Vacation Leave");
+			fileALeaveModal.selectDropDownOption(leaveTypeDropDown, leaveType);
 
 			// Select a random Leave Reason---------------------------------
-			// get a random leave reason
-			String randomLeaveReason = fileALeaveModal.getRandomLeaveReason();
-
-			// select the random leave reason
+			randomLeaveReason = fileALeaveModal.getRandomLeaveReason();
 			fileALeaveModal.selectDropDownOption(leaveReasonDropDown, randomLeaveReason);
 
 			// verify random leave reason was indeed selected
 			fileALeaveModal.verifydropDownOptionIsSelected(leaveReasonDropDown, randomLeaveReason);
 
-			// Fill out Remarks/Comment field---------------------------------
-			// enter text in comments text box
-			String comment = "TEST COMMENT/REMARK";
-			fileALeaveModal.enterTextInRemarksTextBox(comment);
+			// Fill out Remarks/Comment field
+			fileALeaveModal.enterTextInRemarksTextBox(testComment);
 
 			// verify entered text is displayed
-			fileALeaveModal.verifyRemarksTextBoxValue(comment);
+			fileALeaveModal.verifyRemarksTextBoxValue(testComment);
 
 			// Fill out Contact Number field
-			// Verify other required fields are blank/has no value
-			String contactNumber = "0123456789";
-			fileALeaveModal.enterContactNumber(contactNumber);
+			fileALeaveModal.enterContactNumber(testContactNumber);
 
 			// verify entered text is displayed
-			fileALeaveModal.verifyContactNumberTextBoxValue(contactNumber);
+			fileALeaveModal.verifyContactNumberTextBoxValue(testContactNumber);
 
 			// Click Submit button
 			fileALeaveModal.clickSubmitButton();
@@ -122,11 +132,12 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(commentField);
 			fileALeaveModal.verifyErrorMessageForFieldIsNotDisplayed(contactNumberField);
 
-			// Verify Warning Popup
-			// Verify toast is displayed
+			/*-----------------------WARNING POPUP---------------------------------------------------------------*/
+			
+			// Verify Warning Popup is displayed
 			fileALeaveModal.verifyToastIsDisplayed();
 
-			// verify toast message
+			// verify error message in popup
 			fileALeaveModal.verifyToastMessage(errorMessage);
 
 			// Click OK in the Warning popup
@@ -135,9 +146,11 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 			// Verify toast is NOT displayed
 			fileALeaveModal.verifyToastIsNotDisplayed();
 
-			// Click cancel button
-			fileALeaveModal.clickCancelButton();
+			// Click close button
+			fileALeaveModal.clickCloseButton();
 
+			/*-----------------------TIME LOGS PAGE---------------------------------------------------------------*/
+			
 			// verify File A Leave modal is NOT displayed
 			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
 		}

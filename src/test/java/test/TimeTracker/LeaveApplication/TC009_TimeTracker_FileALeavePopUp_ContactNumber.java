@@ -17,20 +17,36 @@ import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class TC009_TimeTracker_FileALeavePopUp_ContactNumber extends BaseClass {
-	// variables
+
+	String testDescription = "Verify that user can enter his/her Contact Number details in Contact Number text field";
+
+	// Pages and elements
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	List<WebElement> fileALeaveLinkDates;
 
-
-	// Login Test Data
+	// Login data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
+	String accountPrecondition = "Has valid credentials";
+	HashMap<String, String> loginCredentials;
+
+	// Test data
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
+	String testContactNumber = "123456789";
 
 	private void initialize() {
+		// initialize page elements
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
+
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
 
 	@Test
@@ -39,30 +55,35 @@ public class TC009_TimeTracker_FileALeavePopUp_ContactNumber extends BaseClass {
 		initialize();
 
 		// Log in to Timetracker with valid credentials
-		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
-				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
 
-		// get all "File a Leave" links/button and store in a variable
-		List<WebElement> fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+		// get all regular shift dates in the M/d/yyyy format
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
 
-		// Iterate over each fileALeaveLink
-		for (int i = 0; i < fileALeaveLinks.size(); i++) {
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
 
-			//lick the link
-			myTimeLogsPage.clickFileALeaveButton(i);
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
 
-			//Enter number in the contact number text box
-			String testContactNumber = "123456789";
-			fileALeaveModal.enterContactNumber(testContactNumber);;
-			
-			//Verify value of contact number textbox is the contact number entered
+			// Click the File A Leave link
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
+
+			// Verify File A Leave modal is displayed
+			fileALeaveModal.verifyFileALeaveModalIsDisplayed();
+
+			// Enter contact number
+			fileALeaveModal.enterContactNumber(testContactNumber);
+
+			// Verify value of contact number textbox is the contact number entered
 			fileALeaveModal.verifyContactNumberTextBoxValue(testContactNumber);
 
-			//Close modal
+			// Close modal
 			fileALeaveModal.clickCloseButton();
 
-			//verify File A Leave modal is NOT displayed
+			// verify File A Leave modal is NOT displayed
 			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
 		}
 

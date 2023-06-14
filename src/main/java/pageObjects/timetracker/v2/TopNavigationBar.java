@@ -7,17 +7,17 @@ import org.openqa.selenium.support.FindBy;
 
 import utilities.UserHelper;
 
-public class NavigationBar extends UserHelper{
+public class TopNavigationBar extends UserHelper{
 
 	WebDriver driver;
 	
 	//Locators
-	@FindBy(id = "topapps") WebElement navBar;
+	@FindBy(id = "topapps") WebElement topNavBar;
 	@FindBy(xpath = "//ul[@id='topapps']/li/a[contains(text(), 'Timesheet')]") WebElement leavesLink;
 	
 	
 	//Constructor
-	public NavigationBar(WebDriver driver) {
+	public TopNavigationBar(WebDriver driver) {
 		this.driver = driver;
 	}
 	

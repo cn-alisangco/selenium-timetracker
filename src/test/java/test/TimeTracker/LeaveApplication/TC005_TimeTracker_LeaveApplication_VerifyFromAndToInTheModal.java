@@ -19,19 +19,35 @@ import utilities.UserHelper;
 
 public class TC005_TimeTracker_LeaveApplication_VerifyFromAndToInTheModal extends BaseClass {
 
+	String testDescription = "Verify that From and To in 'File a leave' pop-up displays the date when the user is having his/her Leave";
+
+	// Pages and elements
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	List<WebElement> fileALeaveLinkDates;
 
-	//Test Data
+	// Login data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
-	String dateFormat = "MM/dd/yyyy";
+	String accountPrecondition = "Has valid credentials";
+	HashMap<String, String> loginCredentials;
+
+	// Test data
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
+	String expectedFromAndToDateFormat = "MM/dd/yyyy";
 
 	private void initialize() {
+		// initialize page elements
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
+
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
 
 	@Test
@@ -40,48 +56,49 @@ public class TC005_TimeTracker_LeaveApplication_VerifyFromAndToInTheModal extend
 		initialize();
 
 		// Log in to Timetracker with valid credentials
-		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
-				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
 
-		// get all regular shift dates and store in a variable
-		List<String> fileALeaveLinkDates = myTimeLogsPage.getFileALeaveLinkDates("MM/dd/yyyy");
-		System.out.println(fileALeaveLinkDates);
-				
-		// get all "File a Leave" links/button for regular shift dates and store in a variable
-		List<WebElement> fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+		// get all regular shift dates in the M/d/yyyy format
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
 
-		
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
 
-		// Iterate over each fileALeaveLink
-		for (int i = 0; i < fileALeaveLinks.size(); i++) {
-			
-			//store regular shift date for current iteration
-			String currentRegularShiftDate = fileALeaveLinkDates.get(i);
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
 
-			//click the file a leave link with the same index as the regular shift date
-			myTimeLogsPage.clickFileALeaveButton(i);
+			// verify "File a Leave" button is visible in the list of Actions
+			myTimeLogsPage.verifyFileALeaveLinkForDateIsDisplayed(fileALeaveLinkDate);
 
-			//Verify File A Leave modal is displayed
-			fileALeaveModal.verifyFileALeaveModalIsDisplayed();
+			// Click File a Leave button
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
 
-			//get from and to date strings in the modal
+			// Verify File a Leave modal is displayed
+			fileALeaveModal.verifyFileALeaveModalForDateIsDisplayed(fileALeaveLinkDate);
+
+			// get from and to date strings in the modal
 			String fromDate = fileALeaveModal.getFromDate();
 			String toDate = fileALeaveModal.getToDate();
-			
-			//Verify format of from and to dates in the modal is correct (i.e. MM/dd/yyyy)
-			fileALeaveModal.isInCorrectDateFormat(fromDate, dateFormat);
-			fileALeaveModal.isInCorrectDateFormat(toDate, dateFormat);
-			
-			//Verify from and to dates is equal to the time log date
-			fileALeaveModal.verifyFromDateIsEqualTimeLogDate(fromDate, currentRegularShiftDate);
-			fileALeaveModal.verifyToDateIsEqualTimeLogDate(toDate, currentRegularShiftDate);
-			
-			//Close modal
+
+			// Verify format of from and to dates in the modal is correct (i.e. MM/dd/yyyy)
+			fileALeaveModal.isInCorrectDateFormat(fromDate, expectedFromAndToDateFormat);
+			fileALeaveModal.isInCorrectDateFormat(toDate, expectedFromAndToDateFormat);
+
+			// Parse the fileALeaveLinkDate to a "MM/dd/yyyy" format
+			String parsedFileALeaveLinkDate = UserHelper.parseDate(fileALeaveLinkDate, "MM/dd/yyyy");
+
+			// Verify from and to dates is equal to the parsed time log date
+			fileALeaveModal.verifyFromDateIsEqualTimeLogDate(fromDate, parsedFileALeaveLinkDate);
+			fileALeaveModal.verifyToDateIsEqualTimeLogDate(toDate, parsedFileALeaveLinkDate);
+
+			// Close modal
 			fileALeaveModal.clickCloseButton();
 
-			//verify File A Leave modal is NOT displayed
+			// verify File A Leave modal is NOT displayed
 			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+
 		}
 
 	}

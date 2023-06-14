@@ -14,14 +14,14 @@ import pageObjects.timetracker.HomePage;
 import pageObjects.timetracker.v2.FileALeave_Modal;
 import pageObjects.timetracker.v2.LoginPage;
 import pageObjects.timetracker.v2.MyTimeLogsPage;
-import pageObjects.timetracker.v2.NavigationBar;
+import pageObjects.timetracker.v2.TopNavigationBar;
 import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class SandBox extends BaseClass {
 
 	LoginPage loginPage;
-	NavigationBar navigationBar;
+	TopNavigationBar navigationBar;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
 	
@@ -50,7 +50,7 @@ public class SandBox extends BaseClass {
 
 	private void initialize() {
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
-		navigationBar = PageFactory.initElements(getDriver(), NavigationBar.class);
+		navigationBar = PageFactory.initElements(getDriver(), TopNavigationBar.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
 

@@ -17,52 +17,81 @@ import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal extends BaseClass {
-	// variables
+
+	String testDescription = "Verify that user can select Reason from the Reason dropdown";
+
+	// Pages and elements
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	List<WebElement> fileALeaveLinkDates;
 
-	List<String> leaveReasonOptions = Arrays.asList("Emergency Leave", "Sick Leave", "Vacation Leave", "Others");
-
-	// Login Test Data
+	// Login data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
+	String accountPrecondition = "Has valid credentials";
+	HashMap<String, String> loginCredentials;
+
+	// Test Data
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
+	List<String> expectedLeaveReasonOptions = Arrays.asList("Emergency Leave", "Sick Leave", "Vacation Leave",
+			"Others");
 
 	private void initialize() {
+		// initialize page elements
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
+
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
 
 	@Test
 	public void TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal() {
-
 		initialize();
 
 		// Log in to Timetracker with valid credentials
-		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
-				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
 
-		// get all "File a Leave" links/button and store in a variable
-		List<WebElement> fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+		// get all regular shift dates in the M/d/yyyy format
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
 
-		// Iterate over each fileALeaveLink
-		for (int i = 0; i < fileALeaveLinks.size(); i++) {
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
 
-			// 1. click the link
-			myTimeLogsPage.clickFileALeaveButton(i);
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
 
-			// 2. Verify leave reasons
-			fileALeaveModal.verifyDropDownOptions(fileALeaveModal.getLeaveReasonDropdown(), fileALeaveModal.getLeaveReasonOptions(), leaveReasonOptions);
+			// click the file a leave link with the same index as the regular shift date
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
 
-			// 3. Select the leave reasons
-			for (String leaveReasonOption : leaveReasonOptions) {
+			// Verify File A Leave modal is displayed
+			fileALeaveModal.verifyFileALeaveModalIsDisplayed();
+
+			// Verify leavetypes
+			fileALeaveModal.verifyDropDownOptions(fileALeaveModal.getLeaveReasonDropdown(),
+					fileALeaveModal.getLeaveReasonOptions(), expectedLeaveReasonOptions);
+
+			// Select the leave reasons
+			for (String leaveReasonOption : expectedLeaveReasonOptions) {
+
+				// log loop iteration
+				String iterationLog1 = "Iteration for leave reason: " + leaveReasonOption
+						+ " ---------------------------------------------------------------------------";
+				UserHelper.customReportLog(iterationLog1);
+
 				// Select a leave reason
 				fileALeaveModal.selectDropDownOption(fileALeaveModal.getLeaveReasonDropdown(), leaveReasonOption);
 
 				// Verify leave reason was indeed selected
-				fileALeaveModal.verifydropDownOptionIsSelected(fileALeaveModal.getLeaveReasonDropdown(), leaveReasonOption);
+				fileALeaveModal.verifydropDownOptionIsSelected(fileALeaveModal.getLeaveReasonDropdown(),
+						leaveReasonOption);
 			}
 
 			// 4. Close modal

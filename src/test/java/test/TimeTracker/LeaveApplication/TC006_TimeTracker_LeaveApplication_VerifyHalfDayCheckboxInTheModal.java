@@ -19,19 +19,34 @@ import utilities.UserHelper;
 
 public class TC006_TimeTracker_LeaveApplication_VerifyHalfDayCheckboxInTheModal extends BaseClass {
 
+	String testDescription = "Verify that Half Day checkbox can be checked and uncheked";
+
+	// Pages and elements
 	LoginPage loginPage;
 	MyTimeLogsPage myTimeLogsPage;
 	FileALeave_Modal fileALeaveModal;
+	List<WebElement> fileALeaveLinkDates;
 
-	// Test Data
+	// Login data
 	String sheetName = "Login";
 	String recordID = "valid_credentials";
-	String dateFormat = "MM/dd/yyyy";
+	String accountPrecondition = "Has valid credentials";
+	HashMap<String, String> loginCredentials;
+
+	//Test data
+	String fileALeaveLinkDateFormat = "M/d/yyyy";
 
 	private void initialize() {
+		// initialize page elements
 		loginPage = PageFactory.initElements(getDriver(), LoginPage.class);
 		myTimeLogsPage = PageFactory.initElements(getDriver(), MyTimeLogsPage.class);
 		fileALeaveModal = PageFactory.initElements(getDriver(), FileALeave_Modal.class);
+
+		// get login test data
+		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
+
+		// print test description
+		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
 
 	@Test
@@ -40,18 +55,21 @@ public class TC006_TimeTracker_LeaveApplication_VerifyHalfDayCheckboxInTheModal 
 		initialize();
 
 		// Log in to Timetracker with valid credentials
-		HashMap<String, String> loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName,
-				recordID);
-		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"));
+		loginPage.login(loginCredentials.get("username"), loginCredentials.get("password"), accountPrecondition);
 
-		// get all "File a Leave" links/button for regular shift dates and store in a variable
-		List<WebElement> fileALeaveLinks = myTimeLogsPage.getAllFileALeaveButtons();
+		// get all regular shift dates in the M/d/yyyy format
+		List<String> fileALeaveLinkDateStrings = myTimeLogsPage.getFileALeaveLinkDateStrings(fileALeaveLinkDateFormat);
 
-		// Iterate over each fileALeaveLink
-		for (int i = 0; i < fileALeaveLinks.size(); i++) {
+		// Iterate over each timelog date with a 'File A Leave' button/link
+		for (String fileALeaveLinkDate : fileALeaveLinkDateStrings) {
+
+			// log loop iteration
+			String iterationLog = "Iteration for timelog date: " + fileALeaveLinkDate
+					+ " ---------------------------------------------------------------------------";
+			UserHelper.customReportLog(iterationLog);
 
 			// click the file a leave link with the same index as the regular shift date
-			myTimeLogsPage.clickFileALeaveButton(i);
+			myTimeLogsPage.clickFileALeaveButton(fileALeaveLinkDate);
 
 			// Verify File A Leave modal is displayed
 			fileALeaveModal.verifyFileALeaveModalIsDisplayed();

@@ -22,9 +22,13 @@ import utilities.ExcelReader;
 import utilities.UserHelper;
 
 public class FileALeave_Modal extends UserHelper {
+	
 	WebDriver driver;
+	
 	/* --------------------------------------------VARIABLES--------------------------------------- */
 	String initialSubmitToastMessage = "Please Wait...";
+	private final int minimumLeaveRunningBalance = 1;
+	
 	
 	/* --------------------------------------------LOCATORS --------------------------------------- */
 	// fields
@@ -63,8 +67,8 @@ public class FileALeave_Modal extends UserHelper {
 	
 	// others (e.g. containers, lists)
 	@FindBy(id = "dialog-modal-leave") WebElement fileALeaveModalBody;
-	@FindBy(xpath = "//select[@id='LeaveType']/option") List<WebElement> leaveTypeOptions;
-	@FindBy(xpath = "//select[@id='reasonDDL']/option[not(@id = '') and contains(@style, 'display: block')]") List<WebElement> leaveReasonOptions;
+	@FindBy(xpath = "//select[@id='LeaveType']/option[@class != '']") List<WebElement> leaveTypeOptions;
+	@FindBy(xpath = "//select[@id='reasonDDL']/option[@class != '']") List<WebElement> leaveReasonOptions;
 
 	
 	
@@ -115,22 +119,6 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
-	public WebElement getLeaveTypeErrorMessage() {
-		return leaveTypeErrorMessage;
-	}
-	
-	public WebElement getLeaveReasonErrorMessage() {
-		return leaveReasonErrorMessage;
-	}
-	
-	public WebElement getCommentErrorMessage() {
-		return commentErrorMessage;
-	}
-	
-	public WebElement getContactNumberErrorMessage() {
-		return contactNumberErrorMessage;
-	}
-	
 	public String getAvailableLeaveBalance(String leaveType) {
 		//Select leaveType
 		waitForElement(leaveTypeDropdown);
@@ -145,6 +133,7 @@ public class FileALeave_Modal extends UserHelper {
 		
 		return runningBalanceString;
 	}
+	
 	public String getAvailableLeaveBalance() {
 		
 		//get running balance
@@ -173,7 +162,9 @@ public class FileALeave_Modal extends UserHelper {
 
 		// close "File a Leave" modal
 		waitForElement(fileALeaveModalCloseButton);
+		moveAndHighlightElement(fileALeaveModalCloseButton);
 		fileALeaveModalCloseButton.click();
+		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
 				"Click close button in the 'File a leave' modal");
 
@@ -181,6 +172,7 @@ public class FileALeave_Modal extends UserHelper {
 
 	public void selectDropDownOption(WebElement dropDown, String leaveType) {
 
+		
 		// declare dropdown as an instance of the Select class
 		Select dropDownElement = new Select(dropDown);
 
@@ -194,6 +186,7 @@ public class FileALeave_Modal extends UserHelper {
 	
 	public void clickHalfDayCheckbox() {
 		waitForElement(halfDayCheckbox);
+		moveAndHighlightElement(halfDayCheckbox);
 		halfDayCheckbox.click();
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
 	}
@@ -219,18 +212,23 @@ public class FileALeave_Modal extends UserHelper {
 
 	public void clickCancelButton() {
 		waitForElement(cancelButton);
+		moveAndHighlightElement(cancelButton);
 		cancelButton.click();
+		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the Cancel button");
 	}
 	
 	public void clickSubmitButton() {
 		waitForElement(submitButton);
+		moveAndHighlightElement(submitButton);
 		submitButton.click();
+		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click the Submit button");
 	}
 
 	public void clickOkButtonInPopup(){
 		waitForElement(popupOkButton);
+		moveAndHighlightElement(popupOkButton);
 		popupOkButton.click();
 		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the pop-up displayed");
@@ -238,6 +236,7 @@ public class FileALeave_Modal extends UserHelper {
 	
 	public void clickOkButtonInWarningPopup(){
 		waitForElement(warningPopupOkButton);
+		moveAndHighlightElement(warningPopupOkButton);
 		warningPopupOkButton.click();
 		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the warning pop-up displayed");
@@ -258,6 +257,24 @@ public class FileALeave_Modal extends UserHelper {
 				"Verify 'File a Leave' modal is displayed for the " + timeLogDate + " timelog");
 
 	}
+	
+	public void verifyFileALeaveModalForDateIsDisplayed(String fileALeaveLinkDate) {
+
+		// verify "File a Leave" modal exists
+		waitForElement(fileALeaveModalCloseButton);
+		waitForElement(fileALeaveModalBody);
+		validateElementIsDisplayed(fileALeaveModalCloseButton);
+		validateElementIsDisplayed(fileALeaveModalBody);
+		
+		String modalTimeLogDate = leaveFromField.getAttribute("value");
+		String parsedModalTimeLogDate = parseDate(modalTimeLogDate, "M/d/yyyy");
+		
+		Assert.assertEquals(parsedModalTimeLogDate, fileALeaveLinkDate);
+		
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify 'File a Leave' modal is displayed for the " + fileALeaveLinkDate + " timelog");
+
+	}
 
 	public void verifyDateAppliedIsCurrentDate() {
 		waitForElement(dateApplied);
@@ -272,7 +289,7 @@ public class FileALeave_Modal extends UserHelper {
 		Assert.assertEquals(dateAppliedText, dateToday);
 
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify Date Applied in the popup is the date today");
+				"Verify value of 'Date Applied' field in the popup is the date today");
 	}
 
 	public void verifyFileALeaveModalIsNotDislayed() {
@@ -507,12 +524,29 @@ public class FileALeave_Modal extends UserHelper {
 	}
 	
 	
+	// BOOLEANS---------------------------------------------------------------------------------------
+	
+	public boolean hasEnoughRunningBalance(String leaveType) {
+		//Select leaveType
+		waitForElement(leaveTypeDropdown);
+		selectDropDownOption(leaveTypeDropdown, leaveType);
+				
+		//get running balance
+		waitForElement(availableLeaveBalance);
+		double runningBalance = Double.parseDouble(availableLeaveBalance.getAttribute("innerText"));
+		
+		boolean hasEnoughRunningBalance = runningBalance >= minimumLeaveRunningBalance;
+		
+		String methodName = "Leave type '" + leaveType + "' has enough running balance? - " + hasEnoughRunningBalance;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+				
+		return (hasEnoughRunningBalance);
+	}
 	
 	
 	
+
 	
-	
-	//-------------------------------------------------------------------
 	/* --------------------------------------------PRIVATE METHODS --------------------------------------- */
 	private List<String> getOptionElementsText(List<WebElement> optionsList) {
 

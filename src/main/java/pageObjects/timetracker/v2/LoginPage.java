@@ -48,22 +48,7 @@ public class LoginPage extends UserHelper {
         reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked the Log In button");
     }
     
-    //newly added 5/26/2023
-    public HashMap<String, String> getLoginCredentialsTestData(String testDataLoc, String sheetname, String recordID) {
-    	
-    	HashMap<String, String> loginCredentials = new HashMap<String, String>();
-    	ExcelReader creds = new ExcelReader(System.getProperty("user.dir") + testDataLoc, sheetname);
-    	// user.dir + td from testng file + testsheet name
-        
-	    String id = recordID;
-	    String user = creds.testData(id, "username");
-	    String pass = creds.testData(id, "password");
-	    
-	    loginCredentials.put("username", user);
-	    loginCredentials.put("password", pass);
-	    
-		return loginCredentials;
-    }
+    
     
     
     public void login(String username, String password) {
@@ -76,13 +61,15 @@ public class LoginPage extends UserHelper {
     }
     
     
+    
     //login with account precondition
     public void login(String username, String password, String accountPrecondition) {
+
     	enterUsername(username);
     	enterPassword(password);
     	clickLogin();
     	
-    	String methodName = "Log in to time tracker using an account with the following precondition/s: '" + accountPrecondition + "'";
+    	String methodName = "Logged in to time tracker using an account with the following precondition/s: " + accountPrecondition;
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
     }
     
