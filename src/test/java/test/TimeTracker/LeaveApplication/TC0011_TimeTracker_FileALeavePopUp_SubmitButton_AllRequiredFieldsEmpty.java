@@ -111,7 +111,7 @@ public class TC0011_TimeTracker_FileALeavePopUp_SubmitButton_AllRequiredFieldsEm
 			fileALeaveModal.clickCloseButton();
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

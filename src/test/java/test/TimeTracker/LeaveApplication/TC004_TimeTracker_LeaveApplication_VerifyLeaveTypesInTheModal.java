@@ -105,7 +105,7 @@ public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal exten
 			fileALeaveModal.clickCloseButton();
 
 			// Verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

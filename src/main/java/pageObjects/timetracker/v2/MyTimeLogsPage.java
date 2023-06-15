@@ -16,26 +16,30 @@ import org.testng.Assert;
 import utilities.UserHelper;
 
 public class MyTimeLogsPage extends UserHelper {
+	
 	WebDriver driver;
 
-	// variables
-	String dateFormat = "MM/dd/yyyy";
-
-	// locators
+	/* --------------------------------------------LOCATORS --------------------------------------- */
+	//tables
 	@FindBy(id = "TimelogsTable")
 	WebElement timeLogsTable;
 	@FindBy(xpath = "//tbody/tr[contains (@id, '0')]")
 	List<WebElement> timeLogsTableRows;
 
+	//links
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/parent::tr//a[@class='fileLeaveLink' and not(@style)]")
 	List<WebElement> fileALeaveLinks;
 	@FindBy(xpath = "//td[contains(text(),'Reg')]/following-sibling::td[position()=2 and not(contains(text(),'PM'))]/parent::tr/td[contains(@class, 'selectDate')]")
 	List<WebElement> fileALeaveLinkDates;
 
+	/* --------------------------------------------CONSTRUCTOR --------------------------------------- */
+	
 	public MyTimeLogsPage(WebDriver driver) {
 		this.driver = driver;
 	}
 
+	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
+	
 	// GETTERS--------------------------------------------------------------------------------------------
 
 	public List<WebElement> getAllFileALeaveButtons() {
@@ -189,7 +193,7 @@ public class MyTimeLogsPage extends UserHelper {
 		WebElement element = driver.findElement(By.xpath(xpath));
 		waitForElement(element);
 
-		System.out.println(element.getText());
+		//System.out.println(element.getText());
 		String expectedString = "Submitted " + leaveType;
 
 		boolean expectedStringIsDisplayed = element.getText().contains(expectedString);
@@ -200,7 +204,6 @@ public class MyTimeLogsPage extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
 
-	// private
-	// methods----------------------------------------------------------------------------
+
 
 }

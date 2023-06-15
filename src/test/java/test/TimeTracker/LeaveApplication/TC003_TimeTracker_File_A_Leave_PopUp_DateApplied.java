@@ -83,7 +83,7 @@ public class TC003_TimeTracker_File_A_Leave_PopUp_DateApplied extends BaseClass 
 				fileALeaveModal.clickCloseButton();
 				
 	        	//2. verify File A Leave modal is NOT displayed
-	        	fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+	        	fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 			}
 	    }
 	

@@ -98,7 +98,7 @@ public class TC007_TimeTracker_LeaveApplication_VerifyReasonsInTheModal extends 
 			fileALeaveModal.clickCloseButton();
 
 			// 5. verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

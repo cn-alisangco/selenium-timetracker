@@ -152,7 +152,7 @@ public class TC0016_TimeTracker_FileALeavePopUp_SubmitButton_VacationLeaveDoesNo
 			/*-----------------------TIME LOGS PAGE---------------------------------------------------------------*/
 			
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

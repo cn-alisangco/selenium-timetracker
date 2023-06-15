@@ -76,7 +76,7 @@ public class TC0010_TimeTracker_FileALeavePopUp_CancelButton extends BaseClass {
 			fileALeaveModal.clickCancelButton();
 
 			// Verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

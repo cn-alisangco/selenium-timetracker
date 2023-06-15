@@ -16,10 +16,15 @@ public class TopNavigationBar extends UserHelper{
 	@FindBy(xpath = "//ul[@id='topapps']/li/a[contains(text(), 'Timesheet')]") WebElement leavesLink;
 	
 	
-	//Constructor
+	/* --------------------------------------------CONSTRUCTOR --------------------------------------- */
+	
 	public TopNavigationBar(WebDriver driver) {
 		this.driver = driver;
 	}
+	
+	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
+	
+	// ACTIONS--------------------------------------------------------------------------------------------
 	
 	public void hoverOverNavBarLink(String linkName) {
 		

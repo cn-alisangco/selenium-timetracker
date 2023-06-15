@@ -90,14 +90,14 @@ public class TC005_TimeTracker_LeaveApplication_VerifyFromAndToInTheModal extend
 			String parsedFileALeaveLinkDate = UserHelper.parseDate(fileALeaveLinkDate, "MM/dd/yyyy");
 
 			// Verify from and to dates is equal to the parsed time log date
-			fileALeaveModal.verifyFromDateIsEqualTimeLogDate(fromDate, parsedFileALeaveLinkDate);
-			fileALeaveModal.verifyToDateIsEqualTimeLogDate(toDate, parsedFileALeaveLinkDate);
+			fileALeaveModal.verifyFromDateValue(fromDate, parsedFileALeaveLinkDate);
+			fileALeaveModal.verifyToDateValue(toDate, parsedFileALeaveLinkDate);
 
 			// Close modal
 			fileALeaveModal.clickCloseButton();
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 
 		}
 

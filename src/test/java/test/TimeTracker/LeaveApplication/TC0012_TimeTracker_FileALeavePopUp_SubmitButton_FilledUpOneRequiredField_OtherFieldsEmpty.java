@@ -128,7 +128,7 @@ public class TC0012_TimeTracker_FileALeavePopUp_SubmitButton_FilledUpOneRequired
 			/*-----------------------TIME LOGS PAGE---------------------------------------------------------------*/
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

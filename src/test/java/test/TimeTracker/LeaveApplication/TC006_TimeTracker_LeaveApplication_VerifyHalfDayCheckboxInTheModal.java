@@ -93,7 +93,7 @@ public class TC006_TimeTracker_LeaveApplication_VerifyHalfDayCheckboxInTheModal 
 			fileALeaveModal.clickCloseButton();
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

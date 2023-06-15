@@ -26,6 +26,7 @@ public class FileALeave_Modal extends UserHelper {
 	WebDriver driver;
 	
 	/* --------------------------------------------VARIABLES--------------------------------------- */
+	
 	String initialSubmitToastMessage = "Please Wait...";
 	private final int minimumLeaveRunningBalance = 1;
 	
@@ -73,16 +74,17 @@ public class FileALeave_Modal extends UserHelper {
 	
 	
 	/* --------------------------------------------CONSTRUCTOR --------------------------------------- */
+	
 	public FileALeave_Modal(WebDriver driver) {
 		this.driver = driver;
 	}
 	
 	
-	// Getters
 	
 	/* --------------------------------------------PUBLIC METHODS --------------------------------------- */
 	
 	//GETTERS--------------------------------------------------------------------------------------------
+	
 	public WebElement getLeaveTypeDropdown() {
 		return leaveTypeDropdown;
 	}
@@ -157,7 +159,10 @@ public class FileALeave_Modal extends UserHelper {
 		return randomLeaveReason;
 	}
 	
+	
 	//ACTIONS--------------------------------------------------------------------------------------------
+	
+	//Click------------------------------------------
 	public void clickCloseButton() {
 
 		// close "File a Leave" modal
@@ -170,46 +175,13 @@ public class FileALeave_Modal extends UserHelper {
 
 	}
 
-	public void selectDropDownOption(WebElement dropDown, String leaveType) {
-
-		
-		// declare dropdown as an instance of the Select class
-		Select dropDownElement = new Select(dropDown);
-
-		// select leave type
-		dropDownElement.selectByVisibleText(leaveType);
-
-		String dropDownName = dropDown.getAttribute("name");
-		String methodName = "Select the option '" + leaveType + "' from the " + dropDownName + " dropdown";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-	
 	public void clickHalfDayCheckbox() {
 		waitForElement(halfDayCheckbox);
 		moveAndHighlightElement(halfDayCheckbox);
 		halfDayCheckbox.click();
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click Half Day checkbox");
 	}
-
-	public void enterTextInRemarksTextBox(String comment) {
-		waitForElement(remarksTextBox);
-
-		remarksTextBox.sendKeys(comment);
-		
-		String methodName = "Enter text:  '" + comment + "' in the comments/remarks textbox";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Enter text in the comments/remarks textbox");
-	}
-
-	public void enterContactNumber(String contactNumber) {
-		waitForElement(contactNumberTextBox);
-
-		contactNumberTextBox.sendKeys(contactNumber);
-
-		String methodName = "Enter contact number:  '" + contactNumber + "' in the contact number textbox";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
+	
 	public void clickCancelButton() {
 		waitForElement(cancelButton);
 		moveAndHighlightElement(cancelButton);
@@ -241,9 +213,45 @@ public class FileALeave_Modal extends UserHelper {
 		
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Click OK button in the warning pop-up displayed");
 	}
+
+	//Input -----------------------------------------
+	public void selectDropDownOption(WebElement dropDown, String leaveType) {
+
+		
+		// declare dropdown as an instance of the Select class
+		Select dropDownElement = new Select(dropDown);
+
+		// select leave type
+		dropDownElement.selectByVisibleText(leaveType);
+
+		String dropDownName = dropDown.getAttribute("name");
+		String methodName = "Select the option '" + leaveType + "' from the " + dropDownName + " dropdown";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}	
+
+	public void enterTextInRemarksTextBox(String comment) {
+		waitForElement(remarksTextBox);
+
+		remarksTextBox.sendKeys(comment);
+		
+		String methodName = "Enter text:  '" + comment + "' in the comments/remarks textbox";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Enter text in the comments/remarks textbox");
+	}
+
+	public void enterContactNumber(String contactNumber) {
+		waitForElement(contactNumberTextBox);
+
+		contactNumberTextBox.sendKeys(contactNumber);
+
+		String methodName = "Enter contact number:  '" + contactNumber + "' in the contact number textbox";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+	
 	
 	// VERIFICATIONS---------------------------------------------------------------------------------------
-	// Verifications and assertions
+
+	//Element State-------------------------------------
 	public void verifyFileALeaveModalIsDisplayed() {
 
 		// verify "File a Leave" modal exists
@@ -255,6 +263,16 @@ public class FileALeave_Modal extends UserHelper {
 		String timeLogDate = leaveFromField.getAttribute("value");
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
 				"Verify 'File a Leave' modal is displayed for the " + timeLogDate + " timelog");
+
+	}
+	
+	public void verifyFileALeaveModalIsNotDisplayed() {
+
+		// verify "File a Leave" modal does not exist
+		validateElementIsNotDisplayed(fileALeaveModalCloseButton);
+		validateElementIsNotDisplayed(fileALeaveModalBody);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify 'File a Leave' modal is NOT dislayed");
 
 	}
 	
@@ -276,57 +294,6 @@ public class FileALeave_Modal extends UserHelper {
 
 	}
 
-	public void verifyDateAppliedIsCurrentDate() {
-		waitForElement(dateApplied);
-
-		// get applied date text
-		String dateAppliedText = dateApplied.getText();
-
-		// get date today in the M/d/yyyy format
-		String dateToday = getTodayDate("M/d/yyyy");
-
-		// verify date applied and date today are equal
-		Assert.assertEquals(dateAppliedText, dateToday);
-
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify value of 'Date Applied' field in the popup is the date today");
-	}
-
-	public void verifyFileALeaveModalIsNotDislayed() {
-
-		// verify "File a Leave" modal does not exist
-		validateElementIsNotDisplayed(fileALeaveModalCloseButton);
-		validateElementIsNotDisplayed(fileALeaveModalBody);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
-				"Verify 'File a Leave' modal is NOT dislayed");
-
-	}
-
-	public void verifyDropDownOptions(WebElement dropDownElement, List<WebElement> optionsList,
-			List<String> optionsListTestData) {
-		waitForElement(dropDownElement);
-
-		// get a list of all leave type options displayed in the app
-		List<String> optionsListStrings = getOptionElementsText(optionsList);
-
-		// click dropdown
-		dropDownElement.click();
-
-		// verify that the optionsListStrings arraylist contains each string in the
-		// optionsListTestData parameter
-		for (String optionTestData : optionsListTestData) {
-
-			boolean optionExists = optionsListStrings.contains(optionTestData);
-			Assert.assertTrue(optionExists);
-
-			String dropDownName = dropDownElement.getAttribute("name");
-			String methodName = "Verify the ff. option is available: " + optionTestData + " in the " + dropDownName
-					+ " dropdown";
-			reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-		}
-
-	}
-
 	public void verifydropDownOptionIsSelected(WebElement dropDown, String option) {
 		// declare dropdown as an instance of the Select class
 		Select dropDownElement = new Select(dropDown);
@@ -340,40 +307,7 @@ public class FileALeave_Modal extends UserHelper {
 				+ " dropdown";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 	}
-
-	public void isInCorrectDateFormat(String dateString, String format) {
-
-		SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-		boolean dateParseable;
-		try {
-			dateFormat.parse(dateString);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Unable to parse date to the format: " + format);
-			dateParseable = false;
-		}
-		dateParseable = true;
-
-		Assert.assertTrue(dateParseable);
-
-		
-		String methodName = "Verify the date : " + dateString + " is in the format: " + format;
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
-	public void verifyFromDateIsEqualTimeLogDate(String fromDate, String timeLogDate) {
-		Assert.assertEquals(fromDate, timeLogDate);
-		String methodName = "Verify the From date: " + fromDate + " is equal to the timelog date: " + timeLogDate;
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
-	public void verifyToDateIsEqualTimeLogDate(String toDate, String timeLogDate) {
-		Assert.assertEquals(toDate, timeLogDate);
-		String methodName = "Verify the To date: " + toDate + " is equal to the timelog date: " + timeLogDate;
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
+	
 	public void verifyHalfDayCheckIsChecked() {
 		waitForElement(halfDayCheckbox);
 		boolean isChecked = halfDayCheckbox.isSelected();
@@ -391,27 +325,7 @@ public class FileALeave_Modal extends UserHelper {
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Half Day checkbox is UNCHECKED");
 
 	}
-
-	public void verifyRemarksTextBoxValue(String remarks) {
-
-		waitForElement(remarksTextBox);
-		String text = remarksTextBox.getAttribute("value");
-
-		Assert.assertEquals(text, remarks);
-		String methodName = "Verify that the value of comments/remarks textarea is equal to '" + remarks + "'";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),methodName);
-	}
-
-	public void verifyContactNumberTextBoxValue(String contactNumber) {
-
-		waitForElement(contactNumberTextBox);
-		String textBoxValue = contactNumberTextBox.getAttribute("value");
-
-		Assert.assertEquals(textBoxValue, contactNumber);
-		String methodName = "Verify that the value of contact number textbox is equal to '" + contactNumber + "'";
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
-	}
-
+	
 	public void verifyFieldIsEmpty(WebElement field) {
 		
 		//verify field value is equal to ""
@@ -463,6 +377,107 @@ public class FileALeave_Modal extends UserHelper {
 		
 	}
 	
+	public void verifyToastIsDisplayed() {
+		waitForElement(toast);
+		validateElementIsDisplayed(toast);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is displayed");
+	}
+	
+	public void verifyToastIsNotDisplayed() {
+		waitElementToBeInvinsible(toast);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is not displayed");
+	}
+	
+	public void verifyWarningPopupIsDisplayed() {
+		waitForElement(warningPopUp);
+		validateElementIsDisplayed(warningPopUp);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is displayed");
+	}
+	
+	public void verifyWarningPopupIsNotDisplayed() {
+		validateElementIsNotDisplayed(warningPopUp);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is NOT displayed");
+	}
+	
+	public void waitForFileALeaveModalToDisappear() {
+		waitElementToBeInvinsible(fileALeaveModalBody);
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify 'File A Leave' modal has disappeared");
+	}
+	
+	//Element values---------------------------------------
+	public void verifyDateAppliedIsCurrentDate() {
+		waitForElement(dateApplied);
+
+		// get applied date text
+		String dateAppliedText = dateApplied.getText();
+
+		// get date today in the M/d/yyyy format
+		String dateToday = getTodayDate("M/d/yyyy");
+
+		// verify date applied and date today are equal
+		Assert.assertEquals(dateAppliedText, dateToday);
+
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),
+				"Verify value of 'Date Applied' field in the popup is the date today");
+	}
+
+	public void verifyDropDownOptions(WebElement dropDownElement, List<WebElement> optionsList,
+			List<String> optionsListTestData) {
+		waitForElement(dropDownElement);
+
+		// get a list of all leave type options displayed in the app
+		List<String> optionsListStrings = getOptionElementsText(optionsList);
+
+		// click dropdown
+		dropDownElement.click();
+
+		// verify that the optionsListStrings arraylist contains each string in the
+		// optionsListTestData parameter
+		for (String optionTestData : optionsListTestData) {
+
+			boolean optionExists = optionsListStrings.contains(optionTestData);
+			Assert.assertTrue(optionExists);
+
+			String dropDownName = dropDownElement.getAttribute("name");
+			String methodName = "Verify the ff. option is available: " + optionTestData + " in the " + dropDownName
+					+ " dropdown";
+			reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+		}
+
+	}
+
+	public void verifyFromDateValue(String fromDate, String expectedDate) {
+		Assert.assertEquals(fromDate, expectedDate);
+		String methodName = "Verify the From date: " + fromDate + " is equal to the timelog date: " + expectedDate;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
+	public void verifyToDateValue(String toDate, String expectedDate) {
+		Assert.assertEquals(toDate, expectedDate);
+		String methodName = "Verify the To date: " + toDate + " is equal to the timelog date: " + expectedDate;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
+	public void verifyRemarksTextBoxValue(String remarks) {
+
+		waitForElement(remarksTextBox);
+		String text = remarksTextBox.getAttribute("value");
+
+		Assert.assertEquals(text, remarks);
+		String methodName = "Verify that the value of comments/remarks textarea is equal to '" + remarks + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(),methodName);
+	}
+
+	public void verifyContactNumberTextBoxValue(String contactNumber) {
+
+		waitForElement(contactNumberTextBox);
+		String textBoxValue = contactNumberTextBox.getAttribute("value");
+
+		Assert.assertEquals(textBoxValue, contactNumber);
+		String methodName = "Verify that the value of contact number textbox is equal to '" + contactNumber + "'";
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
+
 	public void verifyErrorMessageTextForField (WebElement field, String expectedErrorMessage) {
 
 		//get error message of given field parameter
@@ -477,33 +492,6 @@ public class FileALeave_Modal extends UserHelper {
 		String methodName = "Verify error message displayed for field " + field.getAttribute("name") + " is '" + expectedErrorMessage + "'";
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
 		
-	}
-	
-	public void verifyToastIsDisplayed() {
-		waitForElement(toast);
-		validateElementIsDisplayed(toast);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is displayed");
-	}
-	
-	public void verifyWarningPopupIsDisplayed() {
-		waitForElement(warningPopUp);
-		validateElementIsDisplayed(warningPopUp);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is displayed");
-	}
-	
-	public void verifyWarningPopupIsNotDisplayed() {
-		validateElementIsNotDisplayed(warningPopUp);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify Warning popup is NOT displayed");
-	}
-	
-	public void verifyToastIsNotDisplayed() {
-		waitElementToBeInvinsible(toast);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify submit toast/popup is not displayed");
-	}
-	
-	public void waitForFileALeaveModalToDisappear() {
-		waitElementToBeInvinsible(fileALeaveModalBody);
-		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verify 'File A Leave' modal has disappeared");
 	}
 	
 	public void verifyToastMessage(String expectedMessage) {
@@ -543,7 +531,26 @@ public class FileALeave_Modal extends UserHelper {
 		return (hasEnoughRunningBalance);
 	}
 	
-	
+	public void isInCorrectDateFormat(String dateString, String expectedFormat) {
+
+		SimpleDateFormat dateFormat = new SimpleDateFormat(expectedFormat);
+		boolean dateParseable;
+		try {
+			dateFormat.parse(dateString);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.out.println("Unable to parse date to the format: " + expectedFormat);
+			dateParseable = false;
+		}
+		dateParseable = true;
+
+		Assert.assertTrue(dateParseable);
+
+		
+		String methodName = "Verify the date : " + dateString + " is in the format: " + expectedFormat;
+		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), methodName);
+	}
 	
 
 	

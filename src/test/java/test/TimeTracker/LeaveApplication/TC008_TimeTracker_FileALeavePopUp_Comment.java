@@ -84,7 +84,7 @@ public class TC008_TimeTracker_FileALeavePopUp_Comment extends BaseClass {
 			fileALeaveModal.clickCloseButton();
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}

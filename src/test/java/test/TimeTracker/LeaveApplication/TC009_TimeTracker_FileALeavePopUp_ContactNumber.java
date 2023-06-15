@@ -84,7 +84,7 @@ public class TC009_TimeTracker_FileALeavePopUp_ContactNumber extends BaseClass {
 			fileALeaveModal.clickCloseButton();
 
 			// verify File A Leave modal is NOT displayed
-			fileALeaveModal.verifyFileALeaveModalIsNotDislayed();
+			fileALeaveModal.verifyFileALeaveModalIsNotDisplayed();
 		}
 
 	}
