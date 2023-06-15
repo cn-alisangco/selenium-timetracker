@@ -8,6 +8,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 import base.BaseClass;
+import utilities.DateParser;
 import utilities.ExcelReader;
 
 public class ForTestingIdeas extends BaseClass {
@@ -35,11 +36,18 @@ public class ForTestingIdeas extends BaseClass {
 //    	System.out.println(typeOfWork);
 //    	System.out.println(remarks);
     	
-    	String date = creds.testData(id, "day");
-    	String timeIn = creds.testData(id, "timein");
-    	String timeOut = creds.testData(id, "timeout");
-    	System.out.println(timeOut);
-    	LocalDate localDate = LocalDate.of(1899, 12, 30).plusDays((long) Integer.parseInt(date));
-    	System.out.println(dtf.format(localDate));
+//    	String date = creds.testData(id, "day");
+//    	String timeIn = creds.testData(id, "timein");
+//    	String timeOut = creds.testData(id, "timeout");
+//    	System.out.println(timeOut);
+//    	LocalDate localDate = LocalDate.of(1899, 12, 30).plusDays((long) Integer.parseInt(date));
+//    	System.out.println(dtf.format(localDate));
+    	
+    	DateParser datetime = new DateParser();
+    	System.out.println(datetime.month);
+    	System.out.println(datetime.day);
+    	System.out.println(datetime.year);
+    	System.out.println(datetime.fulldate);
+    	System.out.println(datetime.period);
     }
 }

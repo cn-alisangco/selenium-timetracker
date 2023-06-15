@@ -17,6 +17,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -42,12 +43,11 @@ public class TC002_TimeTracker_ChargeHours_DailyWorkHoursCloseButton extends Bas
 	    	String id = "TC002_TimeTracker_ChargeHours_DailyWorkHoursCloseButton";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
 	    	loginPage.login(user, pass);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
-	    	
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
 	    	dailyWorkHours.closeInputWhizHours();

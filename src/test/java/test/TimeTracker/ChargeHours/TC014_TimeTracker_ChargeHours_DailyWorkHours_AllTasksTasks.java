@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -39,17 +40,16 @@ public class TC014_TimeTracker_ChargeHours_DailyWorkHours_AllTasksTasks extends 
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
 	    	String tab = creds.testData(id, "tab");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
 	    	loginPage.login(user, pass);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
 	    	dailyWorkHours.clickTab(tab);
 	    	dailyWorkHours.verifySelectedTasks();
-	    	dailyWorkHours.chooseRandomTask(1);
+	    	dailyWorkHours.chooseRandomTask(1);		//enter number of tasks that will be randomly chosen from list
 	    	dailyWorkHours.verifyTaskChosen();
 	}
 }

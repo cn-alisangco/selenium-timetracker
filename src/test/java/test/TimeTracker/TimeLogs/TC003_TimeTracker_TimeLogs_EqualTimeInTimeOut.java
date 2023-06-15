@@ -11,6 +11,7 @@ import base.BaseClass;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -40,31 +41,23 @@ public class TC003_TimeTracker_TimeLogs_EqualTimeInTimeOut extends BaseClass {
 	    	String reason = creds.testData(id, "remarks");
 	    	
 	    	loginPage.login(user, pass);
-	    	//verify successful login
 	    	homePage.verifyInHomePage();
-	    	/*----------setting date today----------
-	    	 * Pattern is <M/d/yyyy> in order to remove 0's from single-digit instances (1/1/2023 instead of 01/01/2023)
-	    	 * Pattern <MMMM yyyy> for choosing the period*/
-	    	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("M/d/yyyy");
-	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
-	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	
-	    	TimeParser timeparserIn = new TimeParser("11:00 AM"); 	/*Enter the chosen time in here*/
-	    	TimeParser timeparserOut = new TimeParser("11:00 AM"); 	/*Enter the chosen time out here*/
-	    	
-	    	//getting date and time values
+	    	/*----------Getting date and time values----------*/
+	    	DateParser datetime = new DateParser();
 	    	int dayOfWeek = EditTimeLogs.setTimeLogIndex();
 	    	//TIME IN
+	    	TimeParser timeparserIn = new TimeParser("11:00 AM"); 	/*Enter the chosen time in here*/
 	    	String hourIn = timeparserIn.getHour();
 	    	String minuteIn = timeparserIn.getMinute();
 	    	String periodIn = timeparserIn.getPeriod();
 	    	//TIME OUT
+	    	TimeParser timeparserOut = new TimeParser("11:00 AM"); 	/*Enter the chosen time out here*/
 	    	String hourOut = timeparserOut.getHour();
 	    	String minuteOut = timeparserOut.getMinute();
 	    	String periodOut = timeparserOut.getPeriod();
 	    	/*----------Add Logs----------*/
-	    	homePage.selectCurrentTimesheetPeriod(tsFormat.format(now));
-	    	homePage.clickDate(dtf.format(now));
+	    	homePage.selectCurrentTimesheetPeriod(datetime.period);
+	    	homePage.clickDate(datetime.fulldate);
 	    	//TIME LOGS
 	    	editTimeLogs.fillManualTimeIn(dayOfWeek,hourIn,minuteIn,periodIn);
 	    	editTimeLogs.fillManualTimeOut(dayOfWeek,hourOut,minuteOut,periodOut);

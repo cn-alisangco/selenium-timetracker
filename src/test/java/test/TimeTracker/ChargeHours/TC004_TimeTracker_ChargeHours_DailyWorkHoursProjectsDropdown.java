@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -36,17 +37,16 @@ public class TC004_TimeTracker_ChargeHours_DailyWorkHoursProjectsDropdown extend
 	    	// user.dir + td from testng file + testsheet name
 	        
 	    	String id = "TC004_TimeTracker_ChargeHours_DailyWorkHoursProjectsDropdown";
-	    	String user = creds.testData(id, "username");
-	    	String pass = creds.testData(id, "password");
+	    	String username = creds.testData(id, "username");
+	    	String password = creds.testData(id, "password");
 	    	String project = creds.testData(id, "project");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
-	    	loginPage.login(user, pass);
+	    	loginPage.login(username, password);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
 	    	dailyWorkHours.chooseProjectFromDropdown(project);
 	    	dailyWorkHours.verifyChosenProject(project);
 	    	

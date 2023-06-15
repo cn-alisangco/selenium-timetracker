@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -38,13 +39,12 @@ public class TC001_TimeTracker_ChargeHours_ClickInputWhizHours extends BaseClass
 	    	String id = "TC001_TimeTracker_TimeLogs_LogTimeIn";
 	    	String user = creds.testData(id, "username");
 	    	String pass = creds.testData(id, "password");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
 	    	loginPage.login(user, pass);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
 	}
 }

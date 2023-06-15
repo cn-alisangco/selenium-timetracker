@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -42,31 +43,25 @@ public class TC022_TimeTracker_ChargeHours_DailyWorkHours_ActualHoursAndLoggedHo
 	    	String actualHours = creds.testData(id, "actualHours");
 	    	String tab = creds.testData(id, "tab");
 	    	String reason = creds.testData(id, "remarks");
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
 	    	loginPage.login(user, pass);
-	    	
 	    	homePage.verifyInHomePage();
 	    	homePage.clickInputWhizHours(dayOfMonth);
-	    	//verify successful login
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	//choose and then verify chosen project
 	    	dailyWorkHours.chooseProjectFromDropdown(project);
 	    	dailyWorkHours.verifyChosenProject(project);
-	    	//click and verify in General Tasks
 	    	dailyWorkHours.clickTab(tab);
 	    	dailyWorkHours.verifySelectedTasks();
-	    	String chosenTask = dailyWorkHours.chooseRandomTask(2);
+	    	String chosenTask = dailyWorkHours.chooseRandomTask(2);	//enter number of tasks that will be randomly chosen from list
 	    	dailyWorkHours.verifyTaskChosen();
-	    	//extract values for later comparison
 	    	int actual = dailyWorkHours.getActualHours(chosenTask);
 	    	int logged = dailyWorkHours.getLoggedHours(chosenTask);
-	    	//enter your Work Hours
 	    	dailyWorkHours.enterActualHours(actualHours);
 	    	dailyWorkHours.enterTaskDescription(reason);
 	    	dailyWorkHours.clickSave();
 	    	dailyWorkHours.handleWarningPopup();
-	    	//verify successful return to homepage and correct entered hours
 	    	dailyWorkHours.verifyAddedHours(actual, logged, Integer.parseInt(actualHours), chosenTask);
 	}
 }

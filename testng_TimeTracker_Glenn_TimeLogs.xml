@@ -4,7 +4,7 @@
 <listeners>
 		<listener class-name="utilities.TestNGListeners" />
 </listeners>
-  <test thread-count="5" name="Login_Valid Username and Password">
+  <test thread-count="5" name="Time_Logs">
   <parameter name="categoryXML" value="Smoke" />
 		<parameter name="browser" value="chrome" />
 		<parameter name="url" value = "http://timetracker21.srv.pointwest.com.ph/"/>

@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -36,15 +37,15 @@ public class TC005_TimeTracker_ChargeHours_DailyWorkHours_DeliverableMilestone e
 	    	// user.dir + td from testng file + testsheet name
 	        
 	    	String id = "TC005_TimeTracker_ChargeHours_DailyWorkHours_DeliverableMilestone";
-	    	String user = creds.testData(id, "username");
-	    	String pass = creds.testData(id, "password");
+	    	String username = creds.testData(id, "username");
+	    	String password = creds.testData(id, "password");
 	    	String project = creds.testData(id, "project");
 	    	String milestone = creds.testData(id, "milestone");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
-	    	loginPage.login(user, pass);
+	    	loginPage.login(username, password);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
 	    	dailyWorkHours.chooseProjectFromDropdown(project);

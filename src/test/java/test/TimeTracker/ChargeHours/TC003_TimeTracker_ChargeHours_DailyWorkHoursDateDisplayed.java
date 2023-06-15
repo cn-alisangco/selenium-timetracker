@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -36,19 +37,16 @@ public class TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed extends B
 	    	// user.dir + td from testng file + testsheet name
 	        
 	    	String id = "TC003_TimeTracker_ChargeHours_DailyWorkHoursDateDisplayed";
-	    	String user = creds.testData(id, "username");
-	    	String pass = creds.testData(id, "password");
+	    	String username = creds.testData(id, "username");
+	    	String password = creds.testData(id, "password");
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
-	    	loginPage.login(user, pass);
+	    	loginPage.login(username, password);
 	    	homePage.verifyInHomePage();
-	    	
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
 	    	homePage.clickInputWhizHours(dayOfMonth);
 	    	dailyWorkHours.verifyInputWhizExists();
-	    	
-	    	DateTimeFormatter tsFormat = DateTimeFormatter.ofPattern("MMMM yyyy");
-	    	LocalDateTime now = LocalDateTime.now(); //getting current time
-	    	dailyWorkHours.verifyProperDay(tsFormat.format(now),dayOfMonth);
+	    	dailyWorkHours.verifyProperDay(datetime.period,dayOfMonth);
 	    	
 	}
 }

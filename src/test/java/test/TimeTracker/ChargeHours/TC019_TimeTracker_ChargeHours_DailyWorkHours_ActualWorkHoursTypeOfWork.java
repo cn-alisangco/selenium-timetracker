@@ -12,6 +12,7 @@ import pageObjects.timetracker.v2.DailyWorkHours;
 import pageObjects.timetracker.v2.EditTimeLogs;
 import pageObjects.timetracker.v2.HomePage;
 import pageObjects.timetracker.v2.LoginPage;
+import utilities.DateParser;
 import utilities.ExcelReader;
 import utilities.TimeParser;
 
@@ -42,19 +43,18 @@ public class TC019_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursTypeOfW
 	    	String actualHours = creds.testData(id, "actualHours");
 	    	String typeOfWork = creds.testData(id, "typeOfWork");
 	    	String tab = creds.testData(id, "tab");
-	    	int dayOfMonth = LocalDateTime.now().getDayOfMonth();
+	    	DateParser datetime = new DateParser();
+	    	int dayOfMonth = datetime.getMonth();
 	    	
 	    	loginPage.login(user, pass);
-	    	
 	    	homePage.verifyInHomePage();
 	    	homePage.clickInputWhizHours(dayOfMonth);
-	    	
 	    	dailyWorkHours.verifyInputWhizExists();
 	    	dailyWorkHours.chooseProjectFromDropdown(project);
 	    	dailyWorkHours.verifyChosenProject(project);
 	    	dailyWorkHours.clickTab(tab);
 	    	dailyWorkHours.verifySelectedTasks();
-	    	dailyWorkHours.chooseRandomTask(4);
+	    	dailyWorkHours.chooseRandomTask(4);	//enter number of tasks that will be randomly chosen from list
 	    	dailyWorkHours.verifyTaskChosen();
 	    	dailyWorkHours.enterActualHours(actualHours);
 	    	dailyWorkHours.chooseTypeOfWork(typeOfWork);
