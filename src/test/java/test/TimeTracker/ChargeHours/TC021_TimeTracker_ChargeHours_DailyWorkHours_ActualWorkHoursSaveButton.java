@@ -66,6 +66,6 @@ public class TC021_TimeTracker_ChargeHours_DailyWorkHours_ActualWorkHoursSaveBut
 	    	//verify successful return to homepage and correct entered hours
 	    	dailyWorkHours.closeInputWhizHours();
 	    	homePage.verifyInHomePage();
-	    	homePage.verifyEnteredHours(dayOfMonth);
+	    	homePage.verifyEnteredHours(actualHours,dayOfMonth);
 	}
 }

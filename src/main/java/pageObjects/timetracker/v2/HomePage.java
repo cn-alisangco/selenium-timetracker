@@ -125,13 +125,13 @@ public class HomePage extends UserHelper {
     	reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Clicked Input Whiz Hours");
     }
     
-    public void verifyEnteredHours(int day) {
+    public void verifyEnteredHours(String actualHours, int day) {
     	WebElement dailyHours = driver.findElement(By.xpath("//*[@id=\"0"+day+"\"]/td[7]/span"));
     	moveAndHighlightElement(dailyHours);
     	Wait(3000);
     	String enteredHours = dailyHours.getText();
     	System.out.println(enteredHours);
-    	boolean isSame = enteredHours.equals("8");
+    	boolean isSame = enteredHours.equals(actualHours);
     	if(!isSame) {
     		throw new Error("Different entered hours!");
     	}

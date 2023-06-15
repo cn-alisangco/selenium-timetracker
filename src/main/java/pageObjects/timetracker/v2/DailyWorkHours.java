@@ -258,12 +258,8 @@ public class DailyWorkHours extends UserHelper {
 	
 	public void verifyAddedHours(int originalActualHours, int originalLoggedHours,int enteredHours, String task) {
 		
-		WebElement actual = driver.findElement(By.xpath("//*[@id=\"taskTableDetails\"]/tbody/tr["+task+"]/td[3]"));
-		WebElement logged = driver.findElement(By.xpath("//*[@id=\"taskTableDetails\"]/tbody/tr["+task+"]/td[4]"));
-		moveAndHighlightElement(actual);
-		int actualHours = Integer.valueOf(actual.getText()); //get the text from the element and converts it to integer type
-		moveAndHighlightElement(logged);
-		int loggedHoursForToday = Integer.valueOf(logged.getText()); //get the text from the element and converts it to integer type
+		int actualHours = Integer.valueOf(getActualHours(task));			//get the text from the element and converts it to integer type
+		int loggedHoursForToday = Integer.valueOf(getLoggedHours(task));	//get the text from the element and converts it to integer type
 		/*		VERIFICATION STEP
 		 * 		if the entered hours were entered correctly into the system,
 		 * 		<original hours> + <hours entered> should be equal to <the total number of hours currently displayed> */
@@ -275,6 +271,7 @@ public class DailyWorkHours extends UserHelper {
 		}else if(!isAddedtologgedHours) {
 			throw new Error("Changes not reflected in Logged hours!");
 		}
+		Wait(3000);
 		reportPass(Thread.currentThread().getStackTrace()[1].getMethodName(), "Verified changes reflected in fields");
 	}
 }
