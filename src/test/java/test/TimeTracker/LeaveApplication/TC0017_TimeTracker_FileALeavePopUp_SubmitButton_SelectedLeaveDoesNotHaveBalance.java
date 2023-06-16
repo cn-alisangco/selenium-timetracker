@@ -43,7 +43,7 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 
 	// test data---------------------------
 	String fileALeaveLinkDateFormat = "M/d/yyyy";
-	List<String> leaveTypes = Arrays.asList("Call Back Vacation Leave", "Excess Earned Leaves", "Excess General Leaves",
+	List<String> leaveTypeOptions = Arrays.asList("Call Back Vacation Leave", "Excess Earned Leaves", "Excess General Leaves",
 			"On-call Vacation Leave", "Overtime Vacation Leave");
 	String randomLeaveReason;
 	String testComment = "TEST COMMENT/REMARK";
@@ -89,7 +89,7 @@ public class TC0017_TimeTracker_FileALeavePopUp_SubmitButton_SelectedLeaveDoesNo
 					+ " ---------------------------------------------------------------------------";
 			UserHelper.customReportLog(iterationLog);
 
-			for (String leaveType : leaveTypes) {
+			for (String leaveType : leaveTypeOptions) {
 				// log loop iteration
 				String iterationLog1 = "Iteration for leave type: " + leaveType + " ---------------------------";
 				UserHelper.customReportLog(iterationLog1);

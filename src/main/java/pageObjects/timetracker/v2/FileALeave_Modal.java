@@ -27,7 +27,7 @@ public class FileALeave_Modal extends UserHelper {
 	
 	/* --------------------------------------------VARIABLES--------------------------------------- */
 	
-	String initialSubmitToastMessage = "Please Wait...";
+	private String initialSubmitToastMessage = "Please Wait...";
 	private final int minimumLeaveRunningBalance = 1;
 	
 	

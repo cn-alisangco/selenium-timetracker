@@ -48,7 +48,6 @@ public class TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal exten
 		// get login test data
 		loginCredentials = loginPage.getLoginCredentialsTestData(testDataLoc, sheetName, recordID);
 
-
 		// print test description
 		UserHelper.customReportLog("TEST DESCRIPTION: " + testDescription);
 	}
