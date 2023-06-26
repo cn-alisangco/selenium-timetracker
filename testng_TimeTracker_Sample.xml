@@ -4,14 +4,13 @@
 	<listeners>
 		<listener class-name="utilities.TestNGListeners" />
 	</listeners>
-
 	<test thread-count="5" name="Sample test scripts">
 		<parameter name="categoryXML" value="Smoke" />
 		<parameter name="browser" value="chrome" />
-		<parameter name="url" value="http://timetracker.srv.pointwest.com.ph/" />
-		<parameter name="td" value="\testData\timetracker_dean1.xlsx" />
+		<parameter name="url" value="http://timetracker21.srv.pointwest.com.ph/" />
+		<parameter name="td" value="\testData\jsonTestDataSample.json" />
 		<classes>
-			<class name="timetracker.sample.MonthlyTimeLogsEntry" />
+			<class name="test.TimeTracker.LeaveApplication.TC004_TimeTracker_LeaveApplication_VerifyLeaveTypesInTheModal" />
 		</classes>
 	</test> <!-- Test -->
 </suite> <!-- Suite -->

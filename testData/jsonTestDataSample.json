@@ -1,0 +1,19 @@
+{
+	"TC004": {
+		"fileALeaveLinkDateFormat": "M/d/yyyy",
+		"expectedLeaveTypes": [
+			"Banked General Leave",
+			"Call Back Vacation Leave",
+			"Excess Earned Leaves",
+			"Excess General Leaves",
+			"General Leave",
+			"Leave Without Pay",
+			"On-call Vacation Leave",
+			"Overtime Vacation Leave",
+			"Service Incentive Leave",
+			"Solo Parent Leave",
+			"Unauthorized LWOP",
+			"Vacation Leave"
+		]
+	}
+}

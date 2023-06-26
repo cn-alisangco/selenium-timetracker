@@ -16,6 +16,8 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class BaseClass {
 
 	public static ThreadLocal<WebDriver> driver = new ThreadLocal<WebDriver>();
+	public static String baseURL;
+	public static String actualBrowser;
 	public static String category;
 	public static String testDataLoc;
 
@@ -34,9 +36,10 @@ public class BaseClass {
 	@BeforeClass
 	public void invokeBrowser(String categoryXML, String browser, String url, String td) {
 		category = categoryXML; // this will be called by TestNGListeners.java to assign the category
-		String actualBrowser = browser;
-		String baseURL = url;
+		actualBrowser = browser;
+		baseURL = url;
 		testDataLoc = td;
+
 		
 		switch (actualBrowser.toLowerCase()) {
 			case "chrome":
